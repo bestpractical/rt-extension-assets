@@ -1,0 +1,11 @@
+CREATE SEQUENCE RTxAssets_seq;
+CREATE TABLE RTxAssets (
+    id              NUMBER(11,0)    CONSTRAINT RTxAssets_key PRIMARY KEY,
+    Name            varchar2(255)   DEFAULT '',
+    Description     varchar2(255)   DEFAULT '',
+    Disabled        NUMBER(11,0)    DEFAULT 0 NOT NULL,
+    Creator         NUMBER(11,0)    DEFAULT 0 NOT NULL,
+    Created         DATE,
+    LastUpdatedBy   NUMBER(11,0)    DEFAULT 0 NOT NULL,
+    LastUpdated     DATE
+);
