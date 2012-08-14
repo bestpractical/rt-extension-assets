@@ -8,6 +8,19 @@ our $VERSION = '0.01';
 
 RT-Extension-Assets - Asset management for RT
 
+=cut
+
+{
+    use RT::CustomField;
+    my $ORIGINAL = RT::CustomField->can('ApplyGlobally');
+    no warnings 'redefine';
+    *RT::CustomField::ApplyGlobally = sub {
+        my $self = shift;
+        return 1 if lc($self->LookupType) eq lc("RT::Asset");
+        return $ORIGINAL->($self);
+    };
+}
+
 =head1 INSTALLATION
 
 =over

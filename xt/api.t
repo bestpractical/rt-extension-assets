@@ -51,6 +51,8 @@ diag "Create with CFs";
 
     ok apply_cfs($height, $material), "Applied CFs";
 
+    ok $height->ApplyGlobally, "RT::Asset CFs are recognized as only global";
+
     my $asset = RT::Asset->new( RT->SystemUser );
     my ($id, $msg) = $asset->Create(
         Name                        => 'Standing desk',

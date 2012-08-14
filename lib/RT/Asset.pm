@@ -6,6 +6,10 @@ use base 'RT::Record';
 
 use RT::CustomField;
 
+# Assets are primarily built on custom fields
+RT::CustomField->_ForObjectType( CustomFieldLookupType() => 'Assets' );
+sub CustomFieldLookupType { "RT::Asset" }
+
 =head1 NAME
 
 RT::Asset - Represents a single asset record
