@@ -10,3 +10,5 @@ pod2htm*.tmp
 *.bak
 *.swp
 /MYMETA.*
+/xt/tmp/
+/xt/lib/RT/Extension/Assets/Test.pm

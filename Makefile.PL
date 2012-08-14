@@ -7,5 +7,18 @@ license  'gplv2';
 
 requires_rt("4.0.0");
 
+my ($loaded) = ($INC{'RT.pm'} =~ /^(.*)[\\\/]/);
+my $lib_path = join( ' ', "$RT::LocalPath/lib", $loaded );
+
+substitute(
+    {
+        RT_LIB_PATH  => $lib_path,
+    },
+    {
+        sufix => '.in'
+    },
+    q(xt/lib/RT/Extension/Assets/Test.pm),
+);
+
 sign;
 WriteAll;

@@ -16,7 +16,9 @@ meta-spec:
 name: RT-Extension-Assets
 no_index:
   directory:
+    - etc
     - inc
+    - xt
 resources:
   license: http://opensource.org/licenses/gpl-license.php
 version: 0.01

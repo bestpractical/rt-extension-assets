@@ -1,0 +1,12 @@
+#!include_default
+
+# Testing infrastructure
+^xt/lib/RT/Extension/Assets/Test.pm$
+^xt/tmp/
+
+# Dist droppings
+^MYMETA\.
+\.tar\.gz$
+
+# ctags files
+^\.tags
