@@ -7,6 +7,8 @@ use lib qw(/opt/rt4/local/lib /opt/rt4/lib);
 package RT::Extension::Assets::Test;
 use base 'RT::Test';
 
+our @EXPORT = qw(create_cf apply_cfs);
+
 sub import {
     my $class = shift;
     my %args  = @_;
@@ -22,6 +24,32 @@ sub import {
 
     require RT::Extension::Assets;
     require RT::Asset;
+    __PACKAGE__->export_to_level(1);
+}
+
+sub create_cf {
+    my %args = (
+        Name        => "Test Asset CF ".($$ + rand(1024)),
+        Type        => "FreeformSingle",
+        LookupType  => 'RT::Asset',
+        @_,
+    );
+    my $cf = RT::CustomField->new( RT->SystemUser );
+    my ($ok, $msg) = $cf->Create(%args);
+    RT->Logger->error("Can't create CF: $msg") unless $ok;
+    return $cf;
+}
+
+sub apply_cfs {
+    my $success = 1;
+    for my $cf (@_) {
+        my ($ok, $msg) = $cf->AddToObject( RT::Asset->new(RT->SystemUser) );
+        if (not $ok) {
+            RT->Logger->error("Couldn't apply CF: $msg");
+            $success = 0;
+        }
+    }
+    return $success;
 }
 
 1;

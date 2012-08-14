@@ -41,4 +41,26 @@ diag "Create basic asset (no CFs)";
     ok $asset->id, "Asset not deleted";
 }
 
+diag "Create with CFs";
+{
+    my $height = create_cf( Name => 'Height' );
+    ok $height->id, "Created CF";
+
+    my $material = create_cf( Name => 'Material' );
+    ok $material->id, "Created CF";
+
+    ok apply_cfs($height, $material), "Applied CFs";
+
+    my $asset = RT::Asset->new( RT->SystemUser );
+    my ($id, $msg) = $asset->Create(
+        Name                        => 'Standing desk',
+        "CustomField-".$height->id  => '46"',
+        "CustomField-Material"      => 'pine',
+    );
+    ok $id, "Created: $msg";
+    is $asset->FirstCustomFieldValue('Height'), '46"', "Found height";
+    is $asset->FirstCustomFieldValue('Material'), 'pine', "Found material";
+    is $asset->Transactions->Count, 1, "Only a single txn";
+}
+
 done_testing;
