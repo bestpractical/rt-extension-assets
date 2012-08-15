@@ -15,6 +15,20 @@ RT::Asset - Represents a single asset record
 # Assets are primarily built on custom fields
 RT::CustomField->_ForObjectType( CustomFieldLookupType() => 'Assets' );
 
+# Setup rights
+$RT::ACE::OBJECT_TYPES{'RT::Asset'} = 1;
+
+RT::Asset->AddRights(
+    ShowAsset           => 'See assets',        # loc_pair
+    CreateAsset         => 'Create assets',     # loc_pair
+    ModifyAsset         => 'Modify assets',     # loc_pair
+);
+RT::Asset->AddRightCategories(
+    ShowAsset   => 'Staff',
+    CreateAsset => 'Staff',
+    ModifyAsset => 'Staff',
+);
+
 =head1 DESCRIPTION
 
 An Asset is a small record object upon which zero to many custom fields are
@@ -102,8 +116,9 @@ sub Create {
         @_
     );
 
+    # We must check on RT->System because we don't have an asset object to check first
     return (0, $self->loc("Permission Denied"))
-        unless $self->CurrentUserHasRight('CreateAsset');
+        unless $self->CurrentUser->HasRight( Right => 'CreateAsset', Object => RT->System );
 
     return (0, $self->loc('Invalid Name (names may not be all digits)'))
         unless $self->ValidateName( $args{'Name'} );
@@ -191,7 +206,6 @@ sub CurrentUserHasRight {
         $self->CurrentUser->HasRight(
             Right        => $right,
             Object       => $self,
-            EquivObjects => [ RT->System, $self ]
         )
     );
 }
@@ -223,6 +237,59 @@ extending Assets.
 =cut
 
 sub CustomFieldLookupType { "RT::Asset" }
+
+=head2 AddRights C<< RIGHT => DESCRIPTION >> [, ...]
+
+Adds the given rights to the list of possible rights.  This method
+should be called during server startup, not at runtime.
+
+=cut
+
+my (%RIGHTS, %RIGHT_CATEGORIES);
+
+sub AddRights {
+    my $self = shift;
+    my %new = @_;
+    %RIGHTS = ( %RIGHTS, %new );
+    %RT::ACE::LOWERCASERIGHTNAMES = ( %RT::ACE::LOWERCASERIGHTNAMES,
+                                      map { lc($_) => $_ } keys %new);
+    return;
+}
+
+=head2 AddRightCategories C<< RIGHT => CATEGORY>> [, ...]
+
+Adds the given right and category pairs to the list of right categories.
+This method should be called during server startup, not at runtime.
+
+=cut
+
+sub AddRightCategories {
+    my $self = shift;
+    %RIGHT_CATEGORIES = ( %RIGHT_CATEGORIES, @_ );
+    return;
+}
+
+=head2 AvailableRights
+
+Returns a hashref of available rights for this object. The keys are the
+right names and the values are a description of what the rights do.
+
+=cut
+
+sub AvailableRights {
+    return { %RIGHTS };
+}
+
+=head2 RightCategories
+
+Returns a hashref of C<Right> and C<Category> pairs, as added with
+L</AddRightCategories>.
+
+=cut
+
+sub RightCategories {
+    return { %RIGHT_CATEGORIES };
+}
 
 =head1 PRIVATE METHODS
 

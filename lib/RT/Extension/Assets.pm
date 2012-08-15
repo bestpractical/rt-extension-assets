@@ -4,6 +4,8 @@ package RT::Extension::Assets;
 
 our $VERSION = '0.01';
 
+use RT::Asset;  # Load so it's available and rights are injected
+
 =head1 NAME
 
 RT-Extension-Assets - Asset management for RT
