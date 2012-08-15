@@ -6,17 +6,14 @@ use base 'RT::Record';
 
 use RT::CustomField;
 
-# Assets are primarily built on custom fields
-RT::CustomField->_ForObjectType( CustomFieldLookupType() => 'Assets' );
-sub CustomFieldLookupType { "RT::Asset" }
-
 =head1 NAME
 
 RT::Asset - Represents a single asset record
 
 =cut
 
-sub Table { "RTxAssets" }
+# Assets are primarily built on custom fields
+RT::CustomField->_ForObjectType( CustomFieldLookupType() => 'Assets' );
 
 =head1 DESCRIPTION
 
@@ -216,7 +213,29 @@ sub CurrentUserCanSee {
 
 #sub URI; # Needs RT::URI::asset class then URIForObject
 
-# Record transactions on field update
+=head1 INTERNAL METHODS
+
+Public methods, but you shouldn't need to call these unless you're
+extending Assets.
+
+=head2 CustomFieldLookupType
+
+=cut
+
+sub CustomFieldLookupType { "RT::Asset" }
+
+=head1 PRIVATE METHODS
+
+Documented for internal use only, do not call these from outside RT::Asset.
+
+=head2 _Set
+
+Checks if the current user can C<ModifyAsset> before calling C<SUPER::_Set>
+and records a transaction against this object if C<SUPER::_Set> was
+successful.
+
+=cut
+
 sub _Set {
     my $self = shift;
     my %args = (
@@ -244,11 +263,19 @@ sub _Set {
     return ($txn_id, scalar $txn->BriefDescription);
 }
 
+=head2 _Value
+
+Checks L</CurrentUserCanSee> before calling C<SUPER::_Value>.
+
+=cut
+
 sub _Value {
     my $self = shift;
     return unless $self->CurrentUserCanSee;
     return $self->SUPER::_Value(@_);
 }
+
+sub Table { "RTxAssets" }
 
 sub _CoreAccessible {
     {
