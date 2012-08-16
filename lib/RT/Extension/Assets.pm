@@ -5,6 +5,7 @@ package RT::Extension::Assets;
 our $VERSION = '0.01';
 
 use RT::Asset;  # Load so it's available and rights are injected
+use RT::Assets;
 
 =head1 NAME
 
