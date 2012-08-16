@@ -1,5 +1,6 @@
+CREATE SEQUENCE rtxassets_id_seq;
 CREATE TABLE RTxAssets (
-    id                SERIAL,
+    id                integer                  DEFAULT nextval('rtxassets_id_seq'),
     Name              varchar(255)    NOT NULL DEFAULT '',
     Description       varchar(255)    NOT NULL DEFAULT '',
     Disabled          integer         NOT NULL DEFAULT 0,
