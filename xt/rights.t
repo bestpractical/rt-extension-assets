@@ -44,6 +44,13 @@ diag "ModifyAsset";
     ok !$txnid, "Update failed: $txnmsg";
     is $asset->Name, "Thinkpad T420s", "Name didn't change";
 
+    # It doesn't matter that ticket #1 doesn't exist for ACLs to refuse us
+    my ($ok, $msg) = $asset->AddLink( Type => 'RefersTo', Target => 't:1' );
+    ok !$ok, "No rights to AddLink: $msg";
+
+    ($ok, $msg) = $asset->DeleteLink( Type => 'RefersTo', Target => 't:1' );
+    ok !$ok, "No rights to DeleteLink: $msg";
+
     ok(RT::Test->add_rights({
         Principal   => 'Privileged',
         Right       => 'ModifyAsset',

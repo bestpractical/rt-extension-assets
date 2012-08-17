@@ -221,11 +221,49 @@ sub CurrentUserCanSee {
     return $self->CurrentUserHasRight('ShowAsset');
 }
 
-# XXX TODO: links
-#sub DeleteLink;  # from Articles
-#sub AddLink;     # from Articles
+=head2 AddLink
 
-#sub URI; # Needs RT::URI::asset class then URIForObject
+Checks ModifyAsset before calling L<RT::Record/_AddLink>.
+
+=cut
+
+sub AddLink {
+    my $self = shift;
+    my %args = (@_);
+
+    return (0, $self->loc("Permission Denied"))
+        unless $self->CurrentUserHasRight("ModifyAsset");
+
+    return $self->_AddLink(%args);
+}
+
+=head2 DeleteLink
+
+Checks ModifyAsset before calling L<RT::Record/_DeleteLink>.
+
+=cut
+
+sub DeleteLink {
+    my $self = shift;
+    my %args = (@_);
+
+    return (0, $self->loc("Permission Denied"))
+        unless $self->CurrentUserHasRight("ModifyAsset");
+
+    return $self->_DeleteLink(%args);
+}
+
+=head2 URI
+
+Returns this asset's URI
+
+=cut
+
+sub URI {
+    my $self = shift;
+    my $uri = RT::URI::asset->new($self->CurrentUser);
+    return $uri->URIForObject($self);
+}
 
 =head1 INTERNAL METHODS
 
@@ -293,7 +331,8 @@ sub RightCategories {
 
 =head1 PRIVATE METHODS
 
-Documented for internal use only, do not call these from outside RT::Asset.
+Documented for internal use only, do not call these from outside RT::Asset
+itself.
 
 =head2 _Set
 
