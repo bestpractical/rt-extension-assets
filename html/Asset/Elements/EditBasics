@@ -1,0 +1,18 @@
+<table>
+  <tr>
+    <td class="label"><label for="Name"><&|/l&>Name</&></label></td>
+    <td><input name="Name" value="<% $current{Name} %>" size="50"></td>
+  </tr>
+  <tr>
+    <td class="label"><label for="Description"><&|/l&>Description</&></label></td>
+    <td><input name="Description" value="<% $current{Description} %>" size="75"></td>
+  </tr>
+% $m->callback(%ARGS, CallbackName => "AfterFields");
+</table>
+<%args>
+$AssetObj => undef
+</%args>
+<%init>
+my %current = map { $_ => ($ARGS{$_} || ($AssetObj ? $AssetObj->$_ : '') || '') }
+                  qw(Name Description);
+</%init>
