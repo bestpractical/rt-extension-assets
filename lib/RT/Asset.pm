@@ -138,6 +138,8 @@ sub Create {
         my $cf   = $1;
         my @vals = ref $args{$key} eq 'ARRAY' ? @{ $args{$key} } : $args{$key};
         foreach my $value (@vals) {
+            next unless defined $value;
+
             my ( $cfid, $cfmsg ) = $self->AddCustomFieldValue(
                 (ref($value) eq 'HASH'
                     ? %$value
