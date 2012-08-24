@@ -27,7 +27,7 @@ $id => ""
 <%init>
 my $asset = RT::Asset->new( $session{CurrentUser} );
 
-Abort("You don't have permission to create assets.")
+Abort(loc("You don't have permission to create assets."))
     unless $asset->CurrentUserHasRight("CreateAsset");
 
 my @results;
