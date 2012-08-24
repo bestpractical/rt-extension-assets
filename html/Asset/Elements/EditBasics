@@ -7,12 +7,19 @@
     <td class="label"><label for="Description"><&|/l&>Description</&></label></td>
     <td><input name="Description" value="<% $current{Description} %>" size="75"></td>
   </tr>
+% if ($ShowDisabled) {
+  <tr>
+    <td class="label"><label for="Disabled"><&|/l&>Disabled?</&></label></td>
+    <td><input name="Disabled" type="checkbox" value="1" <% $current{Disabled} ? "checked" : "" %>></td>
+  </tr>
+% }
 % $m->callback(%ARGS, CallbackName => "AfterFields");
 </table>
 <%args>
-$AssetObj => undef
+$AssetObj
+$ShowDisabled => 1
 </%args>
 <%init>
-my %current = map { $_ => ($ARGS{$_} || ($AssetObj ? $AssetObj->$_ : '') || '') }
-                  qw(Name Description);
+my %current = map { $_ => ($ARGS{$_} || $AssetObj->$_ || '') }
+                  $AssetObj->WritableAttributes;
 </%init>

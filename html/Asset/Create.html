@@ -7,7 +7,7 @@
   <input type="hidden" name="id" value="new">
 
   <&| /Widgets/TitleBox, title => "Basics", class => "asset-basics" &>
-    <& Elements/EditBasics, %ARGS &>
+    <& Elements/EditBasics, %ARGS, AssetObj => $asset, ShowDisabled => 0 &>
   </&>
 
   <&| /Widgets/TitleBox, title => "Details", class => "asset-cfs" &>
@@ -52,8 +52,13 @@ if ($id eq "new") {
     );
 
     if ($cf_ok and not $skip_create) {
+        # Handle CFs
         my %create = ProcessObjectCustomFieldUpdatesForCreate( ARGSRef => \%ARGS );
-        $create{$_} = $ARGS{$_} for qw(Name Description);
+
+        # Handle basic fields
+        for ($asset->WritableAttributes) {
+            $create{$_} = $ARGS{$_} if exists $ARGS{$_};
+        }
 
         $m->callback( %ARGS, AssetObj => $asset, Create => \%create, CallbackName => 'MassageCreate' );
 
