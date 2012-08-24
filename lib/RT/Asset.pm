@@ -116,9 +116,8 @@ sub Create {
         @_
     );
 
-    # We must check on RT->System because we don't have an asset object to check first
     return (0, $self->loc("Permission Denied"))
-        unless $self->CurrentUser->HasRight( Right => 'CreateAsset', Object => RT->System );
+        unless $self->CurrentUserHasRight('CreateAsset');
 
     return (0, $self->loc('Invalid Name (names may not be all digits)'))
         unless $self->ValidateName( $args{'Name'} );
@@ -194,7 +193,8 @@ sub Delete {
 
 =head2 CurrentUserHasRight RIGHTNAME
 
-Returns true if the current user has the right for this asset.
+Returns true if the current user has the right for this asset, or globally if
+this is called on an unloaded object.
 
 =cut
 
@@ -205,7 +205,7 @@ sub CurrentUserHasRight {
     return (
         $self->CurrentUser->HasRight(
             Right        => $right,
-            Object       => $self,
+            Object       => ($self->id ? $self : RT->System),
         )
     );
 }
