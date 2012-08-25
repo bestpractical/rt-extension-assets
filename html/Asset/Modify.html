@@ -1,0 +1,81 @@
+<& /Elements/Header, Title => loc("Modify asset #[_1]: [_2]", $asset->id, $asset->Name) &>
+<& /Elements/Tabs &>
+
+<& /Elements/ListActions, actions => \@results &>
+
+<form method="post" enctype="multipart/form-data" id="ModifyAsset" action="Modify.html">
+  <input type="hidden" name="id" value="<% $asset->id %>">
+
+  <&| /Widgets/TitleBox, title => "Basics", class => "asset-basics" &>
+    <& Elements/EditBasics, %ARGS, AssetObj => $asset &>
+  </&>
+
+  <&| /Widgets/TitleBox, title => "Details", class => "asset-cfs" &>
+    <!-- XXX TODO: use generic EditCustomFields element in core RT once it's ready -->
+    <& Elements/EditCustomFields, %ARGS, Object => $asset &>
+  </&>
+
+  <!-- XXX TODO: People -->
+  <!-- XXX TODO: Links -->
+
+  <& /Elements/Submit, Label => loc('Save asset'), Name => "Update" &>
+</form>
+
+<%args>
+$id         => undef
+$Update     => 0
+</%args>
+<%init>
+Abort(loc("No asset ID specified.")) unless $id;
+
+my $asset = RT::Asset->new( $session{CurrentUser} );
+$asset->Load($id);
+
+Abort(loc("Unable to find asset #[_1]", $id))
+    unless $asset->id;
+
+Abort(loc("You don't have permission to modify this asset."))
+    unless $asset->CurrentUserHasRight("ModifyAsset");
+
+my @results;
+
+if ($Update) {
+    my $skip_update = 0;
+    my @attributes  = $asset->WritableAttributes;
+
+    $ARGS{Disabled} = $ARGS{Disabled} ? 1 : 0;
+
+    my ($cf_ok, @cf_errors) = $m->comp(
+        '/Elements/ValidateCustomFields',
+        CustomFields    => $asset->CustomFields,
+        NamePrefix      => "Object-RT::Asset-$id-CustomField-",
+        ARGSRef         => \%ARGS
+    );
+
+    $m->callback(
+        CallbackName        => 'BeforeUpdate',
+        AssetObj            => $asset,
+        UpdatableAttributes => \@attributes,
+        results             => \@results,
+        cf_ok               => \$cf_ok,
+        skip_update         => \$skip_update,
+        ARGSRef             => \%ARGS,
+    );
+
+    if ($cf_ok and not $skip_update) {
+        push @results, ProcessObjectCustomFieldUpdates( Object => $asset, ARGSRef => \%ARGS );
+        push @results, UpdateRecordObject(
+            Object          => $asset,
+            AttributesRef   => \@attributes,
+            ARGSRef         => \%ARGS
+        );
+
+        MaybeRedirectForResults(
+            Actions     => \@results,
+            Arguments   => { id => $asset->id },
+        );
+    } else {
+        push @results, @cf_errors;
+    }
+}
+</%init>
