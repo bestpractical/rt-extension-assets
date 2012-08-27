@@ -1,0 +1,14 @@
+<table>
+  <tr>
+    <td class="label"><&|/l&>Name</&></td>
+    <td><% $AssetObj->Name || '' %></td>
+  </tr>
+  <tr>
+    <td class="label"><&|/l&>Description</&></td>
+    <td><% $AssetObj->Description || '' %></td>
+  </tr>
+% $m->callback(%ARGS, CallbackName => "AfterFields");
+</table>
+<%args>
+$AssetObj
+</%args>

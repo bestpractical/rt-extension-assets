@@ -1,0 +1,31 @@
+<& /Elements/Header, Title => loc("Asset #[_1]: [_2]", $asset->id, $asset->Name) &>
+<& /Elements/Tabs &>
+
+<& /Elements/ListActions &>
+
+<&| /Widgets/TitleBox, title => "Basics", class => "asset-basics" &>
+    <& Elements/ShowBasics, AssetObj => $asset &>
+</&>
+
+<&| /Widgets/TitleBox, title => "Details", class => "asset-cfs" &>
+    <& /Elements/ShowCustomFields, Object => $asset &>
+</&>
+
+<!-- XXX TODO: People -->
+<!-- XXX TODO: Links -->
+
+<%args>
+$id => undef
+</%args>
+<%init>
+Abort(loc("No asset ID specified.")) unless $id;
+
+my $asset = RT::Asset->new( $session{CurrentUser} );
+$asset->Load($id);
+
+Abort(loc("Unable to find asset #[_1]", $id))
+    unless $asset->id;
+
+Abort(loc("You don't have permission to view this asset."))
+    unless $asset->CurrentUserCanSee;
+</%init>
