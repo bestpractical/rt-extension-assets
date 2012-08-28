@@ -1,0 +1,19 @@
+<%init>
+my $assets = Menu->child("tools")->add_before(
+               "assets",        title => loc("Assets"),         path => "/Asset/");         # XXX TODO: link top level to search?
+$assets->child("create",        title => loc("Create"),         path => "Create.html");
+$assets->child("search",        title => loc("Search"));                                    # XXX TODO: link up to search
+
+my $request = $r->path_info;
+   $request =~ s{/+}{/}g;
+
+if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id}) {
+    my $id   = $DECODED_ARGS->{id};
+    my $page = PageMenu();
+    $page->child("display",     title => loc("Display"),        path => "/Asset/Display.html?id=$id");
+    $page->child("basics",      title => loc("Basics"),         path => "/Asset/Modify.html?id=$id");
+    $page->child("links",       title => loc("Links"),          path => "/Asset/ModifyLinks.html?id=$id");
+    $page->child("people",      title => loc("People"),         path => "/Asset/ModifyPeople.html?id=$id");
+    $page->child("history",     title => loc("History"),        path => "/Asset/History.html?id=$id");
+}
+</%init>
