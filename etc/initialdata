@@ -1,0 +1,24 @@
+use strict;
+use warnings;
+
+require RT::Asset;
+
+our (@Final);
+
+# Create global role groups
+push @Final, sub {
+    foreach my $type (RT::Asset->Roles) {
+        next if $type eq "Owner";   # There's a core global role group for Owner
+
+        my $group = RT::Group->new( RT->SystemUser );
+        my ($ok, $msg) = $group->CreateRoleGroup(
+            Object              => RT->System,
+            Type                => $type,
+            InsideTransaction   => 0,
+        );
+        RT->Logger->error("Couldn't create global asset role group '$type': $msg")
+            unless $ok;
+    }
+};
+
+1;

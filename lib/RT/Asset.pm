@@ -29,6 +29,10 @@ RT::Asset->AddRightCategories(
     ModifyAsset => 'Staff',
 );
 
+for my $role ('Owner', 'User', 'Technical Contact') {
+    RT::Asset->RegisterRole( Name => $role );
+}
+
 =head1 DESCRIPTION
 
 An Asset is a small record object upon which zero to many custom fields are
@@ -130,6 +134,17 @@ sub Create {
     unless ($id) {
         RT->DatabaseHandle->Rollback();
         return (0, $self->loc("Asset create failed: [_1]", $msg));
+    }
+
+    # Create role groups
+    foreach my $type ($self->Roles) {
+        my $group = RT::Group->new( $self->CurrentUser );
+        my ($id, $msg) = $group->CreateRoleGroup( Object => $self, Type => $type );
+        unless ($id) {
+            RT->Logger->error("Couldn't create role group '$type' for asset ". $self->id .": $msg");
+            RT->DatabaseHandle->Rollback();
+            return (0, $self->loc("Couldn't create role group [_1]: [_2]", $type, $msg));
+        }
     }
 
     # Add CFs
