@@ -7,11 +7,14 @@
     <& Elements/ShowBasics, AssetObj => $asset &>
 </&>
 
+<&| /Widgets/TitleBox, title => "People", class => "asset-people" &>
+    <& Elements/ShowPeople, AssetObj => $asset &>
+</&>
+
 <&| /Widgets/TitleBox, title => "Details", class => "asset-cfs" &>
     <& /Elements/ShowCustomFields, Object => $asset &>
 </&>
 
-<!-- XXX TODO: People -->
 <!-- XXX TODO: Links -->
 
 <%args>
