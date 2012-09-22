@@ -282,6 +282,21 @@ sub URI {
     return $uri->URIForObject($self);
 }
 
+=head2 RoleGroup
+
+An ACL'd version of L<RT::Record/RoleGroup>.  Checks I<ShowAsset>.
+
+=cut
+
+sub RoleGroup {
+    my $self = shift;
+    if ($self->CurrentUserHasRight("ShowAsset")) {
+        return $self->SUPER::RoleGroup(@_);
+    } else {
+        return RT::Group->new( $self->CurrentUser );
+    }
+}
+
 =head1 INTERNAL METHODS
 
 Public methods, but you shouldn't need to call these unless you're
