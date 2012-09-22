@@ -282,6 +282,27 @@ sub URI {
     return $uri->URIForObject($self);
 }
 
+=head2 Owners
+
+Returns an L<RT::Group> object for this asset's I<Owner> role group.  The
+object may be unloaded if permissions aren't satisified.
+
+=head2 Users
+
+Returns an L<RT::Group> object for this asset's I<User> role group.  The object
+may be unloaded if permissions aren't satisified.
+
+=head2 TechnicalContacts
+
+Returns an L<RT::Group> object for this asset's I<Technical Contact> role
+group.  The object may be unloaded if permissions aren't satisified.
+
+=cut
+
+sub Owners              { $_[0]->RoleGroup("Owner") }
+sub Users               { $_[0]->RoleGroup("User")  }
+sub TechnicalContacts   { $_[0]->RoleGroup("Technical Contact") }
+
 =head2 RoleGroup
 
 An ACL'd version of L<RT::Record/RoleGroup>.  Checks I<ShowAsset>.
