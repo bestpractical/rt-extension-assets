@@ -24,6 +24,27 @@ RT-Extension-Assets - Asset management for RT
     };
 }
 
+{
+    require RT::Interface::Web;
+    package HTML::Mason::Commands;
+
+    sub LoadAsset {
+        my $id = shift
+            or Abort(loc("No asset ID specified."));
+
+        my $asset = RT::Asset->new( $session{CurrentUser} );
+        $asset->Load($id);
+
+        Abort(loc("Unable to find asset #[_1]", $id))
+            unless $asset->id;
+
+        Abort(loc("You don't have permission to modify this asset."))
+            unless $asset->CurrentUserHasRight("ModifyAsset");
+
+        return $asset;
+    }
+}
+
 =head1 INSTALLATION
 
 =over
