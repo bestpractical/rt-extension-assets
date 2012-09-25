@@ -8,7 +8,7 @@ $AssetObj
 <tr>
   <td class="label"><&|/l&><% $role %>:</&></td>
   <td>
-    <& ShowWatchers, Group => $AssetObj->RoleGroup($role) &>
+    <& ShowRoleMembers, Group => $AssetObj->RoleGroup($role) &>
   </td>
 </tr>
 % }
