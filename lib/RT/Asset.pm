@@ -272,7 +272,7 @@ sub CurrentUserCanSee {
 
 =head2 AddLink
 
-Checks ModifyAsset before calling L<RT::Record/_AddLink>.
+Checks I<ModifyAsset> before calling L<RT::Record/_AddLink>.
 
 =cut
 
@@ -288,7 +288,7 @@ sub AddLink {
 
 =head2 DeleteLink
 
-Checks ModifyAsset before calling L<RT::Record/_DeleteLink>.
+Checks I<ModifyAsset> before calling L<RT::Record/_DeleteLink>.
 
 =cut
 
@@ -451,7 +451,7 @@ itself.
 
 =head2 _Set
 
-Checks if the current user can C<ModifyAsset> before calling C<SUPER::_Set>
+Checks if the current user can I<ModifyAsset> before calling C<SUPER::_Set>
 and records a transaction against this object if C<SUPER::_Set> was
 successful.
 
