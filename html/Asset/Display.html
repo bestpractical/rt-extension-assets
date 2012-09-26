@@ -3,15 +3,15 @@
 
 <& /Elements/ListActions &>
 
-<&| /Widgets/TitleBox, title => "Basics", class => "asset-basics" &>
+<&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics" &>
     <& Elements/ShowBasics, AssetObj => $asset &>
 </&>
 
-<&| /Widgets/TitleBox, title => "People", class => "asset-people" &>
+<&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
     <& Elements/ShowPeople, AssetObj => $asset &>
 </&>
 
-<&| /Widgets/TitleBox, title => "Details", class => "asset-cfs" &>
+<&| /Widgets/TitleBox, title => loc("Details"), class => "asset-cfs" &>
     <& /Elements/ShowCustomFields, Object => $asset &>
 </&>
 

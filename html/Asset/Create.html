@@ -6,11 +6,11 @@
 <form method="post" enctype="multipart/form-data" id="CreateAsset" action="Create.html">
   <input type="hidden" name="id" value="new">
 
-  <&| /Widgets/TitleBox, title => "Basics", class => "asset-basics" &>
+  <&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics" &>
     <& Elements/EditBasics, %ARGS, AssetObj => $asset, ShowDisabled => 0 &>
   </&>
 
-  <&| /Widgets/TitleBox, title => "Details", class => "asset-cfs" &>
+  <&| /Widgets/TitleBox, title => loc("Details"), class => "asset-cfs" &>
     <!-- XXX TODO: use generic EditCustomFields element in core RT once it's ready -->
     <& Elements/EditCustomFields, %ARGS, Object => $asset &>
   </&>
