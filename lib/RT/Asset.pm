@@ -160,14 +160,16 @@ sub Create {
     for my $role ($self->Roles) {
         next unless $args{$role};
 
+        my $group = $self->RoleGroup($role);
+
         my @members = ref($args{$role}) eq 'ARRAY'
             ? @{$args{$role}}
             : $args{$role};
 
         for my $member (@members) {
-            my ($ok, $msg) = $self->AddRoleMember(
-                Type        => $role,
-                PrincipalId => $member,
+            my ($ok, $msg) = $group->_AddMember(
+                PrincipalId         => $member,
+                InsideTransaction   => 1,
             );
             unless ($ok) {
                 RT->Logger->error("Couldn't add $member as $role: $msg");
@@ -374,6 +376,9 @@ sub AddRoleMember {
     return (0, $self->loc("No valid Type specified"))
         unless $args{Type} and $self->HasRole($args{Type});
 
+    return (0, $self->loc("No permission to modify this asset"))
+        unless $self->CurrentUserHasRight("ModifyAsset");
+
     unless ($args{PrincipalId}) {
         my $object;
         if ($args{User}) {
@@ -422,6 +427,9 @@ sub DeleteRoleMember {
 
     return (0, $self->loc("No valid Type specified"))
         unless $args{Type} and $self->HasRole($args{Type});
+
+    return (0, $self->loc("No permission to modify this asset"))
+        unless $self->CurrentUserHasRight("ModifyAsset");
 
     return $self->RoleGroup($args{Type})->_DeleteMember(delete $args{PrincipalId});
 }
