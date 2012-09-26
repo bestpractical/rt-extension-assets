@@ -1,0 +1,38 @@
+<& /Elements/Header, Title => loc("Modify people related to asset #[_1]: [_2]", $asset->id, $asset->Name) &>
+<& /Elements/Tabs &>
+
+<& /Elements/ListActions, actions => \@results &>
+
+<form method="post" enctype="multipart/form-data" id="ModifyAssetPeople" action="ModifyPeople.html">
+  <input type="hidden" name="id" value="<% $asset->id %>">
+
+  <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
+    <table width="100%" class="edit">
+      <tr>
+        <td width="30%"><& Elements/EditPeople, %ARGS, AssetObj => $asset &></td>
+        <td><& Elements/AddPeople, AssetObj => $asset &></td>
+      </tr>
+    </table>
+  </&>
+
+  <& /Elements/Submit, Label => loc('Save asset'), Name => "Update" &>
+</form>
+
+<%init>
+my $asset = LoadAsset($id);
+my @results;
+
+if ($Update) {
+    push @results, ProcessAssetPeople( $asset => %ARGS );
+
+    MaybeRedirectForResults(
+        Actions     => \@results,
+        Arguments   => { id => $asset->id },
+    );
+}
+</%init>
+<%args>
+$id     => undef
+$Update => 0
+</%args>
+

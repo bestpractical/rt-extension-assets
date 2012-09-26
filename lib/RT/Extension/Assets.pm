@@ -13,6 +13,9 @@ RT-Extension-Assets - Asset management for RT
 
 =cut
 
+RT->AddStyleSheets("RTx-Assets.css");
+RT->AddJavaScript("RTx-Assets.js");
+
 {
     use RT::CustomField;
     my $ORIGINAL = RT::CustomField->can('ApplyGlobally');
@@ -42,6 +45,32 @@ RT-Extension-Assets - Asset management for RT
             unless $asset->CurrentUserHasRight("ModifyAsset");
 
         return $asset;
+    }
+
+    sub ProcessAssetPeople {
+        my $asset = shift;
+        my %ARGS  = (@_);
+        my @results;
+
+        for my $arg (keys %ARGS) {
+            if ($arg =~ /^AddRoleMember-(User|Group)$/) {
+                next unless $ARGS{$arg} and $ARGS{"$arg-Type"};
+
+                my ($ok, $msg) = $asset->AddRoleMember(
+                    Type => $ARGS{"$arg-Type"},
+                    $1   => $ARGS{$arg},
+                );
+                push @results, $msg;
+            }
+            elsif ($arg =~ /^RemoveRoleMember-(.+)$/) {
+                my ($ok, $msg) = $asset->DeleteRoleMember(
+                    Type        => $1,
+                    PrincipalId => $ARGS{$arg},
+                );
+                push @results, $msg;
+            }
+        }
+        return @results;
     }
 }
 
