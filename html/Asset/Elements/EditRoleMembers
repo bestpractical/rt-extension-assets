@@ -1,0 +1,28 @@
+<%args>
+$Group       => undef
+$Recursively => 0
+</%args>
+<%init>
+my $field_name = "RemoveRoleMember-" . $Group->Type;
+</%init>
+<ul class="role-members">
+% my $Users = $Group->UserMembersObj( Recursively => $Recursively );
+% while ( my $user = $Users->Next ) {
+<li>
+  <label>
+    <input type="checkbox" name="<% $field_name %>" value="<% $user->PrincipalId %>">
+    <& /Elements/ShowUser, User => $user &>
+  </label>
+</li>
+% }
+% my $Groups = $Group->GroupMembersObj( Recursively => $Recursively );
+% $Groups->LimitToUserDefinedGroups;
+% while (my $group = $Groups->Next) {
+<li>
+  <label>
+    <input type="checkbox" name="<% $field_name %>" value="<% $group->PrincipalId %>">
+    <&|/l&>Group</&>: <% $group->Name %>
+  </label>
+</li>
+% }
+</ul>

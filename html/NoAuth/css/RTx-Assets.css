@@ -1,0 +1,25 @@
+.asset-people ul.role-members {
+    margin-top:     0;
+    padding-left:   0;
+
+    list-style: none;
+}
+
+.asset-people td {
+    vertical-align: top;
+}
+
+.asset-people .edit h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.asset-people .edit .role h3 {
+    margin-bottom: 0.5em;
+}
+
+.asset-people .edit .role,
+.asset-people .edit .add-group,
+.asset-people .edit .add-user {
+    margin-bottom: 1em;
+}

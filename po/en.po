@@ -1,0 +1,4 @@
+# Spaces in role names make life needlessly difficult;
+# just translate it!
+msgid "TechnicalContact"
+msgstr "Technical Contact"

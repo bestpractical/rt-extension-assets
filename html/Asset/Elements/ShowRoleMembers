@@ -1,0 +1,13 @@
+<%ARGS>
+$Group       => undef
+$Recursively => 0
+</%ARGS>
+% my $Users = $Group->UserMembersObj( Recursively => $Recursively );
+% while ( my $user = $Users->Next ) {
+<& /Elements/ShowUser, User => $user &><br>
+% }
+% my $Groups = $Group->GroupMembersObj( Recursively => $Recursively );
+% $Groups->LimitToUserDefinedGroups;
+% while (my $group = $Groups->Next) {
+<&|/l&>Group</&>: <% $group->Name %><br>
+% }

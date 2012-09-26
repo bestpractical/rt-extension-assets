@@ -29,6 +29,10 @@ RT::Asset->AddRightCategories(
     ModifyAsset => 'Staff',
 );
 
+for my $role ('Owner', 'User', 'TechnicalContact') {
+    RT::Asset->RegisterRole( Name => $role );
+}
+
 =head1 DESCRIPTION
 
 An Asset is a small record object upon which zero to many custom fields are
@@ -103,6 +107,11 @@ undefined.
 
 =item Disabled
 
+=item Owner, User, TechnicalContact
+
+A single principal ID or array ref of principal IDs to add as members of the
+respective role groups for the new asset
+
 =back
 
 =cut
@@ -113,6 +122,10 @@ sub Create {
         Name            => '',
         Description     => '',
         Disabled        => 0,
+
+        Owner               => undef,
+        User                => undef,
+        TechnicalContact    => undef,
         @_
     );
 
@@ -130,6 +143,40 @@ sub Create {
     unless ($id) {
         RT->DatabaseHandle->Rollback();
         return (0, $self->loc("Asset create failed: [_1]", $msg));
+    }
+
+    # Create role groups
+    foreach my $type ($self->Roles) {
+        my $group = RT::Group->new( $self->CurrentUser );
+        my ($id, $msg) = $group->CreateRoleGroup( Object => $self, Type => $type );
+        unless ($id) {
+            RT->Logger->error("Couldn't create role group '$type' for asset ". $self->id .": $msg");
+            RT->DatabaseHandle->Rollback();
+            return (0, $self->loc("Couldn't create role group [_1]: [_2]", $type, $msg));
+        }
+    }
+
+    # Add members to roles
+    for my $role ($self->Roles) {
+        next unless $args{$role};
+
+        my $group = $self->RoleGroup($role);
+
+        my @members = ref($args{$role}) eq 'ARRAY'
+            ? @{$args{$role}}
+            : $args{$role};
+
+        for my $member (@members) {
+            my ($ok, $msg) = $group->_AddMember(
+                PrincipalId         => $member,
+                InsideTransaction   => 1,
+            );
+            unless ($ok) {
+                RT->Logger->error("Couldn't add $member as $role: $msg");
+                RT->DatabaseHandle->Rollback();
+                return (0, $self->loc("Couldn't add [_1] as [_2]: [_3]", $member, $role, $msg));
+            }
+        }
     }
 
     # Add CFs
@@ -225,7 +272,7 @@ sub CurrentUserCanSee {
 
 =head2 AddLink
 
-Checks ModifyAsset before calling L<RT::Record/_AddLink>.
+Checks I<ModifyAsset> before calling L<RT::Record/_AddLink>.
 
 =cut
 
@@ -241,7 +288,7 @@ sub AddLink {
 
 =head2 DeleteLink
 
-Checks ModifyAsset before calling L<RT::Record/_DeleteLink>.
+Checks I<ModifyAsset> before calling L<RT::Record/_DeleteLink>.
 
 =cut
 
@@ -265,6 +312,72 @@ sub URI {
     my $self = shift;
     my $uri = RT::URI::asset->new($self->CurrentUser);
     return $uri->URIForObject($self);
+}
+
+=head2 Owners
+
+Returns an L<RT::Group> object for this asset's I<Owner> role group.  The
+object may be unloaded if permissions aren't satisified.
+
+=head2 Users
+
+Returns an L<RT::Group> object for this asset's I<User> role group.  The object
+may be unloaded if permissions aren't satisified.
+
+=head2 TechnicalContacts
+
+Returns an L<RT::Group> object for this asset's I<TechnicalContact> role
+group.  The object may be unloaded if permissions aren't satisified.
+
+=cut
+
+sub Owners              { $_[0]->RoleGroup("Owner") }
+sub Users               { $_[0]->RoleGroup("User")  }
+sub TechnicalContacts   { $_[0]->RoleGroup("TechnicalContact") }
+
+=head2 AddRoleMember
+
+Checks I<ModifyAsset> before calling L<RT::Record/AddRoleMember>.
+
+=cut
+
+sub AddRoleMember {
+    my $self = shift;
+
+    return (0, $self->loc("No permission to modify this asset"))
+        unless $self->CurrentUserHasRight("ModifyAsset");
+
+    return $self->SUPER::AddRoleMember(@_);
+}
+
+=head2 DeleteRoleMember
+
+Checks I<ModifyAsset> before calling L<RT::Record/DeleteRoleMember>.
+
+=cut
+
+sub DeleteRoleMember {
+    my $self = shift;
+
+    return (0, $self->loc("No permission to modify this asset"))
+        unless $self->CurrentUserHasRight("ModifyAsset");
+
+    return $self->SUPER::DeleteRoleMember(@_);
+}
+
+=head2 RoleGroup
+
+An ACL'd version of L<RT::Record/RoleGroup>.  Checks I<ShowAsset>.
+
+=cut
+
+sub RoleGroup {
+    my $self = shift;
+    if ($self->CurrentUserHasRight("ShowAsset")) {
+        return $self->SUPER::RoleGroup(@_);
+    } else {
+        return RT::Group->new( $self->CurrentUser );
+    }
 }
 
 =head1 INTERNAL METHODS
@@ -338,7 +451,7 @@ itself.
 
 =head2 _Set
 
-Checks if the current user can C<ModifyAsset> before calling C<SUPER::_Set>
+Checks if the current user can I<ModifyAsset> before calling C<SUPER::_Set>
 and records a transaction against this object if C<SUPER::_Set> was
 successful.
 
