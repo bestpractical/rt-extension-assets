@@ -65,7 +65,7 @@ diag "Create with CFs";
     is $asset->Transactions->Count, 1, "Only a single txn";
 }
 
-note "Create with Roles";
+note "Create/update with Roles";
 {
     my $root = RT::User->new( RT->SystemUser );
     $root->Load("root");
@@ -85,6 +85,26 @@ note "Create with Roles";
     is $asset->Users->UserMembersObj->First->Name, "root", "root is User";
     is $asset->Owners->UserMembersObj->First->Name, "BPS", "BPS is Owner";
     is $asset->TechnicalContacts->UserMembersObj->First->Name, "BPS", "BPS is TechnicalContact";
+
+    my $sysadmins = RT::Group->new( RT->SystemUser );
+    $sysadmins->CreateUserDefinedGroup( Name => 'Sysadmins' );
+    ok $sysadmins->id, "Created group";
+    is $sysadmins->Name, "Sysadmins", "Got group name";
+
+    (my $ok, $msg) = $asset->AddRoleMember(
+        Type        => 'TechnicalContact',
+        Group       => 'Sysadmins',
+    );
+    ok $ok, "Added Sysadmins as TechnicalContact: $msg";
+    is $asset->TechnicalContacts->MembersObj->Count, 2, "Found two members";
+
+    ($ok, $msg) = $asset->DeleteRoleMember(
+        Type        => 'TechnicalContact',
+        PrincipalId => $bps->PrincipalId,
+    );
+    ok $ok, "Removed BPS user as TechnicalContact: $msg";
+    is $asset->TechnicalContacts->MembersObj->Count, 1, "Now just one member";
+    is $asset->TechnicalContacts->GroupMembersObj(Recursively => 0)->First->Name, "Sysadmins", "... it's Sysadmins";
 }
 
 done_testing;
