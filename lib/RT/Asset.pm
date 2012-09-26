@@ -395,7 +395,7 @@ sub AddRoleMember {
     return (0, $self->loc("No valid PrincipalId"))
         unless $args{PrincipalId};
 
-    return $self->RoleGroup($args{Type})->_AddMember(%args);
+    return $self->RoleGroup(delete $args{Type})->_AddMember(%args);
 }
 
 =head2 DeleteRoleMember
