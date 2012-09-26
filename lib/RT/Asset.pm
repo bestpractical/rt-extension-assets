@@ -337,101 +337,32 @@ sub TechnicalContacts   { $_[0]->RoleGroup("TechnicalContact") }
 
 =head2 AddRoleMember
 
-Adds the specified L<RT::Principal> to the specified role group for this asset.
-
-Takes a set of key-value pairs:
-
-=over 4
-
-=item PrincipalId
-
-Optional.  The ID of the L<RT::Principal> object to add.
-
-=item User
-
-=item Group
-
-Optional.  The Name of an L<RT::User> or L<RT::Group>, respectively, to use as
-the principal.
-
-=item Type
-
-Required.  One of the valid roles for assets.
-
-=back
-
-One, and only one, of I<PrincipalId>, I<User>, or I<Group> is required.
-
-Returns a tuple of (status, message).
+Checks I<ModifyAsset> before calling L<RT::Record/AddRoleMember>.
 
 =cut
 
 sub AddRoleMember {
     my $self = shift;
-    my %args = (@_);
-
-    return (0, $self->loc("One, and only one, of PrincipalId/User/Group is required"))
-        if 1 != grep { $_ } @args{qw/PrincipalId User Group/};
-
-    return (0, $self->loc("No valid Type specified"))
-        unless $args{Type} and $self->HasRole($args{Type});
 
     return (0, $self->loc("No permission to modify this asset"))
         unless $self->CurrentUserHasRight("ModifyAsset");
 
-    unless ($args{PrincipalId}) {
-        my $object;
-        if ($args{User}) {
-            $object = RT::User->new( $self->CurrentUser );
-            $object->Load(delete $args{User});
-        }
-        elsif ($args{Group}) {
-            $object = RT::Group->new( $self->CurrentUser );
-            $object->LoadUserDefinedGroup(delete $args{Group});
-        }
-        $args{PrincipalId} = $object->PrincipalObj->id;
-    }
-
-    return (0, $self->loc("No valid PrincipalId"))
-        unless $args{PrincipalId};
-
-    return $self->RoleGroup(delete $args{Type})->_AddMember(%args);
+    return $self->SUPER::AddRoleMember(@_);
 }
 
 =head2 DeleteRoleMember
 
-Removes the specified L<RT::Principal> from the specified role group for this
-asset.
-
-Takes a set of key-value pairs:
-
-=over 4
-
-=item PrincipalId
-
-Required.  The ID of the L<RT::Principal> object to remove.
-
-=item Type
-
-Required.  One of the valid roles for assets.
-
-=back
-
-Returns a tuple of (status, message).
+Checks I<ModifyAsset> before calling L<RT::Record/DeleteRoleMember>.
 
 =cut
 
 sub DeleteRoleMember {
     my $self = shift;
-    my %args = (@_);
-
-    return (0, $self->loc("No valid Type specified"))
-        unless $args{Type} and $self->HasRole($args{Type});
 
     return (0, $self->loc("No permission to modify this asset"))
         unless $self->CurrentUserHasRight("ModifyAsset");
 
-    return $self->RoleGroup($args{Type})->_DeleteMember(delete $args{PrincipalId});
+    return $self->SUPER::DeleteRoleMember(@_);
 }
 
 =head2 RoleGroup
