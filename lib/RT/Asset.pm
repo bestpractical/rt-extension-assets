@@ -107,6 +107,11 @@ undefined.
 
 =item Disabled
 
+=item Owner, User, TechnicalContact
+
+A single principal ID or array ref of principal IDs to add as members of the
+respective role groups for the new asset
+
 =back
 
 =cut
@@ -117,6 +122,10 @@ sub Create {
         Name            => '',
         Description     => '',
         Disabled        => 0,
+
+        Owner               => undef,
+        User                => undef,
+        TechnicalContact    => undef,
         @_
     );
 
@@ -144,6 +153,27 @@ sub Create {
             RT->Logger->error("Couldn't create role group '$type' for asset ". $self->id .": $msg");
             RT->DatabaseHandle->Rollback();
             return (0, $self->loc("Couldn't create role group [_1]: [_2]", $type, $msg));
+        }
+    }
+
+    # Add members to roles
+    for my $role ($self->Roles) {
+        next unless $args{$role};
+
+        my @members = ref($args{$role}) eq 'ARRAY'
+            ? @{$args{$role}}
+            : $args{$role};
+
+        for my $member (@members) {
+            my ($ok, $msg) = $self->AddRoleMember(
+                Type        => $role,
+                PrincipalId => $member,
+            );
+            unless ($ok) {
+                RT->Logger->error("Couldn't add $member as $role: $msg");
+                RT->DatabaseHandle->Rollback();
+                return (0, $self->loc("Couldn't add [_1] as [_2]: [_3]", $member, $role, $msg));
+            }
         }
     }
 

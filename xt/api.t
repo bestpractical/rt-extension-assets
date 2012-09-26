@@ -65,4 +65,26 @@ diag "Create with CFs";
     is $asset->Transactions->Count, 1, "Only a single txn";
 }
 
+note "Create with Roles";
+{
+    my $root = RT::User->new( RT->SystemUser );
+    $root->Load("root");
+    ok $root->id, "Found root";
+
+    my $bps = RT::Test->load_or_create_user( Name => "BPS" );
+    ok $bps->id, "Created BPS user";
+
+    my $asset = RT::Asset->new( RT->SystemUser );
+    my ($id, $msg) = $asset->Create(
+        Name    => 'RT server',
+        User                => $root->PrincipalId,
+        Owner               => $bps->PrincipalId,
+        TechnicalContact    => $bps->PrincipalId,
+    );
+    ok $id, "Created: $msg";
+    is $asset->Users->UserMembersObj->First->Name, "root", "root is User";
+    is $asset->Owners->UserMembersObj->First->Name, "BPS", "BPS is Owner";
+    is $asset->TechnicalContacts->UserMembersObj->First->Name, "BPS", "BPS is TechnicalContact";
+}
+
 done_testing;
