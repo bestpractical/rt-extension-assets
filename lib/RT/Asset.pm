@@ -29,7 +29,7 @@ RT::Asset->AddRightCategories(
     ModifyAsset => 'Staff',
 );
 
-for my $role ('Owner', 'User', 'Technical Contact') {
+for my $role ('Owner', 'User', 'TechnicalContact') {
     RT::Asset->RegisterRole( Name => $role );
 }
 
@@ -294,14 +294,14 @@ may be unloaded if permissions aren't satisified.
 
 =head2 TechnicalContacts
 
-Returns an L<RT::Group> object for this asset's I<Technical Contact> role
+Returns an L<RT::Group> object for this asset's I<TechnicalContact> role
 group.  The object may be unloaded if permissions aren't satisified.
 
 =cut
 
 sub Owners              { $_[0]->RoleGroup("Owner") }
 sub Users               { $_[0]->RoleGroup("User")  }
-sub TechnicalContacts   { $_[0]->RoleGroup("Technical Contact") }
+sub TechnicalContacts   { $_[0]->RoleGroup("TechnicalContact") }
 
 =head2 RoleGroup
 
