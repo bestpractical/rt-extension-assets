@@ -9,3 +9,5 @@ CREATE TABLE RTxAssets (
     LastUpdated       datetime                 DEFAULT NULL,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE INDEX RTxAssetsName ON RTxAssets (Name);

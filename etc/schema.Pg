@@ -10,3 +10,5 @@ CREATE TABLE RTxAssets (
     LastUpdated       timestamp                DEFAULT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE INDEX RTxAssetsName ON RTxAssets (LOWER(Name));
