@@ -18,9 +18,9 @@ RT->AddJavaScript("RTx-Assets.js");
 
 {
     use RT::CustomField;
-    my $ORIGINAL = RT::CustomField->can('ApplyGlobally');
+    my $ORIGINAL = RT::CustomField->can('IsOnlyGlobal');
     no warnings 'redefine';
-    *RT::CustomField::ApplyGlobally = sub {
+    *RT::CustomField::IsOnlyGlobal = sub {
         my $self = shift;
         return 1 if lc($self->LookupType) eq lc("RT::Asset");
         return $ORIGINAL->($self);
