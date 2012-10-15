@@ -10,10 +10,7 @@
     <& Elements/EditBasics, %ARGS, AssetObj => $asset &>
   </&>
 
-  <&| /Widgets/TitleBox, title => loc("Details"), class => "asset-cfs" &>
-    <!-- XXX TODO: use generic EditCustomFields element in core RT once it's ready -->
-    <& Elements/EditCustomFields, %ARGS, Object => $asset &>
-  </&>
+  <& /Elements/EditCustomFieldCustomGroups, Object => $asset &>
 
   <!-- XXX TODO: Links -->
 

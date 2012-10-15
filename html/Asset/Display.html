@@ -11,9 +11,7 @@
     <& Elements/ShowPeople, AssetObj => $asset &>
 </&>
 
-<&| /Widgets/TitleBox, title => loc("Details"), class => "asset-cfs" &>
-    <& /Elements/ShowCustomFields, Object => $asset &>
-</&>
+<& /Elements/ShowCustomFieldCustomGroups, Object => $asset &>
 
 <!-- XXX TODO: Links -->
 
