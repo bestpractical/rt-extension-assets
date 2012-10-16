@@ -12,5 +12,3 @@ $AssetObj
 </div>
 % }
 <em><&|/l&>(Check box to delete)</&></em>
-
-<& /Elements/EditCustomFields, Object => $AssetObj, Grouping => 'People', AsTable => 1 &>

@@ -10,7 +10,10 @@
     <table width="100%" class="edit">
       <tr>
         <td width="30%"><& Elements/EditPeople, %ARGS, AssetObj => $asset &></td>
-        <td><& Elements/AddPeople, AssetObj => $asset &></td>
+        <td width="30%"><& Elements/AddPeople, AssetObj => $asset &></td>
+        <td>
+          <& /Elements/EditCustomFields, Object => $asset, Grouping => 'People', AsTable => 1 &>
+        </td>
       </tr>
     </table>
   </&>
