@@ -1,0 +1,32 @@
+<& /Elements/Header, Title => loc("Modify dates for asset #[_1]: [_2]", $asset->id, $asset->Name) &>
+<& /Elements/Tabs &>
+
+<& /Elements/ListActions, actions => \@results &>
+
+<form method="post" enctype="multipart/form-data" id="ModifyAssetDates" action="ModifyDates.html">
+  <input type="hidden" name="id" value="<% $asset->id %>">
+
+  <&| /Widgets/TitleBox, title => loc("Dates"), class => "asset-dates" &>
+    <& Elements/EditDates, %ARGS, AssetObj => $asset &>
+  </&>
+
+  <& /Elements/Submit, Label => loc('Save asset'), Name => "Update" &>
+</form>
+
+<%init>
+my $asset = LoadAsset($id);
+my @results;
+
+if ($Update) {
+    push @results, ProcessObjectCustomFieldUpdates( Object => $asset, ARGSRef => \%ARGS );
+
+    MaybeRedirectForResults(
+        Actions     => \@results,
+        Arguments   => { id => $asset->id },
+    );
+}
+</%init>
+<%args>
+$id     => undef
+$Update => 0
+</%args>
