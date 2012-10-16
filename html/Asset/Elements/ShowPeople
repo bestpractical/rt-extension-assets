@@ -12,4 +12,5 @@ $AssetObj
   </td>
 </tr>
 % }
+<& /Elements/ShowCustomFields, Object => $AssetObj, Grouping => 'People', Table => 0 &>
 </table>

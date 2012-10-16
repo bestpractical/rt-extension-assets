@@ -14,6 +14,9 @@ RT::Asset - Represents a single asset record
 
 # Assets are primarily built on custom fields
 RT::CustomField->_ForObjectType( CustomFieldLookupType() => 'Assets' );
+RT::CustomField->RegisterBuiltInGroupings(
+    'RT::Asset' => [qw( Basics Dates People Links )]
+);
 
 # Setup rights
 $RT::ACE::OBJECT_TYPES{'RT::Asset'} = 1;

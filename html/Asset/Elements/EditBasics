@@ -13,6 +13,7 @@
     <td><input name="Disabled" type="checkbox" value="1" <% $current{Disabled} ? "checked" : "" %>></td>
   </tr>
 % }
+  <& /Elements/EditCustomFields, Object => $AssetObj, Grouping => 'Basics', InTable => 1 &>
 % $m->callback(%ARGS, CallbackName => "AfterFields");
 </table>
 <%args>

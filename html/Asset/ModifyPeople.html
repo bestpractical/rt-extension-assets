@@ -24,6 +24,7 @@ my @results;
 
 if ($Update) {
     push @results, ProcessAssetPeople( $asset => %ARGS );
+    push @results, ProcessObjectCustomFieldUpdates( Object => $asset, ARGSRef => \%ARGS );
 
     MaybeRedirectForResults(
         Actions     => \@results,
