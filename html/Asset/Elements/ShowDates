@@ -1,0 +1,25 @@
+<table>
+  <tr>
+    <td class="label"><&|/l&>Created</&>:</td>
+    <td>
+      <&|/l_unsafe,
+          $m->interp->apply_escapes($AssetObj->CreatedAsString, 'h'),
+          $m->scomp('/Elements/ShowUser', User => $AssetObj->CreatorObj)
+        &>[_1] by [_2]</&>
+    </td>
+  </tr>
+  <tr>
+    <td class="label"><&|/l&>Last Updated</&>:</td>
+    <td>
+      <&|/l_unsafe,
+          $m->interp->apply_escapes($AssetObj->LastUpdatedAsString, 'h'),
+          $m->scomp('/Elements/ShowUser', User => $AssetObj->LastUpdatedByObj)
+        &>[_1] by [_2]</&>
+    </td>
+  </tr>
+  <& /Elements/ShowCustomFields, Object => $AssetObj, Grouping => 'Dates', Table => 0 &>
+% $m->callback(%ARGS, CallbackName => "AfterFields");
+</table>
+<%args>
+$AssetObj
+</%args>

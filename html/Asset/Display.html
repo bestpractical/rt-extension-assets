@@ -11,6 +11,10 @@
     <& Elements/ShowPeople, AssetObj => $asset &>
 </&>
 
+<&| /Widgets/TitleBox, title => loc("Dates"), class => "asset-dates" &>
+    <& Elements/ShowDates, AssetObj => $asset &>
+</&>
+
 <& /Elements/ShowCustomFieldCustomGroupings, Object => $asset &>
 
 <!-- XXX TODO: Links -->
