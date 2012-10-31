@@ -5,6 +5,7 @@ package RT::Asset;
 use base 'RT::Record';
 
 use RT::CustomField;
+use RT::URI::asset;
 
 =head1 NAME
 
@@ -203,6 +204,8 @@ sub Create {
             }
         }
     }
+
+    # XXX TODO: Handle Links
 
     # Create transaction
     my ( $txn_id, $txn_msg, $txn ) = $self->_NewTransaction( Type => 'Create' );

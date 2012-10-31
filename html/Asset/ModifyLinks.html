@@ -1,0 +1,34 @@
+<& /Elements/Header, Title => loc("Modify links for asset #[_1]: [_2]", $asset->id, $asset->Name) &>
+<& /Elements/Tabs &>
+
+<& /Elements/ListActions, actions => \@results &>
+
+<form method="post" enctype="multipart/form-data" id="ModifyAssetLinks" action="ModifyLinks.html">
+  <input type="hidden" name="id" value="<% $asset->id %>">
+
+  <&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links" &>
+    <!-- ShowRelationLabel is wrong :( -->
+    <& /Elements/EditLinks, %ARGS, Object => $asset, Merge => 0 &>
+  </&>
+
+  <& /Elements/Submit, Label => loc('Save asset'), Name => "Update" &>
+</form>
+
+<%init>
+my $asset = LoadAsset($id);
+my @results;
+
+if ($Update) {
+    push @results, ProcessRecordLinks( RecordObj => $asset, ARGSRef => \%ARGS );
+    push @results, ProcessObjectCustomFieldUpdates( Object => $asset, ARGSRef => \%ARGS );
+
+    MaybeRedirectForResults(
+        Actions     => \@results,
+        Arguments   => { id => $asset->id },
+    );
+}
+</%init>
+<%args>
+$id     => undef
+$Update => 0
+</%args>
