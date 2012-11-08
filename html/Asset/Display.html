@@ -15,6 +15,10 @@
     <& Elements/ShowDates, AssetObj => $asset &>
 </&>
 
+<&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links" &>
+    <& /Elements/ShowLinks, Object => $asset &>
+</&>
+
 <& /Elements/ShowCustomFieldCustomGroupings, Object => $asset &>
 
 <!-- XXX TODO: Links -->
