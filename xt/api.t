@@ -98,6 +98,11 @@ note "Create/update with Roles";
     ok $ok, "Added Sysadmins as TechnicalContact: $msg";
     is $asset->TechnicalContacts->MembersObj->Count, 2, "Found two members";
 
+    my @txn = grep { $_->Type eq 'AddWatcher' } @{$asset->Transactions->ItemsArrayRef};
+    ok @txn == 1, "Found one AddWatcher txn";
+    is $txn[0]->Field, "TechnicalContact", "... of a TechnicalContact";
+    is $txn[0]->NewValue, $sysadmins->PrincipalId, "... for the right principal";
+
     ($ok, $msg) = $asset->DeleteRoleMember(
         Type        => 'TechnicalContact',
         PrincipalId => $bps->PrincipalId,
@@ -105,6 +110,11 @@ note "Create/update with Roles";
     ok $ok, "Removed BPS user as TechnicalContact: $msg";
     is $asset->TechnicalContacts->MembersObj->Count, 1, "Now just one member";
     is $asset->TechnicalContacts->GroupMembersObj(Recursively => 0)->First->Name, "Sysadmins", "... it's Sysadmins";
+
+    @txn = grep { $_->Type eq 'DelWatcher' } @{$asset->Transactions->ItemsArrayRef};
+    ok @txn == 1, "Found one DelWatcher txn";
+    is $txn[0]->Field, "TechnicalContact", "... of a TechnicalContact";
+    is $txn[0]->NewValue, $bps->PrincipalId, "... for the right principal";
 }
 
 done_testing;
