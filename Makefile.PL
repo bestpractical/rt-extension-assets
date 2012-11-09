@@ -6,6 +6,7 @@ readme_from 'lib/RT/Extension/Assets.pm';
 license  'gplv2';
 
 requires_rt("4.0.0");
+test_requires "Test::Warn";
 
 my ($loaded) = ($INC{'RT.pm'} =~ /^(.*)[\\\/]/);
 my $lib_path = join( ' ', "$RT::LocalPath/lib", $loaded );

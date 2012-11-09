@@ -4,6 +4,7 @@ author:
   - 'Thomas Sibley <trs@bestpractical.com>'
 build_requires:
   ExtUtils::MakeMaker: 6.36
+  Test::Warn: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.36
 distribution_type: module

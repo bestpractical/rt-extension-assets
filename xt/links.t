@@ -3,6 +3,7 @@ use warnings;
 
 use lib 'xt/lib';
 use RT::Extension::Assets::Test tests => undef;
+use Test::Warn;
 
 ok(
     create_assets(
@@ -30,8 +31,8 @@ diag "RT::URI::asset";
 
     while (my ($url, $expected) = each %uris) {
         my $uri = RT::URI->new( RT->SystemUser );
-        my $parsed = $uri->FromURI($url);
         if ($expected) {
+            my $parsed = $uri->FromURI($url);
             ok $parsed, "Parsed $url";
 
             my $asset = $uri->Object;
@@ -42,6 +43,10 @@ diag "RT::URI::asset";
                 is $asset->$field, $value, "... $field is $value";
             }
         } else {
+            my $parsed;
+            warnings_like {
+                $parsed = $uri->FromURI($url);
+            } [qr/\Q$url\E/, qr/\Q$url\E/], "Caught warnings about unknown URI";
             ok !$parsed, "Failed to parse $url, as expected";
         }
     }
