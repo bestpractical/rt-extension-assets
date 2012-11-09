@@ -216,7 +216,7 @@ sub Create {
 
     RT->DatabaseHandle->Commit();
 
-    return ($id, $self->loc('Asset #[_1] created: [_2]', $self->id, $self->Name));
+    return ($id, $self->loc('Asset #[_1] created: [_2]', $self->id, $args{'Name'}));
 }
 
 =head2 ValidateName NAME
