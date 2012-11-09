@@ -22,6 +22,8 @@ no_index:
     - inc
     - po
     - xt
+  package:
+    - HTML::Mason::Commands
 resources:
   license: http://opensource.org/licenses/gpl-license.php
 version: 0.01

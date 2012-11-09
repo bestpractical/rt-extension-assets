@@ -5,6 +5,8 @@ all_from 'lib/RT/Extension/Assets.pm';
 readme_from 'lib/RT/Extension/Assets.pm';
 license  'gplv2';
 
+no_index package => "HTML::Mason::Commands";
+
 requires_rt("4.0.0");
 test_requires "Test::Warn";
 
