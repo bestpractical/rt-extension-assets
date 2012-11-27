@@ -481,8 +481,18 @@ sub _Set {
     # Only record the transaction if the _Set worked
     return ($ok, $msg) unless $ok;
 
+    my $txn_type = "Set";
+    if ($args{'Field'} eq "Disabled") {
+        if (not $old and $args{'Value'}) {
+            $txn_type = "Disabled";
+        }
+        elsif ($old and not $args{'Value'}) {
+            $txn_type = "Enabled";
+        }
+    }
+
     my ($txn_id, $txn_msg, $txn) = $self->_NewTransaction(
-        Type     => 'Set',
+        Type     => $txn_type,
         Field    => $args{'Field'},
         NewValue => $args{'Value'},
         OldValue => $old,
