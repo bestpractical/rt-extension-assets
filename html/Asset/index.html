@@ -1,0 +1,19 @@
+<%init>
+my $assets = RT::Assets->new($session{CurrentUser});
+$assets->UnLimit;
+$assets->RowsPerPage(20);
+</%init>
+<& /Elements/Header, Title => loc("Assets") &>
+<& /Elements/Tabs &>
+
+<& /Elements/CollectionList,
+    Collection      => $assets,
+    OrderBy         => 'Name',
+    Order           => 'ASC',
+    Format          => q[
+        '<b><a href="__WebPath__/Asset/Display.html?id=__id__">__id__</a></b>/TITLE:#',
+        '<b><a href="__WebPath__/Asset/Display.html?id=__id__">__Name__</a></b>/TITLE:Name',
+        Description,
+    ],
+    AllowSorting    => 0,
+    &>
