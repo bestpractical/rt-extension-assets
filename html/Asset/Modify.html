@@ -32,8 +32,8 @@ if ($Update) {
 
     my ($cf_ok, @cf_errors) = $m->comp(
         '/Elements/ValidateCustomFields',
+        Object          => $asset,
         CustomFields    => $asset->CustomFields,
-        NamePrefix      => "Object-RT::Asset-$id-CustomField-",
         ARGSRef         => \%ARGS
     );
 
