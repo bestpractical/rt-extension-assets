@@ -9,9 +9,18 @@ my @sections = (
     "Links",    #loc
 );
 
+my %link;
+if ($AssetObj->CurrentUserHasRight("ModifyAsset")) {
+    for my $section (@sections) {
+        $link{$section} =
+            RT->Config->Get("WebPath")
+            . "/Asset/Modify$section.html?id="
+            . $AssetObj->id;
+    }
+}
 </%init>
 % for my $section (@sections) {
-<&| /Widgets/TitleBox, title => loc($section), class => "asset-\L$section" &>
+<&| /Widgets/TitleBox, title => loc($section), title_href => $link{$section}, class => "asset-\L$section" &>
     <& "Show$section", AssetObj => $AssetObj &>
 </&>
 % }
