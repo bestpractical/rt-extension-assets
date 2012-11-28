@@ -41,6 +41,15 @@ RT->AddJavaScript("RTx-Assets.js");
         Abort(loc("Unable to find asset #[_1]", $id))
             unless $asset->id;
 
+        Abort(loc("You don't have permission to view this asset."))
+            unless $asset->CurrentUserCanSee;
+
+        return $asset;
+    }
+
+    sub LoadAssetForUpdate {
+        my $asset = LoadAsset(@_);
+
         Abort(loc("You don't have permission to modify this asset."))
             unless $asset->CurrentUserHasRight("ModifyAsset");
 
