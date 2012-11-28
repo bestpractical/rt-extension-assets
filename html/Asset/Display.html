@@ -25,14 +25,5 @@
 $id => undef
 </%args>
 <%init>
-Abort(loc("No asset ID specified.")) unless $id;
-
-my $asset = RT::Asset->new( $session{CurrentUser} );
-$asset->Load($id);
-
-Abort(loc("Unable to find asset #[_1]", $id))
-    unless $asset->id;
-
-Abort(loc("You don't have permission to view this asset."))
-    unless $asset->CurrentUserCanSee;
+my $asset = LoadAsset($id);
 </%init>
