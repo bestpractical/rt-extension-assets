@@ -1,20 +1,19 @@
 <%args>
 $AssetObj
 </%args>
-<&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics" &>
-    <& ShowBasics, AssetObj => $AssetObj &>
-</&>
+<%init>
+my @sections = (
+    "Basics",   #loc
+    "People",   #loc
+    "Dates",    #loc
+    "Links",    #loc
+);
 
-<&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
-    <& ShowPeople, AssetObj => $AssetObj &>
+</%init>
+% for my $section (@sections) {
+<&| /Widgets/TitleBox, title => loc($section), class => "asset-\L$section" &>
+    <& "Show$section", AssetObj => $AssetObj &>
 </&>
-
-<&| /Widgets/TitleBox, title => loc("Dates"), class => "asset-dates" &>
-    <& ShowDates, AssetObj => $AssetObj &>
-</&>
-
-<&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links" &>
-    <& /Elements/ShowLinks, Object => $AssetObj &>
-</&>
+% }
 
 <& /Elements/ShowCustomFieldCustomGroupings, Object => $AssetObj &>
