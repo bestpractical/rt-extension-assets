@@ -1,0 +1,7 @@
+<%init>
+Menu->child("tickets")->add_after(
+    "assets",
+    title   => loc("Assets"),
+    path    => "/SelfService/Asset/",
+);
+</%init>
