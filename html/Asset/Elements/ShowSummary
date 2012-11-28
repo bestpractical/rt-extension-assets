@@ -12,9 +12,10 @@ my @sections = (
 my %link;
 if ($AssetObj->CurrentUserHasRight("ModifyAsset")) {
     for my $section (@sections) {
+        my $page = $section eq 'Basics' ? "Modify.html" : "Modify$section.html";
         $link{$section} =
             RT->Config->Get("WebPath")
-            . "/Asset/Modify$section.html?id="
+            . "/Asset/$page?id="
             . $AssetObj->id;
     }
 }
