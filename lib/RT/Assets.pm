@@ -28,6 +28,62 @@ sub Limit {
     $self->SUPER::Limit(%args);
 }
 
+=head2 LimitRoleMember
+
+Takes a paramhash of C<Type> and C<PrincipalId> and limits the collection to
+assets where the specified principal is a member of the specified role group.
+
+=cut
+
+sub LimitRoleMember {
+    my $self = shift;
+    my %args = (
+        Type        => undef,
+        PrincipalId => undef,
+        @_,
+    );
+
+    for (qw(Type PrincipalId)) {
+        return (0, "$_ is required")
+            unless $args{$_};
+    }
+
+    my $groups = $self->Join(
+        ALIAS1 => 'main',
+        FIELD1 => 'id',
+        TABLE2 => 'Groups',
+        FIELD2 => 'Instance',
+    );
+    $self->Limit(
+        ALIAS   => $groups,
+        FIELD   => "Domain",
+        VALUE   => "RT::Asset-Role",
+    );
+    $self->Limit(
+        ALIAS   => $groups,
+        FIELD   => "Type",
+        VALUE   => $args{Type},
+    );
+
+    my $members = $self->Join(
+        ALIAS1 => $groups,
+        FIELD1 => 'id',
+        TABLE2 => 'CachedGroupMembers',
+        FIELD2 => 'GroupId',
+    );
+    $self->Limit(
+        ALIAS   => $members,
+        FIELD   => "Disabled",
+        VALUE   => 0,
+    );
+    $self->Limit(
+        ALIAS   => $members,
+        FIELD   => "MemberId",
+        VALUE   => $args{PrincipalId},
+    );
+    return;
+}
+
 =head1 INTERNAL METHODS
 
 Public methods which encapsulate implementation details.  You shouldn't need to
