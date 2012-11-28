@@ -1,0 +1,10 @@
+<& /SelfService/Elements/Header, Title => loc("Asset #[_1]: [_2]", $asset->id, $asset->Name) &>
+
+<& /Asset/Elements/ShowSummary, AssetObj => $asset &>
+
+<%args>
+$id => undef
+</%args>
+<%init>
+my $asset = LoadAsset($id);
+</%init>
