@@ -1,3 +1,30 @@
+/* Colors */
+
+.asset-basics   .titlebox .titlebox-title .left,
+.asset-info-cfs .titlebox .titlebox-title .left { background-color: #b32; }
+.asset-people   .titlebox .titlebox-title .left { background-color: #48c; }
+.asset-dates    .titlebox .titlebox-title .left { background-color: #633063; }
+.asset-links    .titlebox .titlebox-title .left { background-color: #316531; }
+
+.asset-basics   .titlebox-title .left, .asset-basics    .titlebox-title .left a,
+.asset-info-cfs .titlebox-title .left, .asset-info-cfs  .titlebox-title .left a,
+.asset-people   .titlebox-title .left, .asset-people    .titlebox-title .left a,
+.asset-dates    .titlebox-title .left, .asset-dates     .titlebox-title .left a,
+.asset-links    .titlebox-title .left, .asset-links     .titlebox-title .left a {
+    color: white;
+}
+
+.aileron .asset-basics      .titlebox-title .widget a,
+.aileron .asset-info-cfs    .titlebox-title .widget a,
+.aileron .asset-people      .titlebox-title .widget a,
+.aileron .asset-dates       .titlebox-title .widget a,
+.aileron .asset-links       .titlebox-title .widget a {
+    /* lighter color for the toggle arrow sprite, just like aileron/ticket.css */
+    background-position: center -7px;
+}
+
+/* People */
+
 .asset-people ul.role-members {
     margin-top:     0;
     padding-left:   0;
