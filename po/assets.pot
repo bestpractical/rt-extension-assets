@@ -1,0 +1,254 @@
+#: html/Asset/Elements/EditDates:17 html/Asset/Elements/EditDates:8 html/Asset/Elements/ShowDates:17 html/Asset/Elements/ShowDates:8
+#. ($m->interp->apply_escapes($AssetObj->CreatedAsString, 'h'),          $m->scomp('/Elements/ShowUser', User => $AssetObj->CreatorObj))
+#. ($m->interp->apply_escapes($AssetObj->LastUpdatedAsString, 'h'),          $m->scomp('/Elements/ShowUser', User => $AssetObj->LastUpdatedByObj))
+msgid "%1 by %2"
+msgstr ""
+
+#: html/Asset/Elements/EditPeople:14
+msgid "(Check box to delete)"
+msgstr ""
+
+#: lib/RT/Asset.pm:219
+#. ($self->id, $args{'Name'})
+msgid "Asset #%1 created: %2"
+msgstr ""
+
+#: html/Asset/Display.html:1 html/SelfService/Asset/Display.html:1
+#. ($asset->id, $asset->Name)
+msgid "Asset #%1: %2"
+msgstr ""
+
+#: lib/RT/URI/asset.pm:152
+#. ($self->Object->id)
+msgid "Asset %1"
+msgstr ""
+
+#: lib/RT/Asset.pm:214
+#. ($txn_msg)
+msgid "Asset Create txn failed: %1"
+msgstr ""
+
+#: lib/RT/Asset.pm:149
+#. ($msg)
+msgid "Asset create failed: %1"
+msgstr ""
+
+#: html/Asset/index.html:6 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:12 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:4 html/Callbacks/RT-Extension-Assets/Elements/Tabs/SelfService:4
+msgid "Assets"
+msgstr ""
+
+#: lib/RT/Asset.pm:246
+msgid "Assets may not be deleted"
+msgstr ""
+
+#: html/Asset/Create.html:9 html/Asset/Elements/ShowSummary:6 html/Asset/Modify.html:9 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:27
+msgid "Basics"
+msgstr ""
+
+#: lib/RT/Asset.pm:181
+#. ($member, $role, $msg)
+msgid "Couldn't add %1 as %2: %3"
+msgstr ""
+
+#: lib/RT/Asset.pm:203
+#. ($cfmsg)
+msgid "Couldn't add custom field value on create: %1"
+msgstr ""
+
+#: lib/RT/Asset.pm:159
+#. ($type, $msg)
+msgid "Couldn't create role group %1: %2"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:5
+msgid "Create"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:41
+msgid "Create New"
+msgstr ""
+
+#: html/Asset/Create.html:1
+msgid "Create a new asset"
+msgstr ""
+
+#: html/Asset/Create.html:18
+msgid "Create asset"
+msgstr ""
+
+#: lib/RT/Asset.pm:27
+msgid "Create assets"
+msgstr ""
+
+#: lib/RT/Asset.pm:27
+msgid "CreateAsset"
+msgstr ""
+
+#: html/Asset/Elements/EditDates:3 html/Asset/Elements/ShowDates:3
+msgid "Created"
+msgstr ""
+
+#: html/Asset/Modify.html:13
+msgid "Custom Fields"
+msgstr ""
+
+#: html/Asset/Elements/ShowSummary:8 html/Asset/ModifyDates.html:9 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:30
+msgid "Dates"
+msgstr ""
+
+#: html/Asset/Elements/EditBasics:7 html/Asset/Elements/ShowBasics:7
+msgid "Description"
+msgstr ""
+
+#: html/Elements/RT__Asset/ColumnMap:67
+msgid "Disabled"
+msgstr ""
+
+#: html/Asset/Elements/EditBasics:12
+msgid "Disabled?"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:25
+msgid "Display"
+msgstr ""
+
+#: html/Admin/Global/CustomFields/Assets.html:5
+msgid "Edit Custom Fields for Assets"
+msgstr ""
+
+#: html/Elements/RT__Asset/ColumnMap:67
+msgid "Enabled"
+msgstr ""
+
+#: html/Asset/Elements/AddPeople:19
+msgid "Find a group..."
+msgstr ""
+
+#: html/Asset/Elements/AddPeople:10
+msgid "Find a user..."
+msgstr ""
+
+#: html/Asset/Elements/EditRoleMembers:24 html/Asset/Elements/ShowRoleMembers:12
+msgid "Group"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:26
+msgid "History"
+msgstr ""
+
+#: html/Asset/History.html:1
+#. ($asset->id, $asset->Name)
+msgid "History of Asset #%1: %2"
+msgstr ""
+
+#: lib/RT/Asset.pm:139
+msgid "Invalid Name (names may not be all digits)"
+msgstr ""
+
+#: html/Asset/Elements/EditDates:12 html/Asset/Elements/ShowDates:12
+msgid "Last Updated"
+msgstr ""
+
+#: html/Asset/Elements/ShowSummary:9 html/Asset/ModifyLinks.html:9 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:28
+msgid "Links"
+msgstr ""
+
+#: html/Asset/ModifyCFs.html:1
+#. ($asset->id, $asset->Name, $Grouping)
+msgid "Modify %3 for asset #%1: %2"
+msgstr ""
+
+#: html/Asset/Modify.html:1
+#. ($asset->id, $asset->Name)
+msgid "Modify asset #%1: %2"
+msgstr ""
+
+#: lib/RT/Asset.pm:28
+msgid "Modify assets"
+msgstr ""
+
+#: html/Asset/ModifyDates.html:1
+#. ($asset->id, $asset->Name)
+msgid "Modify dates for asset #%1: %2"
+msgstr ""
+
+#: html/Asset/ModifyLinks.html:1
+#. ($asset->id, $asset->Name)
+msgid "Modify links for asset #%1: %2"
+msgstr ""
+
+#: html/Asset/ModifyPeople.html:1
+#. ($asset->id, $asset->Name)
+msgid "Modify people related to asset #%1: %2"
+msgstr ""
+
+#: lib/RT/Asset.pm:28
+msgid "ModifyAsset"
+msgstr ""
+
+#: html/Elements/MyAssets:8 html/SelfService/Asset/index.html:1
+msgid "My Assets"
+msgstr ""
+
+#: html/Asset/Elements/EditBasics:3 html/Asset/Elements/ShowBasics:3
+msgid "Name"
+msgstr ""
+
+#: lib/RT/Extension/Assets.pm:36
+msgid "No asset ID specified."
+msgstr ""
+
+#: html/Asset/ModifyCFs.html:32
+#. ($Grouping)
+msgid "No custom fields found for grouping '%1'"
+msgstr ""
+
+#: html/Asset/ModifyCFs.html:23
+msgid "No grouping specified"
+msgstr ""
+
+#: lib/RT/Asset.pm:353 lib/RT/Asset.pm:368
+msgid "No permission to modify this asset"
+msgstr ""
+
+#: html/Asset/Elements/ShowSummary:7 html/Asset/ModifyPeople.html:9 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:29
+msgid "People"
+msgstr ""
+
+#: lib/RT/Asset.pm:136 lib/RT/Asset.pm:289 lib/RT/Asset.pm:305 lib/RT/Asset.pm:474
+msgid "Permission Denied"
+msgstr ""
+
+#: html/Asset/Modify.html:17 html/Asset/ModifyCFs.html:14 html/Asset/ModifyDates.html:13 html/Asset/ModifyLinks.html:13 html/Asset/ModifyPeople.html:21
+msgid "Save asset"
+msgstr ""
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:6
+msgid "Search"
+msgstr ""
+
+#: lib/RT/Asset.pm:26
+msgid "See assets"
+msgstr ""
+
+#: lib/RT/Asset.pm:26
+msgid "ShowAsset"
+msgstr ""
+
+#: lib/RT/Extension/Assets.pm:41
+#. ($id)
+msgid "Unable to find asset #%1"
+msgstr ""
+
+#: html/Asset/Create.html:27
+msgid "You don't have permission to create assets."
+msgstr ""
+
+#: lib/RT/Extension/Assets.pm:53
+msgid "You don't have permission to modify this asset."
+msgstr ""
+
+#: lib/RT/Extension/Assets.pm:44
+msgid "You don't have permission to view this asset."
+msgstr ""
+
