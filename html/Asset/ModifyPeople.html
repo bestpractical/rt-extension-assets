@@ -26,13 +26,27 @@ my $asset = LoadAssetForUpdate($id);
 my @results;
 
 if ($Update) {
-    push @results, ProcessAssetPeople( $asset => %ARGS );
-    push @results, ProcessObjectCustomFieldUpdates( Object => $asset, ARGSRef => \%ARGS );
+    my $CFs = $asset->CustomFields;
+    $CFs->LimitToGrouping($asset => "People");
 
-    MaybeRedirectForResults(
-        Actions     => \@results,
-        Arguments   => { id => $asset->id },
+    my ($cf_ok, @cf_errors) = $m->comp(
+        '/Elements/ValidateCustomFields',
+        Object          => $asset,
+        CustomFields    => $CFs,
+        ARGSRef         => \%ARGS
     );
+
+    if ($cf_ok) {
+        push @results, ProcessAssetPeople( $asset => %ARGS );
+        push @results, ProcessObjectCustomFieldUpdates( Object => $asset, ARGSRef => \%ARGS );
+
+        MaybeRedirectForResults(
+            Actions     => \@results,
+            Arguments   => { id => $asset->id },
+        );
+    } else {
+        push @results, @cf_errors;
+    }
 }
 </%init>
 <%args>
