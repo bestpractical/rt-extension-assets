@@ -7,7 +7,6 @@
   <input type="hidden" name="id" value="<% $asset->id %>">
 
   <&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links" &>
-    <!-- ShowRelationLabel is wrong :( -->
     <& /Elements/EditLinks, %ARGS, Object => $asset, Merge => 0 &>
   </&>
 
