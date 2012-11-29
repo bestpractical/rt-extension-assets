@@ -6,7 +6,7 @@ $AssetObj
 %# supported metadata in core RT for roles?
 % for my $role ($AssetObj->Roles) {
 <tr>
-  <td class="label"><&|/l&><% $role %></&>:</td>
+  <td class="label"><% loc($role) %>:</td>
   <td>
     <& ShowRoleMembers, Group => $AssetObj->RoleGroup($role) &>
   </td>

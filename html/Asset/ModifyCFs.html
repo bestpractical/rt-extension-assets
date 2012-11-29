@@ -29,7 +29,7 @@ my @results;
 my $CFs = $asset->CustomFields;
 $CFs->LimitToGrouping($asset => $Grouping);
 
-Abort(loc("No custom fields found for grouping '$Grouping'"))
+Abort(loc("No custom fields found for grouping '[_1]'", $Grouping))
     unless $CFs->Count;
 
 if ($Update) {
