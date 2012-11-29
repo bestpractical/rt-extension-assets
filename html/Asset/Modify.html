@@ -10,7 +10,9 @@
     <& Elements/EditBasics, %ARGS, AssetObj => $asset &>
   </&>
 
-  <& /Elements/EditCustomFieldCustomGroupings, Object => $asset &>
+  <&| /Widgets/TitleBox, title => loc("Custom Fields"), class => "asset-info-cfs" &>
+    <& /Elements/EditCustomFields, Object => $asset, Grouping => '' &>
+  </&>
 
   <& /Elements/Submit, Label => loc('Save asset'), Name => "Update" &>
 </form>

@@ -1,0 +1,57 @@
+<& /Elements/Header, Title => loc("Modify [_3] for asset #[_1]: [_2]", $asset->id, $asset->Name, $Grouping) &>
+<& /Elements/Tabs &>
+
+<& /Elements/ListActions, actions => \@results &>
+
+<form method="post" enctype="multipart/form-data" id="ModifyAssetCFs" action="ModifyCFs.html">
+  <input type="hidden" name="id" value="<% $asset->id %>">
+  <input type="hidden" name="Grouping" value="<% $Grouping %>">
+
+  <&| /Widgets/TitleBox, title => loc($Grouping), class => CSSClass("asset-info-cfs-\L$Grouping") &>
+    <& /Elements/EditCustomFields, Object => $asset, Grouping => $Grouping &>
+  </&>
+
+  <& /Elements/Submit, Label => loc('Save asset'), Name => "Update" &>
+</form>
+
+<%args>
+$id         => undef
+$Update     => 0
+$Grouping   => undef
+</%args>
+<%init>
+Abort(loc("No grouping specified"))
+    unless $Grouping;
+
+my $asset = LoadAssetForUpdate($id);
+my @results;
+
+my $CFs = $asset->CustomFields;
+$CFs->LimitToGrouping($asset => $Grouping);
+
+Abort(loc("No custom fields found for grouping '$Grouping'"))
+    unless $CFs->Count;
+
+if ($Update) {
+    my ($cf_ok, @cf_errors) = $m->comp(
+        '/Elements/ValidateCustomFields',
+        Object          => $asset,
+        CustomFields    => $CFs,
+        ARGSRef         => \%ARGS
+    );
+
+    if ($cf_ok) {
+        push @results, ProcessObjectCustomFieldUpdates( Object => $asset, ARGSRef => \%ARGS );
+
+        MaybeRedirectForResults(
+            Actions     => \@results,
+            Arguments   => {
+                id          => $asset->id,
+                Grouping    => $Grouping,
+            },
+        );
+    } else {
+        push @results, @cf_errors;
+    }
+}
+</%init>
