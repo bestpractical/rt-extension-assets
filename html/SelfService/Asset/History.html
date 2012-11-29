@@ -1,0 +1,13 @@
+<& /SelfService/Elements/Header, Title => loc("History of Asset #[_1]: [_2]", $asset->id, $asset->Name) &>
+
+<& /Elements/ShowHistory,
+    Object => $asset,
+    ShowDisplayModes => 0,
+    &>
+
+<%args>
+$id => undef
+</%args>
+<%init>
+my $asset = LoadAsset($id);
+</%init>
