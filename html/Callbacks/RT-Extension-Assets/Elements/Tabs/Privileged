@@ -17,7 +17,7 @@ my $page    = PageMenu();
 my $request = $r->path_info;
    $request =~ s{/+}{/}g;
 
-if ($request =~ m{^/Asset/} and ($DECODED_ARGS->{id} || '') !~ /\D/) {
+if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /\D/) {
     my $id    = $DECODED_ARGS->{id};
     my $asset = RT::Asset->new( $session{CurrentUser} );
     $asset->Load($id);
