@@ -4,6 +4,27 @@ use warnings;
 use lib 'xt/lib';
 use RT::Extension::Assets::Test tests => undef;
 
+RT->Config->Set("CustomFieldGroupings",
+    "RT::Asset" => {
+        Dates => [qw(Purchased)],
+    },
+);
+
+my $purchased = create_cf( Name => 'Purchased', Pattern => '(?#Year)^(?:19|20)\d{2}$' );
+ok $purchased->id, "Created CF";
+
+my $height = create_cf( Name => 'Height', Pattern => '(?#Inches)^\d+"?$' );
+ok $height->id, "Created CF";
+
+my $material = create_cf( Name => 'Material' );
+ok $material->id, "Created CF";
+
+my %CF = (
+    Height      => ".CF-" . $height->id    . "-Edit",
+    Material    => ".CF-" . $material->id  . "-Edit",
+    Purchased   => ".CF-" . $purchased->id . "-Edit",
+);
+
 my ($base, $m) = RT::Extension::Assets::Test->started_ok;
 ok $m->login, "Logged in agent";
 
@@ -30,18 +51,7 @@ diag "Create basic asset (no CFs)";
 
 diag "Create with CFs";
 {
-    my $height = create_cf( Name => 'Height', Pattern => '(?#Inches)^\d+"?$' );
-    ok $height->id, "Created CF";
-
-    my $material = create_cf( Name => 'Material' );
-    ok $material->id, "Created CF";
-
     ok apply_cfs($height, $material), "Applied CFs";
-
-    my %CF = (
-        Height      => ".CF-" . $height->id   . "-Edit",
-        Material    => ".CF-" . $material->id . "-Edit",
-    );
 
     $m->follow_link_ok({ id => "assets-create" }, "Asset create link");
     ok $m->form_with_fields(qw(id Name Description)), "Found form";
@@ -70,6 +80,32 @@ diag "Create with CFs";
     is $asset->id, $id, "id matches";
     is $asset->FirstCustomFieldValue('Height'), '46"', "Found height";
     is $asset->FirstCustomFieldValue('Material'), 'pine', "Found material";
+}
+
+diag "Create with CFs in other groups";
+{
+    ok apply_cfs($purchased), "Applied CF";
+
+    $m->follow_link_ok({ id => "assets-create" }, "Asset create link");
+    ok $m->form_with_fields(qw(id Name Description)), "Found form";
+
+    my $has_purchased = $m->current_form->find_input($CF{Purchased});
+
+    $m->submit_form_ok({
+        fields => {
+            id          => 'new',
+            Name        => 'Chair',
+            $CF{Height} => '23',
+        },
+    }, "submited create form");
+
+    if ($has_purchased) {
+        $m->content_unlike(qr/Asset .* created/, "Lacks created message");
+        $m->content_like(qr/Purchased.*?must match .*?Year/, "Has validation error for Purchased");
+    } else {
+        $m->content_like(qr/Asset .* created/, "Found created message");
+        $m->content_unlike(qr/Purchased.*?must match .*?Year/, "Lacks validation error for Purchased");
+    }
 }
 
 # XXX TODO: test other modify pages
