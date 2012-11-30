@@ -114,7 +114,7 @@ note "Create/update with Roles";
     @txn = grep { $_->Type eq 'DelWatcher' } @{$asset->Transactions->ItemsArrayRef};
     ok @txn == 1, "Found one DelWatcher txn";
     is $txn[0]->Field, "TechnicalContact", "... of a TechnicalContact";
-    is $txn[0]->NewValue, $bps->PrincipalId, "... for the right principal";
+    is $txn[0]->OldValue, $bps->PrincipalId, "... for the right principal";
 }
 
 done_testing;
