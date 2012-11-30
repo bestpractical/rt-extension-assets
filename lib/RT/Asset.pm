@@ -114,9 +114,16 @@ undefined.
 =item Owner, User, TechnicalContact
 
 A single principal ID or array ref of principal IDs to add as members of the
-respective role groups for the new asset
+respective role groups for the new asset.
+
+User Names and EmailAddresses may also be used, but Groups must be referenced
+by ID.
 
 =back
+
+Returns a tuple of (status, msg) on failure and (id, msg, non-fatal errors) on
+success, where the third value is an array reference of errors that occurred
+but didn't prevent creation.
 
 =cut
 
@@ -132,6 +139,7 @@ sub Create {
         TechnicalContact    => undef,
         @_
     );
+    my @non_fatal_errors;
 
     return (0, $self->loc("Permission Denied"))
         unless $self->CurrentUserHasRight('CreateAsset');
@@ -150,38 +158,16 @@ sub Create {
     }
 
     # Create role groups
-    foreach my $type ($self->Roles) {
-        my $group = RT::Group->new( $self->CurrentUser );
-        my ($id, $msg) = $group->CreateRoleGroup( Object => $self, Type => $type );
-        unless ($id) {
-            RT->Logger->error("Couldn't create role group '$type' for asset ". $self->id .": $msg");
-            RT->DatabaseHandle->Rollback();
-            return (0, $self->loc("Couldn't create role group [_1]: [_2]", $type, $msg));
-        }
+    unless ($self->_CreateRoleGroups()) {
+        RT->Logger->error("Couldn't create role groups for asset ". $self->id);
+        RT->DatabaseHandle->Rollback();
+        return (0, $self->loc("Couldn't create role groups for asset"));
     }
 
-    # Add members to roles
-    for my $role ($self->Roles) {
-        next unless $args{$role};
-
-        my $group = $self->RoleGroup($role);
-
-        my @members = ref($args{$role}) eq 'ARRAY'
-            ? @{$args{$role}}
-            : $args{$role};
-
-        for my $member (@members) {
-            my ($ok, $msg) = $group->_AddMember(
-                PrincipalId         => $member,
-                InsideTransaction   => 1,
-            );
-            unless ($ok) {
-                RT->Logger->error("Couldn't add $member as $role: $msg");
-                RT->DatabaseHandle->Rollback();
-                return (0, $self->loc("Couldn't add [_1] as [_2]: [_3]", $member, $role, $msg));
-            }
-        }
-    }
+    # Figure out users for roles
+    my $roles = {};
+    push @non_fatal_errors, $self->_ResolveRoles( $roles, %args );
+    push @non_fatal_errors, $self->_AddRolesOnCreate( $roles, map { $_ => sub {1} } $self->Roles );
 
     # Add CFs
     foreach my $key (keys %args) {
@@ -216,7 +202,7 @@ sub Create {
 
     RT->DatabaseHandle->Commit();
 
-    return ($id, $self->loc('Asset #[_1] created: [_2]', $self->id, $args{'Name'}));
+    return ($id, $self->loc('Asset #[_1] created: [_2]', $self->id, $args{'Name'}), \@non_fatal_errors);
 }
 
 =head2 ValidateName NAME

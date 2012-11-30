@@ -59,16 +59,15 @@ if ($id eq "new") {
 
         $m->callback( %ARGS, AssetObj => $asset, Create => \%create, CallbackName => 'MassageCreate' );
 
-        my ($ok, $msg) = $asset->Create( %create );
+        my ($ok, $msg, $nonfatal) = $asset->Create( %create );
+        push @results, $msg, @$nonfatal;
+
         if ($ok) {
             MaybeRedirectForResults(
-                Actions     => [$msg],
+                Actions     => \@results,
                 Path        => "/Asset/Display.html",
                 Arguments   => { id => $asset->id },
             );
-        } else {
-            # Report the error but don't redirect away so they can re-submit
-            push @results, $msg;
         }
     } else {
         push @results, @cf_errors;
