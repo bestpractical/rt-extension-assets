@@ -157,6 +157,9 @@ sub Create {
         return (0, $self->loc("Asset create failed: [_1]", $msg));
     }
 
+    # Let users who just created an asset see it until the end of this method.
+    $self->{_object_is_readable} = 1;
+
     # Create role groups
     unless ($self->_CreateRoleGroups()) {
         RT->Logger->error("Couldn't create role groups for asset ". $self->id);
@@ -201,6 +204,9 @@ sub Create {
     }
 
     RT->DatabaseHandle->Commit();
+
+    # Let normal ACLs take over.
+    delete $self->{_object_is_readable};
 
     return ($id, $self->loc('Asset #[_1] created: [_2]', $self->id, $args{'Name'}), \@non_fatal_errors);
 }
@@ -253,13 +259,14 @@ sub CurrentUserHasRight {
 
 =head2 CurrentUserCanSee
 
-Returns true if the current user can see the asset.
+Returns true if the current user can see the asset, either because they just
+created it or they have the I<ShowAsset> right.
 
 =cut
 
 sub CurrentUserCanSee {
     my $self = shift;
-    return $self->CurrentUserHasRight('ShowAsset');
+    return $self->{_object_is_readable} || $self->CurrentUserHasRight('ShowAsset');
 }
 
 =head2 AddLink
@@ -365,7 +372,7 @@ An ACL'd version of L<RT::Record/RoleGroup>.  Checks I<ShowAsset>.
 
 sub RoleGroup {
     my $self = shift;
-    if ($self->CurrentUserHasRight("ShowAsset")) {
+    if ($self->CurrentUserCanSee) {
         return $self->SUPER::RoleGroup(@_);
     } else {
         return RT::Group->new( $self->CurrentUser );
