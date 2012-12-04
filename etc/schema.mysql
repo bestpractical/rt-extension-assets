@@ -11,3 +11,4 @@ CREATE TABLE RTxAssets (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE INDEX RTxAssetsName ON RTxAssets (Name);
+CREATE INDEX RTxAssetsDisabled ON RTxAssets (Disabled);

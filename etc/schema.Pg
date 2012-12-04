@@ -12,3 +12,4 @@ CREATE TABLE RTxAssets (
 );
 
 CREATE INDEX RTxAssetsName ON RTxAssets (LOWER(Name));
+CREATE INDEX RTxAssetsDisabled ON RTxAssets (Disabled);
