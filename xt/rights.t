@@ -11,7 +11,11 @@ my $asset = RT::Asset->new( RT::CurrentUser->new($user) );
 
 diag "CreateAsset";
 {
-    my ($id, $msg) = $asset->Create( Name => 'Thinkpad T420s' );
+    my %create = (
+        Name    => 'Thinkpad T420s',
+        Contact => 'trs@example.com',
+    );
+    my ($id, $msg) = $asset->Create(%create);
     ok !$id, "Create denied: $msg";
 
     ok(RT::Test->set_rights({
@@ -20,7 +24,7 @@ diag "CreateAsset";
         Object      => RT->System,
     }), "Granted CreateAsset");
 
-    ($id, $msg) = $asset->Create( Name => 'Thinkpad T420s' );
+    ($id, $msg) = $asset->Create(%create);
     ok $id, "Created: $msg";
     is $asset->id, $id, "id matches";
 };
@@ -28,6 +32,7 @@ diag "CreateAsset";
 diag "ShowAsset";
 {
     is $asset->Name, undef, "Can't see Name without ShowAsset";
+    ok !$asset->Contacts->id, "Can't see Contacts role group";
 
     ok(RT::Test->add_rights({
         Principal   => 'Privileged',
@@ -36,6 +41,7 @@ diag "ShowAsset";
     }), "Granted ShowAsset");
 
     is $asset->Name, "Thinkpad T420s", "Got Name";
+    is $asset->Contacts->UserMembersObj->First->EmailAddress, 'trs@example.com', "Got Contact";
 }
 
 diag "ModifyAsset";
