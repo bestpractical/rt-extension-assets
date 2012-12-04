@@ -77,14 +77,14 @@ note "Create/update with Roles";
     my $asset = RT::Asset->new( RT->SystemUser );
     my ($id, $msg) = $asset->Create(
         Name    => 'RT server',
-        User                => $root->PrincipalId,
-        Owner               => $bps->PrincipalId,
-        TechnicalContact    => $bps->PrincipalId,
+        HeldBy  => $root->PrincipalId,
+        Owner   => $bps->PrincipalId,
+        Contact => $bps->PrincipalId,
     );
     ok $id, "Created: $msg";
-    is $asset->Users->UserMembersObj->First->Name, "root", "root is User";
-    is $asset->Owners->UserMembersObj->First->Name, "BPS", "BPS is Owner";
-    is $asset->TechnicalContacts->UserMembersObj->First->Name, "BPS", "BPS is TechnicalContact";
+    is $asset->HeldBy->UserMembersObj->First->Name, "root", "root is Holder";
+    is $asset->Owner->Name, "BPS", "BPS is Owner";
+    is $asset->Contacts->UserMembersObj->First->Name, "BPS", "BPS is Contact";
 
     my $sysadmins = RT::Group->new( RT->SystemUser );
     $sysadmins->CreateUserDefinedGroup( Name => 'Sysadmins' );
@@ -92,28 +92,28 @@ note "Create/update with Roles";
     is $sysadmins->Name, "Sysadmins", "Got group name";
 
     (my $ok, $msg) = $asset->AddRoleMember(
-        Type        => 'TechnicalContact',
+        Type        => 'Contact',
         Group       => 'Sysadmins',
     );
-    ok $ok, "Added Sysadmins as TechnicalContact: $msg";
-    is $asset->TechnicalContacts->MembersObj->Count, 2, "Found two members";
+    ok $ok, "Added Sysadmins as Contact: $msg";
+    is $asset->Contacts->MembersObj->Count, 2, "Found two members";
 
     my @txn = grep { $_->Type eq 'AddWatcher' } @{$asset->Transactions->ItemsArrayRef};
     ok @txn == 1, "Found one AddWatcher txn";
-    is $txn[0]->Field, "TechnicalContact", "... of a TechnicalContact";
+    is $txn[0]->Field, "Contact", "... of a Contact";
     is $txn[0]->NewValue, $sysadmins->PrincipalId, "... for the right principal";
 
     ($ok, $msg) = $asset->DeleteRoleMember(
-        Type        => 'TechnicalContact',
+        Type        => 'Contact',
         PrincipalId => $bps->PrincipalId,
     );
-    ok $ok, "Removed BPS user as TechnicalContact: $msg";
-    is $asset->TechnicalContacts->MembersObj->Count, 1, "Now just one member";
-    is $asset->TechnicalContacts->GroupMembersObj(Recursively => 0)->First->Name, "Sysadmins", "... it's Sysadmins";
+    ok $ok, "Removed BPS user as Contact: $msg";
+    is $asset->Contacts->MembersObj->Count, 1, "Now just one member";
+    is $asset->Contacts->GroupMembersObj(Recursively => 0)->First->Name, "Sysadmins", "... it's Sysadmins";
 
     @txn = grep { $_->Type eq 'DelWatcher' } @{$asset->Transactions->ItemsArrayRef};
     ok @txn == 1, "Found one DelWatcher txn";
-    is $txn[0]->Field, "TechnicalContact", "... of a TechnicalContact";
+    is $txn[0]->Field, "Contact", "... of a Contact";
     is $txn[0]->OldValue, $bps->PrincipalId, "... for the right principal";
 }
 

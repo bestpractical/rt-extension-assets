@@ -33,8 +33,11 @@ RT::Asset->AddRightCategories(
     ModifyAsset => 'Staff',
 );
 
-for my $role ('Owner', 'User', 'TechnicalContact') {
-    RT::Asset->RegisterRole( Name => $role );
+for my $role ('Owner', 'HeldBy', 'Contact') {
+    RT::Asset->RegisterRole(
+        Name    => $role,
+        Single  => ($role eq "Owner" ? 1 : 0),
+    );
 }
 
 =head1 DESCRIPTION
@@ -111,7 +114,7 @@ undefined.
 
 =item Disabled
 
-=item Owner, User, TechnicalContact
+=item Owner, HeldBy, Contact
 
 A single principal ID or array ref of principal IDs to add as members of the
 respective role groups for the new asset.
@@ -134,9 +137,9 @@ sub Create {
         Description     => '',
         Disabled        => 0,
 
-        Owner               => undef,
-        User                => undef,
-        TechnicalContact    => undef,
+        Owner           => undef,
+        HeldBy          => undef,
+        Contact         => undef,
         @_
     );
     my @non_fatal_errors;
@@ -313,26 +316,31 @@ sub URI {
     return $uri->URIForObject($self);
 }
 
-=head2 Owners
+=head2 Owner
 
-Returns an L<RT::Group> object for this asset's I<Owner> role group.  The
-object may be unloaded if permissions aren't satisified.
+Returns an L<RT::User> object for this asset's I<Owner> role group.  On error,
+returns undef.
 
-=head2 Users
+=head2 HeldBy
 
-Returns an L<RT::Group> object for this asset's I<User> role group.  The object
+Returns an L<RT::Group> object for this asset's I<HeldBy> role group.  The object
 may be unloaded if permissions aren't satisified.
 
-=head2 TechnicalContacts
+=head2 Contacts
 
-Returns an L<RT::Group> object for this asset's I<TechnicalContact> role
+Returns an L<RT::Group> object for this asset's I<Contact> role
 group.  The object may be unloaded if permissions aren't satisified.
 
 =cut
 
-sub Owners              { $_[0]->RoleGroup("Owner") }
-sub Users               { $_[0]->RoleGroup("User")  }
-sub TechnicalContacts   { $_[0]->RoleGroup("TechnicalContact") }
+sub Owner {
+    my $self  = shift;
+    my $group = $self->RoleGroup("Owner");
+    return unless $group and $group->id;
+    return $group->UserMembersObj->First;
+}
+sub HeldBy   { $_[0]->RoleGroup("HeldBy")  }
+sub Contacts { $_[0]->RoleGroup("Contact") }
 
 =head2 AddRoleMember
 
