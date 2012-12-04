@@ -47,15 +47,6 @@ RT->AddJavaScript("RTx-Assets.js");
         return $asset;
     }
 
-    sub LoadAssetForUpdate {
-        my $asset = LoadAsset(@_);
-
-        Abort(loc("You don't have permission to modify this asset."))
-            unless $asset->CurrentUserHasRight("ModifyAsset");
-
-        return $asset;
-    }
-
     sub ProcessAssetPeople {
         my $asset = shift;
         my %ARGS  = (@_);

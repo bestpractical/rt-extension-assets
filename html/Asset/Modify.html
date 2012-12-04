@@ -22,7 +22,7 @@ $id         => undef
 $Update     => 0
 </%args>
 <%init>
-my $asset = LoadAssetForUpdate($id);
+my $asset = LoadAsset($id);
 my @results;
 
 if ($Update) {

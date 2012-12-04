@@ -23,7 +23,7 @@ $Grouping   => undef
 Abort(loc("No grouping specified"))
     unless $Grouping;
 
-my $asset = LoadAssetForUpdate($id);
+my $asset = LoadAsset($id);
 my @results;
 
 my $CFs = $asset->CustomFields;
