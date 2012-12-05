@@ -1,0 +1,10 @@
+<%args>
+$id => undef
+</%args>
+<%init>
+my $asset = LoadAsset($id);
+</%init>
+<& /Elements/Header,
+    Title => loc("Create linked ticket for asset #[_1]: [_2]", $asset->id, $asset->Name) &>
+<& /Elements/Tabs &>
+<& /Asset/Elements/CreateLinkedTicket, AssetObj => $asset &>

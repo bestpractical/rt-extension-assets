@@ -1,0 +1,8 @@
+<%args>
+$Asset
+</%args>
+<%init>
+my $asset = LoadAsset($Asset);
+</%init>
+<& /Asset/Elements/CreateLinkedTicket, AssetObj => $asset &>
+% $m->abort;
