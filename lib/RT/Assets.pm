@@ -13,6 +13,17 @@ RT::Assets - a collection of L<RT::Asset> objects
 Only additional methods or overridden behaviour beyond the L<RT::SearchBuilder>
 (itself a L<DBIx::SearchBuilder>) class are documented below.
 
+=head2 LimitToActiveStatus
+
+=cut
+
+sub LimitToActiveStatus {
+    my $self = shift;
+
+    $self->Limit( FIELD => 'Status', VALUE => $_ )
+        for RT::Asset->Lifecycle->Valid('initial', 'active');
+}
+
 =head2 Limit
 
 Defaults CASESENSITIVE to 0
@@ -95,10 +106,28 @@ Checks the L<RT::Asset> is readable before adding it to the results
 
 =cut
 
+sub _DoSearch {
+    my $self = shift;
+    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted')
+        unless $self->{'allow_deleted_search'};
+    $self->SUPER::_DoSearch(@_);
+}
+
+sub _DoCount {
+    my $self = shift;
+    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted')
+        unless $self->{'allow_deleted_search'};
+    $self->SUPER::_DoCount(@_);
+}
+
 sub AddRecord {
     my $self  = shift;
     my $asset = shift;
     return unless $asset->CurrentUserCanSee;
+
+    return if $asset->__Value('Status') eq 'deleted'
+        and not $self->{'allow_deleted_search'};
+
     $self->SUPER::AddRecord($asset, @_);
 }
 
@@ -125,8 +154,6 @@ Sets default ordering by Name ascending.
 
 sub _Init {
     my $self = shift;
-
-    $self->{'with_disabled_column'} = 1;
 
     $self->OrderBy( FIELD => 'Name', ORDER => 'ASC' );
     return $self->SUPER::_Init( @_ );

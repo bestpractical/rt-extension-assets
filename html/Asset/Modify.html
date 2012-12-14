@@ -29,8 +29,6 @@ if ($Update) {
     my $skip_update = 0;
     my @attributes  = $asset->WritableAttributes;
 
-    $ARGS{Disabled} = $ARGS{Disabled} ? 1 : 0;
-
     my ($cf_ok, @cf_errors) = $m->comp(
         '/Elements/ValidateCustomFields',
         Object          => $asset,

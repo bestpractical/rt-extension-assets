@@ -46,7 +46,6 @@ diag "Create basic asset (no CFs)";
     is $asset->id, $id, "id matches";
     is $asset->Name, "Thinkpad T420s", "Name matches";
     is $asset->Description, "A laptop", "Description matches";
-    ok !$asset->Disabled, "Default to enabled";
 }
 
 diag "Create with CFs";

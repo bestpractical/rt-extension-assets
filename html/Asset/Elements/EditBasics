@@ -7,18 +7,15 @@
     <td class="label"><label for="Description"><&|/l&>Description</&></label></td>
     <td><input name="Description" value="<% $current{Description} %>" size="75"></td>
   </tr>
-% if ($ShowDisabled) {
-  <tr>
-    <td class="label"><label for="Disabled"><&|/l&>Disabled?</&></label></td>
-    <td><input name="Disabled" type="checkbox" value="1" <% $current{Disabled} ? "checked" : "" %>></td>
+  <tr class="status">
+    <td class="label"><label for="Status"><&|/l&>Status</&></label></td>
+    <td><& /Asset/Elements/SelectStatus, Name => 'Status', AssetObj => $AssetObj &></td>
   </tr>
-% }
   <& /Elements/EditCustomFields, Object => $AssetObj, Grouping => 'Basics', InTable => 1 &>
 % $m->callback(%ARGS, CallbackName => "AfterFields");
 </table>
 <%args>
 $AssetObj
-$ShowDisabled => 1
 </%args>
 <%init>
 my %current = map { $_ => ($ARGS{$_} || $AssetObj->$_ || '') }

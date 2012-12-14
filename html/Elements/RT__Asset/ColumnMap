@@ -61,10 +61,10 @@ my $COLUMN_MAP = {
         title     => 'Description',
         value     => sub { $_[0]->Description },
     },
-    Disabled => {
-        title     => \'&nbsp;',
-        attribute => 'Disabled',
-        value     => sub { return $_[0]->Disabled ? $_[0]->loc('Disabled'): $_[0]->loc('Enabled') },
+    Status => {
+        title     => 'Status',
+        attribute => 'Status',
+        value     => sub { loc($_[0]->Status) }
     },
 };
 </%ONCE>

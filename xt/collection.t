@@ -15,10 +15,18 @@ ok(
     create_assets(
         { Name => "Thinkpad T420s", "CustomField-Location" => "Home" },
         { Name => "Standing desk",  "CustomField-Location" => "Office" },
-        { Name => "Chair",          "CustomField-Location" => "Office", Disabled => 1 },
+        { Name => "Chair",          "CustomField-Location" => "Office" },
     ),
     "Created assets"
 );
+
+diag "Mark chair as deleted";
+{
+    my $asset = RT::Asset->new( RT->SystemUser );
+    $asset->LoadByCols( Name => "Chair" );
+    my ($ok, $msg) = $asset->SetStatus( "deleted" );
+    ok($ok, "Deleted the chair: $msg");
+}
 
 diag "Basic types of limits";
 {
@@ -33,8 +41,9 @@ diag "Basic types of limits";
     ok((!grep { $_->Name eq "Chair" } @{$assets->ItemsArrayRef}), "No chair (disabled)");
 
     $assets = RT::Assets->new( RT->SystemUser );
-    $assets->LimitToDeleted;
-    is $assets->Count, 1, "Found 1 disabled";
+    $assets->Limit( FIELD => 'Status', VALUE => 'deleted' );
+    $assets->{allow_deleted_search} = 1;
+    is $assets->Count, 1, "Found 1 deleted";
     is $assets->First->Name, "Chair", "Found chair";
 
     $assets = RT::Assets->new( RT->SystemUser );

@@ -7,7 +7,7 @@
   <input type="hidden" name="id" value="new">
 
   <&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics" &>
-    <& Elements/EditBasics, %ARGS, AssetObj => $asset, ShowDisabled => 0 &>
+    <& Elements/EditBasics, %ARGS, AssetObj => $asset &>
   </&>
 
   <& /Elements/EditCustomFieldCustomGroupings, Object => $asset &>

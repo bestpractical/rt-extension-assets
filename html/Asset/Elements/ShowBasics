@@ -7,6 +7,10 @@
     <td class="label"><&|/l&>Description</&></td>
     <td><% $AssetObj->Description || '' %></td>
   </tr>
+  <tr class="status">
+    <td class="label"><&|/l&>Status</&>:</td>
+    <td class="value"><% loc($AssetObj->Status) %></td>
+  </tr>
   <& /Elements/ShowCustomFields, Object => $AssetObj, Grouping => 'Basics', Table => 0 &>
 % $m->callback(%ARGS, CallbackName => "AfterFields");
 </table>

@@ -57,7 +57,7 @@ Limited to 255 characters.
 
 Limited to 255 characters.
 
-=item Disabled
+=item Status
 
 =item Creator
 
@@ -112,7 +112,7 @@ C<< <ID> >> should be a numeric ID, but may also be a Name if and only if your
 custom fields have unique names.  Without unique names, the behaviour is
 undefined.
 
-=item Disabled
+=item Status
 
 =item Owner, HeldBy, Contact
 
@@ -135,11 +135,12 @@ sub Create {
     my %args = (
         Name            => '',
         Description     => '',
-        Disabled        => 0,
 
         Owner           => undef,
         HeldBy          => undef,
         Contact         => undef,
+
+        Status          => undef,
         @_
     );
     my @non_fatal_errors;
@@ -150,10 +151,29 @@ sub Create {
     return (0, $self->loc('Invalid Name (names may not be all digits)'))
         unless $self->ValidateName( $args{'Name'} );
 
+    my $cycle = $self->Lifecycle;
+    unless ( defined $args{'Status'} && length $args{'Status'} ) {
+        $args{'Status'} = $cycle->DefaultOnCreate;
+    }
+
+    unless ( $cycle->IsValid( $args{'Status'} ) ) {
+        return ( 0,
+            $self->loc("Status '[_1]' isn't a valid status for assets.",
+                $self->loc($args{'Status'}))
+        );
+    }
+
+    unless ( $cycle->IsTransition( '' => $args{'Status'} ) ) {
+        return ( 0,
+            $self->loc("New assets cannot have status '[_1]'.",
+                $self->loc($args{'Status'}))
+        );
+    }
+
     RT->DatabaseHandle->BeginTransaction();
 
     my ( $id, $msg ) = $self->SUPER::Create(
-        map { $_ => $args{$_} } qw(Name Description Disabled),
+        map { $_ => $args{$_} } qw(Name Description Status),
     );
     unless ($id) {
         RT->DatabaseHandle->Rollback();
@@ -228,11 +248,23 @@ sub ValidateName {
     return 1;
 }
 
+=head2 ValidateStatus STATUS
+
+Takes a string. Returns true if that status is a valid status for this asset.
+Returns false otherwise.
+
+=cut
+
+sub ValidateStatus {
+    my $self   = shift;
+    return $self->Lifecycle->IsValid(@_);
+}
+
 =head2 Delete
 
 Assets may not be deleted.  Always returns failure.
 
-You should disable the asset instead with C<< $asset->SetDisabled(1) >>.
+You should disable the asset instead with C<< $asset->SetStatus('deleted') >>.
 
 =cut
 
@@ -315,6 +347,53 @@ sub URI {
     my $uri = RT::URI::asset->new($self->CurrentUser);
     return $uri->URIForObject($self);
 }
+
+=head2 Lifecycle
+
+Returns an R<RT::Lifecycle> object for this asset.
+
+=cut
+
+sub Lifecycle {
+    return RT::Lifecycle->Load( Name => 'assets', Type => 'asset' );
+}
+
+=head2 SetStatus STATUS
+
+Set this asset's status.
+
+=cut
+
+sub SetStatus {
+    my $self = shift;
+
+    my ($new) = @_;
+    my $old = $self->__Value('Status');
+
+    my $lifecycle = $self->Lifecycle;
+    unless ( $lifecycle->IsValid( $new ) ) {
+        return (0, $self->loc("Status '[_1]' isn't a valid status for assets.", $self->loc($new)));
+    }
+
+    unless ( $lifecycle->IsTransition( $old => $new ) ) {
+        return (0, $self->loc("You can't change status from '[_1]' to '[_2]'.", $self->loc($old), $self->loc($new)));
+    }
+
+    my $check_right = $lifecycle->CheckRight( $old => $new );
+    unless ( $self->CurrentUserHasRight( $check_right ) ) {
+        return ( 0, $self->loc('Permission Denied') );
+    }
+
+    # Actually update the status
+    my ($val, $msg) = $self->_Set(
+        Field           => 'Status',
+        Value           => $new,
+        CheckACL        => 0,
+        TransactionType => 'Status',
+    );
+    return ($val, $msg);
+}
+
 
 =head2 Owner
 
@@ -482,18 +561,8 @@ sub _Set {
     # Only record the transaction if the _Set worked
     return ($ok, $msg) unless $ok;
 
-    my $txn_type = "Set";
-    if ($args{'Field'} eq "Disabled") {
-        if (not $old and $args{'Value'}) {
-            $txn_type = "Disabled";
-        }
-        elsif ($old and not $args{'Value'}) {
-            $txn_type = "Enabled";
-        }
-    }
-
     my ($txn_id, $txn_msg, $txn) = $self->_NewTransaction(
-        Type     => $txn_type,
+        Type     => "Set",
         Field    => $args{'Field'},
         NewValue => $args{'Value'},
         OldValue => $old,
@@ -519,8 +588,8 @@ sub _CoreAccessible {
     {
         id            => { read => 1, type => 'int(11)',        default => '' },
         Name          => { read => 1, type => 'varchar(255)',   default => '',  write => 1 },
+        Status        => { read => 1, type => 'varchar(64)',    default => '',  write => 1 },
         Description   => { read => 1, type => 'varchar(255)',   default => '',  write => 1 },
-        Disabled      => { read => 1, type => 'int(2)',         default => '0', write => 1 },
         Creator       => { read => 1, type => 'int(11)',        default => '0', auto => 1 },
         Created       => { read => 1, type => 'datetime',       default => '',  auto => 1 },
         LastUpdatedBy => { read => 1, type => 'int(11)',        default => '0', auto => 1 },

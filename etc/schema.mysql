@@ -1,8 +1,8 @@
 CREATE TABLE RTxAssets (
     id                int(11)         NOT NULL AUTO_INCREMENT,
     Name              varchar(255)    NOT NULL DEFAULT '',
+    Status            varchar(64)     NOT NULL DEFAULT '',
     Description       varchar(255)    NOT NULL DEFAULT '',
-    Disabled          int2            NOT NULL DEFAULT 0,
     Creator           int(11)         NOT NULL DEFAULT 0,
     Created           datetime                 DEFAULT NULL,
     LastUpdatedBy     int(11)         NOT NULL DEFAULT 0,
@@ -11,4 +11,4 @@ CREATE TABLE RTxAssets (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE INDEX RTxAssetsName ON RTxAssets (Name);
-CREATE INDEX RTxAssetsDisabled ON RTxAssets (Disabled);
+CREATE INDEX RTxAssetsStatus ON RTxAssets (Status);
