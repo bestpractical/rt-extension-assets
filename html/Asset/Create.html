@@ -61,7 +61,7 @@ if ($id eq "new") {
         $m->callback( %ARGS, AssetObj => $asset, Create => \%create, CallbackName => 'MassageCreate' );
 
         my ($ok, $msg, $nonfatal) = $asset->Create( %create );
-        push @results, $msg, @$nonfatal;
+        push @results, $msg, @{$nonfatal || []};
 
         if ($ok) {
             MaybeRedirectForResults(
