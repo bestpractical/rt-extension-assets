@@ -40,8 +40,27 @@ if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /
             );
         }
 
+        my $actions = $page->child("actions", title => loc("Actions"));
+        $actions->child("create-linked-ticket", title => loc("Create linked ticket"), path => "/Asset/CreateLinkedTicket.html?id=$id");
         $emit_js = 1;
-        $page->child("create-linked-ticket", title => loc("Create linked ticket"), path => "/Asset/CreateLinkedTicket.html?id=$id");
+
+        my $status    = $asset->Status;
+        my $lifecycle = $asset->Lifecycle;
+        for my $action ( $lifecycle->Actions($status) ) {
+            my $next = $action->{'to'};
+            next unless $lifecycle->IsTransition( $status => $next );
+
+            my $check = $lifecycle->CheckRight( $status => $next );
+            next unless $asset->CurrentUserHasRight($check);
+
+            my $label = $action->{'label'} || ucfirst($next);
+            $actions->child(
+                $label,
+                title   => loc($label),
+                path    => "/Asset/Modify.html?id=$id;Update=1;DisplayAfter=1;Status="
+                            . $m->interp->apply_escapes($next, 'u')
+            );
+        }
     }
 }
 elsif ($request =~ m{^/Admin/Global/CustomFields/Assets\.html$}) {

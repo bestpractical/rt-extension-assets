@@ -18,5 +18,12 @@ Set(%Lifecycles,
             stolen    => [qw(allocated)],
             deleted   => [qw(allocated)],
         },
+
+        actions => {
+            '* -> allocated' => { label => "Allocate" },
+            '* -> in-use'    => { label => "Now in-use" },
+            '* -> recycled'  => { label => "Recycle" },
+            '* -> stolen'    => { label => "Report stolen" },
+        },
     },
 );

@@ -18,8 +18,9 @@
 </form>
 
 <%args>
-$id         => undef
-$Update     => 0
+$id             => undef
+$Update         => 0
+$DisplayAfter   => 0
 </%args>
 <%init>
 my $asset = LoadAsset($id);
@@ -57,6 +58,9 @@ if ($Update) {
         MaybeRedirectForResults(
             Actions     => \@results,
             Arguments   => { id => $asset->id },
+            $DisplayAfter
+                ? (Path => "/Asset/Display.html")
+                : (),
         );
     } else {
         push @results, @cf_errors;
