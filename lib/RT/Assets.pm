@@ -106,20 +106,6 @@ Checks the L<RT::Asset> is readable before adding it to the results
 
 =cut
 
-sub _DoSearch {
-    my $self = shift;
-    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted')
-        unless $self->{'allow_deleted_search'};
-    $self->SUPER::_DoSearch(@_);
-}
-
-sub _DoCount {
-    my $self = shift;
-    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted')
-        unless $self->{'allow_deleted_search'};
-    $self->SUPER::_DoCount(@_);
-}
-
 sub AddRecord {
     my $self  = shift;
     my $asset = shift;
@@ -157,6 +143,28 @@ sub _Init {
 
     $self->OrderBy( FIELD => 'Name', ORDER => 'ASC' );
     return $self->SUPER::_Init( @_ );
+}
+
+=head2 _DoSearch
+
+=head2 _DoCount
+
+Limits to non-deleted assets unless the C<allow_deleted_search> flag is set.
+
+=cut
+
+sub _DoSearch {
+    my $self = shift;
+    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted')
+        unless $self->{'allow_deleted_search'};
+    $self->SUPER::_DoSearch(@_);
+}
+
+sub _DoCount {
+    my $self = shift;
+    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted')
+        unless $self->{'allow_deleted_search'};
+    $self->SUPER::_DoCount(@_);
 }
 
 sub Table { "RTxAssets" }
