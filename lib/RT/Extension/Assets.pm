@@ -62,6 +62,18 @@ RT->AddJavaScript("RTx-Assets.js");
                 );
                 push @results, $msg;
             }
+            elsif ($arg =~ /^SetRoleMember-(.+)$/) {
+                my $type = $1;
+                warn "Adding role member $type = $ARGS{$arg}";
+                my $group = $asset->RoleGroup($type);
+                next unless $group->id and $group->SingleMemberRoleGroup;
+                next if $ARGS{$arg} eq $group->UserMembersObj->First->Name;
+                my ($ok, $msg) = $asset->AddRoleMember(
+                    Type => $type,
+                    User => $ARGS{$arg},
+                );
+                push @results, $msg;
+            }
             elsif ($arg =~ /^RemoveRoleMember-(.+)$/) {
                 my ($ok, $msg) = $asset->DeleteRoleMember(
                     Type        => $1,
