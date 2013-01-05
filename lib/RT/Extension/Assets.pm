@@ -20,6 +20,21 @@ RT->AddStyleSheets("RTx-Assets.css");
 RT->AddJavaScript("RTx-Assets.js");
 
 {
+    package RT::Transaction;
+    our %_BriefDescriptions;
+
+    $_BriefDescriptions{"RT::Asset-Set-Catalog"} = sub {
+        my $self = shift;
+        return ("[_1] changed from [_2] to [_3]",   #loc
+                $self->loc($self->Field), map {
+                    my $c = RT::Catalog->new($self->CurrentUser);
+                    $c->Load($_);
+                    $c->Name || $self->loc("~[a hidden catalog~]")
+                } $self->OldValue, $self->NewValue);
+    };
+}
+
+{
     require RT::Interface::Web;
     package HTML::Mason::Commands;
 
