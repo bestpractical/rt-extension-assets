@@ -523,6 +523,12 @@ sub _Set {
         NewValue => $args{'Value'},
         OldValue => $old,
     );
+
+    # Ensure that we can read the transaction, even if the change just made
+    # the asset unreadable to us.  This is only in effect for the lifetime of
+    # $txn, i.e. as soon as this method returns.
+    $txn->{ _object_is_readable } = 1;
+
     return ($txn_id, scalar $txn->BriefDescription);
 }
 
