@@ -9,6 +9,14 @@ for my $key (keys %ARGS) {
             OPERATOR => 'LIKE',
             VALUE => $ARGS{$key},
         );
+    } elsif ($key =~ /^CF\.\{(.+?)\}$/ or $key =~ /^CF\.(.*)/) {
+        my $cf = RT::Asset->new( $session{CurrentUser} )
+            ->LoadCustomFieldByIdentifier( $1 );
+        next unless $cf->id;
+        $assets->LimitCustomField(
+            CUSTOMFIELD => $cf->Id,
+            VALUE       => $ARGS{$key},
+        );
     }
 }
 $assets->LimitToActiveStatus;
@@ -39,6 +47,20 @@ my $Format = RT->Config->Get('AssetSearchFormat') || q[
     <td class="value"><input type="text" id="Name" name="Name" value="<% $ARGS{Name} || ''%>" /></td></tr>
 <tr><td class="label"><label for="Description"><&|/l&>Description</&></label></td>
     <td class="value"><input type="text" id="Description" name="Description" value="<% $ARGS{Description} || ''%>" /></td></tr>
+
+% my $CFs = RT::CustomFields->new( $session{CurrentUser} );
+% $CFs->LimitToChildType( 'RT::Asset' );
+% while (my $cf = $CFs->Next) {
+% my $name = "CF.{" . $cf->Name . "}";
+<tr>
+  <td class="label"><label for="<% $name %>"><% $cf->Name %></label></td>
+  <td class="value">
+% if ($cf->Type =~ /^Date(Time)?$/) {
+<& /Elements/SelectDate, ShowTime => ($1 ? 1 : 0), Name => $name, Value => $ARGS{$name} || '' &>
+% } else {
+<& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => $name, Default => $ARGS{$name} || '' &>
+% }
+% }
 
 </table>
 
