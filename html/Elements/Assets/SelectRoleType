@@ -1,5 +1,5 @@
 <%args>
-$AssetObj
+$Object
 $Name
 $AllowNull  => 1
 </%args>
@@ -7,7 +7,7 @@ $AllowNull  => 1
 % if ($AllowNull) {
   <option value=""></option>
 % }
-% for my $role ($AssetObj->Roles) {
+% for my $role ($Object->Roles) {
   <option value="<% $role %>"><% loc($role) %></option>
 % }
 </select>

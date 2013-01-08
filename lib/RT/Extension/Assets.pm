@@ -54,23 +54,23 @@ RT->AddJavaScript("RTx-Assets.js");
         return $asset;
     }
 
-    sub ProcessAssetPeople {
-        my $asset = shift;
-        my %ARGS  = (@_);
+    sub ProcessRoleMembers {
+        my $object = shift;
+        my %ARGS   = (@_);
         my @results;
 
         for my $arg (keys %ARGS) {
             if ($arg =~ /^AddRoleMember-(User|Group)$/) {
                 next unless $ARGS{$arg} and $ARGS{"$arg-Type"};
 
-                my ($ok, $msg) = $asset->AddRoleMember(
+                my ($ok, $msg) = $object->AddRoleMember(
                     Type => $ARGS{"$arg-Type"},
                     $1   => $ARGS{$arg},
                 );
                 push @results, $msg;
             }
             elsif ($arg =~ /^RemoveRoleMember-(.+)$/) {
-                my ($ok, $msg) = $asset->DeleteRoleMember(
+                my ($ok, $msg) = $object->DeleteRoleMember(
                     Type        => $1,
                     PrincipalId => $ARGS{$arg},
                 );
