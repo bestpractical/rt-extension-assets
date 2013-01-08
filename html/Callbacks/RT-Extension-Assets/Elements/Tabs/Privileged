@@ -72,7 +72,7 @@ jQuery(function(){
             .bind('modal:close', function(ev,modal) { modal.elm.remove(); })
             .modal();
     };
-    jQuery("#page-create-linked-ticket").click(function(ev){
+    jQuery("#page-actions-create-linked-ticket").click(function(ev){
         ev.preventDefault();
         jQuery.get(
             RT.Config.WebPath + "/Asset/Helpers/CreateLinkedTicket?Asset=" + <% $DECODED_ARGS->{id} || 0 |n,j %>,
