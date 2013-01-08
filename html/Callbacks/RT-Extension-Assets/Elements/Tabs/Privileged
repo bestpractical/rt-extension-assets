@@ -9,7 +9,7 @@ $assets->child("search",        title => loc("Search"));                        
 my $global_cfs = Menu();
    $global_cfs = $global_cfs->child($_) or last
         for "tools" => "config" => "global" => "custom-fields";
-$global_cfs->child("assets", title => loc("Assets"), path => "/Admin/Global/CustomFields/Assets.html")
+$global_cfs->child("assets", title => loc("Assets"), path => "/Admin/Global/CustomFields/Catalog-Assets.html")
     if $global_cfs;
 
 # Page menus
@@ -60,8 +60,8 @@ if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /
         }
     }
 }
-elsif ($request =~ m{^/Admin/Global/CustomFields/Assets\.html$}) {
-    $page->child("create", title => loc("Create New"), path => "/Admin/CustomFields/Modify.html?Create=1;LookupType=RT::Asset");
+elsif ($request =~ m{^/Admin/Global/CustomFields/Catalog-Assets\.html$}) {
+    $page->child("create", title => loc("Create New"), path => "/Admin/CustomFields/Modify.html?Create=1;LookupType=" . RT::Asset->CustomFieldLookupType);
 }
 </%init>
 <script type="text/javascript">

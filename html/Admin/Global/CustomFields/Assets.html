@@ -1,7 +1,0 @@
-<& /Admin/Elements/Header, Title => $title &>
-<& /Elements/Tabs &>
-<& /Admin/Elements/EditCustomFields, %ARGS, title => $title, ObjectType => 'RT::Asset', Object=> $object &>
-<%init>
-my $title = loc('Edit Custom Fields for Assets');
-my $object = RT::Asset->new($session{'CurrentUser'});
-</%init>
