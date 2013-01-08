@@ -10,6 +10,9 @@ RT->Config->Set("CustomFieldGroupings",
     },
 );
 
+my $catalog = create_catalog( Name => "Office" );
+ok $catalog->id, "Created Catalog";
+
 my $purchased = create_cf( Name => 'Purchased', Pattern => '(?#Year)^(?:19|20)\d{2}$' );
 ok $purchased->id, "Created CF";
 
@@ -31,6 +34,7 @@ ok $m->login, "Logged in agent";
 diag "Create basic asset (no CFs)";
 {
     $m->follow_link_ok({ id => "assets-create" }, "Asset create link");
+    $m->submit_form_ok({ with_fields => { Catalog => $catalog->id } }, "Picked a catalog");
     $m->submit_form_ok({
         with_fields => {
             id          => 'new',
@@ -53,6 +57,8 @@ diag "Create with CFs";
     ok apply_cfs($height, $material), "Applied CFs";
 
     $m->follow_link_ok({ id => "assets-create" }, "Asset create link");
+    $m->submit_form_ok({ with_fields => { Catalog => $catalog->id } }, "Picked a catalog");
+
     ok $m->form_with_fields(qw(id Name Description)), "Found form";
     $m->submit_form_ok({
         fields => {
@@ -86,6 +92,8 @@ diag "Create with CFs in other groups";
     ok apply_cfs($purchased), "Applied CF";
 
     $m->follow_link_ok({ id => "assets-create" }, "Asset create link");
+    $m->submit_form_ok({ with_fields => { Catalog => $catalog->id } }, "Picked a catalog");
+
     ok $m->form_with_fields(qw(id Name Description)), "Found form";
 
     my $has_purchased = $m->current_form->find_input($CF{Purchased});

@@ -1,0 +1,6 @@
+<form action="<% RT->Config->Get("WebPath") %>/Asset/Create.html" id="AssetCreateInCatalog">
+  <&|/l_unsafe,
+    $m->scomp("/Asset/Elements/SelectCatalog"),
+    &>Create a new asset in the catalog [_1].</&>
+  <& /Elements/Submit, Label => loc("Go"), Caption => loc("This will take you to a partially prefilled asset creation form.") &>
+</form>

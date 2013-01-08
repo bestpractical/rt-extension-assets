@@ -1,4 +1,5 @@
 <& /Elements/SelectObject,
+    Name            => "Catalog",
     CheckRight      => "CreateAsset",
     ShowAll         => 0,
     ShowNullOption  => 0,

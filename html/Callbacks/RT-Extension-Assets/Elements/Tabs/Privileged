@@ -2,7 +2,7 @@
 # Top level Assets menu
 my $assets = Menu->child("tools")->add_before(
                "assets",        title => loc("Assets"),         path => "/Asset/");         # XXX TODO: link top level to search?
-$assets->child("create",        title => loc("Create"),         path => "Create.html");
+$assets->child("create",        title => loc("Create"),         path => "CreateInCatalog.html");
 $assets->child("search",        title => loc("Search"));                                    # XXX TODO: link up to search
 
 # Add global Assets custom field admin page
@@ -16,8 +16,6 @@ $global_cfs->child("assets", title => loc("Assets"), path => "/Admin/Global/Cust
 my $page    = PageMenu();
 my $request = $r->path_info;
    $request =~ s{/+}{/}g;
-
-my $emit_js;
 
 if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /\D/) {
     my $id    = $DECODED_ARGS->{id};
@@ -42,7 +40,6 @@ if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /
 
         my $actions = $page->child("actions", title => loc("Actions"));
         $actions->child("create-linked-ticket", title => loc("Create linked ticket"), path => "/Asset/CreateLinkedTicket.html?id=$id");
-        $emit_js = 1;
 
         my $status    = $asset->Status;
         my $lifecycle = $asset->LifecycleObj;
@@ -66,21 +63,27 @@ if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /
 elsif ($request =~ m{^/Admin/Global/CustomFields/Assets\.html$}) {
     $page->child("create", title => loc("Create New"), path => "/Admin/CustomFields/Modify.html?Create=1;LookupType=RT::Asset");
 }
-
-return unless $emit_js;
 </%init>
 <script type="text/javascript">
 jQuery(function(){
+    var showModal = function(html) {
+        jQuery("<div class='modal'></div>")
+            .append(html).appendTo("body")
+            .bind('modal:close', function(ev,modal) { modal.elm.remove(); })
+            .modal();
+    };
     jQuery("#page-create-linked-ticket").click(function(ev){
         ev.preventDefault();
         jQuery.get(
             RT.Config.WebPath + "/Asset/Helpers/CreateLinkedTicket?Asset=" + <% $DECODED_ARGS->{id} || 0 |n,j %>,
-            function(html) {
-                jQuery("<div class='modal'></div>")
-                    .append(html).appendTo("body")
-                    .bind('modal:close', function(ev,modal) { modal.elm.remove(); })
-                    .modal();
-            }
+            showModal
+        );
+    });
+    jQuery("#assets-create").click(function(ev){
+        ev.preventDefault();
+        jQuery.get(
+            RT.Config.WebPath + "/Asset/Helpers/CreateInCatalog",
+            showModal
         );
     });
 });
