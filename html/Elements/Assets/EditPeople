@@ -6,7 +6,7 @@ $Object
 %# XXX TODO: these should be ordered non-alphabetically... add ordering as
 %# supported metadata in core RT for roles?
 % for my $role ($Object->Roles) {
-<div class="role-<% $role %> role">
+<div class="role-<% CSSClass($role) %> role">
   <h3><% loc($role) %></h3>
   <& EditRoleMembers, Group => $Object->RoleGroup($role) &>
 </div>
