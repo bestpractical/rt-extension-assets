@@ -45,7 +45,7 @@ if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /
         $emit_js = 1;
 
         my $status    = $asset->Status;
-        my $lifecycle = $asset->Lifecycle;
+        my $lifecycle = $asset->LifecycleObj;
         for my $action ( $lifecycle->Actions($status) ) {
             my $next = $action->{'to'};
             next unless $lifecycle->IsTransition( $status => $next );

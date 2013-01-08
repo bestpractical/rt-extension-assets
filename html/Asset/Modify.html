@@ -30,6 +30,10 @@ if ($Update) {
     my $skip_update = 0;
     my @attributes  = $asset->WritableAttributes;
 
+    # Don't update status unless we have a value; otherwise RT complains
+    @attributes = grep { $_ ne "Status" } @attributes
+        unless $ARGS{Status};
+
     my ($cf_ok, @cf_errors) = $m->comp(
         '/Elements/ValidateCustomFields',
         Object          => $asset,

@@ -322,6 +322,27 @@ sub RoleGroup {
     }
 }
 
+=head2 AssetCustomFields
+
+Returns an L<RT::CustomFields> object containing all global and
+catalog-specific B<asset> custom fields.
+
+=cut
+
+sub AssetCustomFields {
+    my $self = shift;
+    my $cfs  = RT::CustomFields->new( $self->CurrentUser );
+    if ($self->CurrentUserCanSee) {
+        $cfs->SetContextObject( $self );
+        $cfs->LimitToGlobalOrObjectId( $self->Id );
+        $cfs->LimitToLookupType( RT::Asset->CustomFieldLookupType );
+        $cfs->ApplySortOrder;
+    } else {
+        $cfs->Limit( FIELD => 'id', VALUE => 0, SUBCLAUSE => 'acl' );
+    }
+    return ($cfs);
+}
+
 =head1 INTERNAL METHODS
 
 Public methods, but you shouldn't need to call these unless you're
