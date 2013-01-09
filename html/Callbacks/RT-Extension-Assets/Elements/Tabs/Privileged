@@ -12,6 +12,21 @@ my $global_cfs = Menu();
 $global_cfs->child("assets", title => loc("Assets"), path => "/Admin/Global/CustomFields/Catalog-Assets.html")
     if $global_cfs;
 
+# Add a Catalog admin menu
+my $config = Menu();
+   $config = $config->child($_) or last
+        for "tools" => "config";
+if ($config) {
+    my $assets   = $config->child("tools")->add_before("assets", title => loc("Assets"), path => "/Admin/Assets/");
+    my $catalogs = $assets->child("catalogs", title => loc("Catalogs"), path => "/Admin/Assets/Catalogs/");
+    $catalogs->child("select", title => loc("Select"), path => $catalogs->path);
+    $catalogs->child("create", title => loc("Create"), path => "Create.html");
+
+    my $cfs = $assets->child("cfs", title => loc("Custom Fields"), path => "/Admin/CustomFields/?Type=" . RT::Asset->CustomFieldLookupType);
+    $cfs->child("select", title => loc("Select"), path => $cfs->path);
+    $cfs->child("create", title => loc("Create"), path => "/Admin/CustomFields/Modify.html?Create=1&LookupType=" . RT::Asset->CustomFieldLookupType);
+}
+
 # Page menus
 my $page    = PageMenu();
 my $request = $r->path_info;
@@ -62,6 +77,32 @@ if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /
 }
 elsif ($request =~ m{^/Admin/Global/CustomFields/Catalog-Assets\.html$}) {
     $page->child("create", title => loc("Create New"), path => "/Admin/CustomFields/Modify.html?Create=1;LookupType=" . RT::Asset->CustomFieldLookupType);
+}
+elsif ($request =~ m{^/Admin/CustomFields(/|/index\.html)?$}
+       and $DECODED_ARGS->{'Type'} eq RT::Asset->CustomFieldLookupType) {
+    $page->child("create")->path( $page->child("create")->path . "&LookupType=" . RT::Asset->CustomFieldLookupType );
+}
+elsif ($request =~ m{^/Admin/Assets/Catalogs/}) {
+    my $actions = $request =~ m{/((index|Create)\.html)?$}
+        ? $page
+        : $page->child("catalogs", title => loc("Catalogs"), path => "/Admin/Assets/Catalogs/");
+
+    $actions->child("select", title => loc("Select"), path => "/Admin/Assets/Catalogs/");
+    $actions->child("create", title => loc("Create"), path => "/Admin/Assets/Catalogs/Create.html");
+
+    my $catalog = RT::Catalog->new( $session{CurrentUser} );
+    $catalog->Load($DECODED_ARGS->{id}) if $DECODED_ARGS->{id};
+
+    if ($catalog->id and $catalog->CurrentUserCanSee) {
+        my $query = "id=" . $catalog->id;
+        $page->child("modify", title => loc("Basics"), path => "/Admin/Assets/Catalogs/Modify.html?$query");
+        $page->child("people", title => loc("Roles"),  path => "/Admin/Assets/Catalogs/Roles.html?$query");
+
+        $page->child("cfs", title => loc("Asset Custom Fields"), path => "/Admin/Assets/Catalogs/CustomFields.html?$query");
+
+        $page->child("group-rights", title => loc("Group Rights"), path => "/Admin/Assets/Catalogs/GroupRights.html?$query");
+        $page->child("user-rights",  title => loc("User Rights"),  path => "/Admin/Assets/Catalogs/UserRights.html?$query");
+    }
 }
 </%init>
 <script type="text/javascript">

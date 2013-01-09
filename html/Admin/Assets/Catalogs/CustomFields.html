@@ -1,0 +1,14 @@
+<& /Elements/Header, Title => loc("Catalog [_1]: Edit Custom Fields", $Catalog->Name) &>
+<& /Elements/Tabs &>
+<& /Admin/Elements/EditCustomFields,
+    %ARGS,
+    Object      => $Catalog,
+    ObjectType  => 'RT::Catalog',
+    SubType     => 'RT::Asset',
+    &>
+<%init>
+my $Catalog = LoadCatalog($id);
+</%init>
+<%args>
+$id => undef
+</%args>

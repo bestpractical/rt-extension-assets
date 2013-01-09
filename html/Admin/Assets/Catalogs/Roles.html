@@ -1,0 +1,36 @@
+<& /Elements/Header, Title => loc("Catalog [_1]: Modify roles", $catalog->Name) &>
+<& /Elements/Tabs &>
+<& /Elements/ListActions, actions => \@results &>
+
+<form method="post" enctype="multipart/form-data" id="ModifyCatalogRoles" action="Roles.html">
+  <input type="hidden" name="id" value="<% $catalog->id %>">
+
+  <&| /Widgets/TitleBox, title => loc("Roles"), class => "catalog-roles" &>
+    <table width="60%" class="edit">
+      <tr>
+        <!-- XXX TODO: currently the Owner role is shown, when it should be hidden -->
+        <td><& /Elements/Assets/EditPeople, %ARGS, Object => $catalog &></td>
+        <td><& /Elements/Assets/AddPeople, Object => $catalog &></td>
+      </tr>
+    </table>
+  </&>
+
+  <& /Elements/Submit, Label => loc('Save'), Name => "Update" &>
+</form>
+<%args>
+$id     => undef
+$Update => 0
+</%args>
+<%init>
+my $catalog = LoadCatalog($id);
+my @results;
+
+if ($Update) {
+    push @results, ProcessRoleMembers( $catalog => %ARGS );
+
+    MaybeRedirectForResults(
+        Actions     => \@results,
+        Arguments   => { id => $catalog->id },
+    );
+}
+</%init>

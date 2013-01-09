@@ -1,0 +1,71 @@
+<& /Admin/Elements/Header, Title => loc("Admin Catalogs") &>
+<& /Elements/Tabs &>
+
+<h1><% $caption %></h1>
+<p><&|/l&>Select a catalog</&>:</p>
+% unless ( $catalogs->Count ) {
+<em><&|/l&>No catalogs matching search criteria found.</&></em>
+% } else {
+<& /Elements/CollectionList,
+    OrderBy => 'Name',
+    Order => 'ASC',
+    %ARGS,
+    Format => $Format,
+    Collection => $catalogs,
+    AllowSorting => 1,
+    PassArguments => [qw(
+        Rows Page Order OrderBy FindDisabled String Op Field
+    )],
+&>
+% }
+<form method="post" action="<% RT->Config->Get('WebPath') %>/Admin/Assets/Catalogs/index.html">
+% foreach my $field( qw(Rows Page Order OrderBy) ) {
+%     next unless defined $ARGS{ $field } && length $ARGS{ $field };
+<input type="hidden" name="<% $field %>" value="<% $ARGS{ $field } %>" />
+% }
+
+<select name="Field">
+% foreach my $col (qw(id Name Description Lifecycle)) {
+<option <% $Field eq $col ? 'selected="selected"' : '' |n %> value="<% $col %>"><% loc($col) %></option>
+% }
+</select>
+<& /Elements/SelectMatch, Name => 'Op', Default => $Op &>
+<input size="20" name="String" value="<% $String %>" />
+<br />
+
+<input type="checkbox" class="checkbox" id="FindDisabled" name="FindDisabled" value="1" <% $FindDisabled ? 'checked="checked"': '' |n%> />
+<label for="FindDisabled"><&|/l&>Include disabled catalogs in listing.</&></label>
+<div align="right"><input type="submit" class="button" value="<&|/l&>Search</&>" /></div> 
+</form>
+
+<%INIT>
+my $catalogs = RT::Catalogs->new($session{'CurrentUser'});
+$catalogs->FindAllRows if $FindDisabled;
+
+my ($caption);
+if ( defined $String && length $String ) {
+    $caption = $FindDisabled
+        ? loc("All catalogs matching search criteria")
+        : loc("Enabled catalogs matching search criteria");
+    $catalogs->Limit(
+        FIELD    => $Field,
+        OPERATOR => $Op,
+        VALUE    => $String,
+    );
+    RT::Interface::Web::Redirect(RT->Config->Get('WebURL')."Admin/Assets/Catalogs/Modify.html?id=".$catalogs->First->id)
+          if $catalogs->Count == 1;
+} else {
+    $catalogs->UnLimit;
+    $caption = $FindDisabled
+        ? loc("All Catalogs")
+        : loc("Enabled Catalogs");
+}
+
+my $Format = RT->Config->Get('AdminSearchResultFormat')->{'Catalogs'};
+</%INIT>
+<%ARGS>
+$FindDisabled => 0
+$Field        => 'Name'
+$Op           => '='
+$String       => ''
+</%ARGS>

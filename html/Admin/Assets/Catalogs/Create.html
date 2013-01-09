@@ -1,0 +1,40 @@
+<& /Admin/Elements/Header, Title => loc("Create catalog") &>
+<& /Elements/Tabs &>
+<& /Elements/ListActions, actions => \@results &>
+
+<form method="post" enctype="multipart/form-data" id="CreateCatalog" action="Create.html">
+  <input type="hidden" name="id" value="new">
+
+  <&| /Widgets/TitleBox, title => loc("Basics"), class => "catalog-basics" &>
+    <& Elements/EditBasics, %ARGS, CatalogObj => $catalog &>
+  </&>
+
+  <& /Elements/Submit, Label => loc('Create catalog'), Name => "Update" &>
+</form>
+<%args>
+$id => ""
+</%args>
+<%init>
+my @results;
+my $catalog = RT::Catalog->new( $session{CurrentUser} );
+
+if ($id eq "new") {
+    my %create;
+    for ($catalog->WritableAttributes) {
+        $create{$_} = $ARGS{$_} if exists $ARGS{$_};
+    }
+
+    $m->callback( %ARGS, CatalogObj => $catalog, Create => \%create, CallbackName => 'MassageCreate' );
+
+    my ($ok, $msg, $nonfatal) = $catalog->Create( %create );
+    push @results, $msg, @{$nonfatal || []};
+
+    if ($ok) {
+        MaybeRedirectForResults(
+            Actions     => \@results,
+            Path        => "/Admin/Assets/Catalogs/Modify.html",
+            Arguments   => { id => $catalog->id },
+        );
+    }
+}
+</%init>

@@ -38,6 +38,22 @@ RT->AddJavaScript("RTx-Assets.js");
     require RT::Interface::Web;
     package HTML::Mason::Commands;
 
+    sub LoadCatalog {
+        my $id = shift
+            or Abort(loc("No catalog specified."));
+
+        my $catalog = RT::Catalog->new( $session{CurrentUser} );
+        $catalog->Load($id);
+
+        Abort(loc("Unable to find catalog [_1]", $id))
+            unless $catalog->id;
+
+        Abort(loc("You don't have permission to view this catalog."))
+            unless $catalog->CurrentUserCanSee;
+
+        return $catalog;
+    }
+
     sub LoadAsset {
         my $id = shift
             or Abort(loc("No asset ID specified."));
