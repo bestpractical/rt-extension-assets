@@ -1,6 +1,9 @@
 <%args>
 $AssetObj
 </%args>
+<%init>
+my $CatalogObj = $AssetObj->CatalogObj;
+</%init>
 <table>
 %# XXX TODO: these should be ordered non-alphabetically... add ordering as
 %# supported metadata in core RT for roles?
@@ -8,7 +11,10 @@ $AssetObj
 <tr>
   <td class="label"><% loc($role) %>:</td>
   <td>
-    <& ShowRoleMembers, Group => $AssetObj->RoleGroup($role) &>
+    <& ShowRoleMembers,
+        Group           => $AssetObj->RoleGroup($role),
+        CatalogGroup    => $CatalogObj->RoleGroup($role),
+        &>
   </td>
 </tr>
 % }
