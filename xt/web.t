@@ -96,8 +96,6 @@ diag "Create with CFs in other groups";
 
     ok $m->form_with_fields(qw(id Name Description)), "Found form";
 
-    my $has_purchased = $m->current_form->find_input($CF{Purchased});
-
     $m->submit_form_ok({
         fields => {
             id          => 'new',
@@ -106,16 +104,8 @@ diag "Create with CFs in other groups";
         },
     }, "submited create form");
 
-    TODO: {
-        local $TODO = "We validate too much on create, even CFs which aren't displayed.";
-        if ($has_purchased) {
-            $m->content_unlike(qr/Asset .* created/, "Lacks created message");
-            $m->content_like(qr/Purchased.*?must match .*?Year/, "Has validation error for Purchased");
-        } else {
-            $m->content_like(qr/Asset .* created/, "Found created message");
-            $m->content_unlike(qr/Purchased.*?must match .*?Year/, "Lacks validation error for Purchased");
-        }
-    }
+    $m->content_like(qr/Asset .* created/, "Found created message");
+    $m->content_unlike(qr/Purchased.*?must match .*?Year/, "Lacks validation error for Purchased");
 }
 
 # XXX TODO: test other modify pages
