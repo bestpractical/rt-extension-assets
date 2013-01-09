@@ -7,15 +7,18 @@ use RT::Extension::Assets::Test tests => undef;
 my $user = RT::Test->load_or_create_user( Name => 'testuser' );
 ok $user->id, "Created user";
 
+my $catalog  = create_catalog( Name => "BPS" );
+ok $catalog && $catalog->id, "Created catalog";
+
 my $location = create_cf( Name => 'Location' );
 ok $location->id, "Created CF";
 ok apply_cfs($location), "Applied CF";
 
 ok(
     create_assets(
-        { Name => "Thinkpad T420s", "CustomField-Location" => "Home" },
-        { Name => "Standing desk",  "CustomField-Location" => "Office" },
-        { Name => "Chair",          "CustomField-Location" => "Office" },
+        { Name => "Thinkpad T420s", Catalog => $catalog->id, "CustomField-Location" => "Home" },
+        { Name => "Standing desk",  Catalog => $catalog->id, "CustomField-Location" => "Office" },
+        { Name => "Chair",          Catalog => $catalog->id, "CustomField-Location" => "Office" },
     ),
     "Created assets"
 );

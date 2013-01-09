@@ -4,10 +4,11 @@ use warnings;
 use lib 'xt/lib';
 use RT::Extension::Assets::Test tests => undef;
 
-my $asset = create_asset( Name => "Test asset" );
+my $catalog = create_catalog( Name => "A catalog" );
+my $asset = create_asset( Name => "Test asset", Catalog => $catalog->id );
 ok $asset && $asset->id, "Created asset";
 
-for my $object ($asset, RT->System) {
+for my $object ($asset, $catalog, RT->System) {
     for my $role (RT::Asset->Roles) {
         my $group = $object->RoleGroup($role);
         ok $group->id, "Loaded role group $role for " . ref($object);

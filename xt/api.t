@@ -3,6 +3,27 @@ use warnings;
 
 use lib 'xt/lib';
 use RT::Extension::Assets::Test tests => undef;
+use Test::Warn;
+
+my $catalog;
+
+diag "Create a catalog";
+{
+    $catalog = create_catalog( Name => 'Test Catalog', Disabled => 1 );
+    ok $catalog && $catalog->id, "Created catalog";
+    is $catalog->Name, "Test Catalog", "Name is correct";
+    ok $catalog->Disabled, "Disabled";
+
+    my $asset;
+    warning_like {
+        $asset = create_asset( Name => "Test", Catalog => $catalog->id );
+    } qr/^Failed to create asset .* Invalid catalog/i;
+    ok !$asset, "Couldn't create asset in disabled catalog";
+
+    my ($ok, $msg) = $catalog->SetDisabled(0);
+    ok $ok, "Enabled catalog: $msg";
+    ok !$catalog->Disabled, "Enabled";
+}
 
 diag "Create basic asset (no CFs)";
 {
@@ -10,6 +31,7 @@ diag "Create basic asset (no CFs)";
     my ($id, $msg) = $asset->Create(
         Name        => 'Thinkpad T420s',
         Description => 'Laptop',
+        Catalog     => $catalog->Name,
     );
     ok $id, "Created: $msg";
     is $asset->id, $id, "id matches";
@@ -50,13 +72,12 @@ diag "Create with CFs";
 
     ok apply_cfs($height, $material), "Applied CFs";
 
-    ok $height->IsOnlyGlobal, "RT::Asset CFs are recognized as only global";
-
     my $asset = RT::Asset->new( RT->SystemUser );
     my ($id, $msg) = $asset->Create(
         Name                        => 'Standing desk',
         "CustomField-".$height->id  => '46"',
         "CustomField-Material"      => 'pine',
+        Catalog                     => $catalog->Name,
     );
     ok $id, "Created: $msg";
     is $asset->FirstCustomFieldValue('Height'), '46"', "Found height";
@@ -79,6 +100,7 @@ note "Create/update with Roles";
         HeldBy  => $root->PrincipalId,
         Owner   => $bps->PrincipalId,
         Contact => $bps->PrincipalId,
+        Catalog => $catalog->id,
     );
     ok $id, "Created: $msg";
     is $asset->HeldBy->UserMembersObj->First->Name, "root", "root is Holder";
