@@ -182,6 +182,7 @@ sub Create {
         return (0, $self->loc( 'Catalog Create txn failed: [_1]', $txn_msg ));
     }
 
+    $self->CacheNeedsUpdate(1);
     RT->DatabaseHandle->Commit();
 
     return ($id, $self->loc('Catalog #[_1] created: [_2]', $self->id, $args{'Name'}), \@non_fatal_errors);
@@ -401,6 +402,34 @@ sub RightCategories {
     return { %RIGHT_CATEGORIES };
 }
 
+=head2 CacheNeedsUpdate
+
+Takes zero or one arguments.
+
+If a true argument is provided, marks any Catalog caches as needing an update.
+This happens when catalogs are created, disabled/enabled, or modified.  Returns
+nothing.
+
+If no arguments are provided, returns an epoch time that any catalog caches
+should be newer than.
+
+May be called as a class or object method.
+
+=cut
+
+sub CacheNeedsUpdate {
+    my $class  = shift;
+    my $update = shift;
+
+    if ($update) {
+        RT->System->SetAttribute(Name => 'CatalogCacheNeedsUpdate', Content => time);
+        return;
+    } else {
+        my $attribute = RT->System->FirstAttribute('CatalogCacheNeedsUpdate');
+        return $attribute ? $attribute->Content : 0;
+    }
+}
+
 =head1 PRIVATE METHODS
 
 Documented for internal use only, do not call these from outside RT::Catalog
@@ -441,6 +470,8 @@ sub _Set {
             $txn_type = "Enabled";
         }
     }
+
+    $self->CacheNeedsUpdate(1);
 
     my ($txn_id, $txn_msg, $txn) = $self->_NewTransaction(
         Type     => $txn_type,

@@ -4,5 +4,6 @@
     ShowAll         => 0,
     ShowNullOption  => 0,
     %ARGS,
-    ObjectType  => "Catalog",
+    ObjectType          => "Catalog",
+    CacheNeedsUpdate    => RT::Catalog->CacheNeedsUpdate,
     &>
