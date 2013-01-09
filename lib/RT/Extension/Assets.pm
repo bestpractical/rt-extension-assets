@@ -4,7 +4,10 @@ package RT::Extension::Assets;
 
 our $VERSION = '0.01';
 
-use RT::Asset;  # Load so it's available and rights are injected
+# Loaded so they're available and rights are injected.
+use RT::Catalog;
+use RT::Catalogs;
+use RT::Asset;
 use RT::Assets;
 
 =head1 NAME
@@ -15,17 +18,6 @@ RT-Extension-Assets - Asset management for RT
 
 RT->AddStyleSheets("RTx-Assets.css");
 RT->AddJavaScript("RTx-Assets.js");
-
-{
-    use RT::CustomField;
-    my $ORIGINAL = RT::CustomField->can('IsOnlyGlobal');
-    no warnings 'redefine';
-    *RT::CustomField::IsOnlyGlobal = sub {
-        my $self = shift;
-        return 1 if lc($self->LookupType) eq lc("RT::Asset");
-        return $ORIGINAL->($self);
-    };
-}
 
 {
     require RT::Interface::Web;

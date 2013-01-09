@@ -5,6 +5,8 @@ sub acl {
     my @tables = qw (
         rtxassets_id_seq
         RTxAssets
+        rtxcatalogs_id_seq
+        RTxCatalogs
     );
 
     my $db_user = RT->Config->Get('DatabaseUser');

@@ -4,6 +4,10 @@ use warnings;
 package RT::Asset;
 use base 'RT::Record';
 
+use Role::Basic "with";
+with "RT::Role::Record::Status";
+
+use RT::Catalog;
 use RT::CustomField;
 use RT::URI::asset;
 
@@ -13,30 +17,19 @@ RT::Asset - Represents a single asset record
 
 =cut
 
+sub LifecycleColumn { "Catalog" }
+
 # Assets are primarily built on custom fields
 RT::CustomField->_ForObjectType( CustomFieldLookupType() => 'Assets' );
 RT::CustomField->RegisterBuiltInGroupings(
     'RT::Asset' => [qw( Basics Dates People Links )]
 );
 
-# Setup rights
-$RT::ACE::OBJECT_TYPES{'RT::Asset'} = 1;
-
-RT::Asset->AddRights(
-    ShowAsset           => 'See assets',        # loc_pair
-    CreateAsset         => 'Create assets',     # loc_pair
-    ModifyAsset         => 'Modify assets',     # loc_pair
-);
-RT::Asset->AddRightCategories(
-    ShowAsset   => 'Staff',
-    CreateAsset => 'Staff',
-    ModifyAsset => 'Staff',
-);
-
 for my $role ('Owner', 'HeldBy', 'Contact') {
     RT::Asset->RegisterRole(
-        Name    => $role,
-        Single  => ($role eq "Owner" ? 1 : 0),
+        Name            => $role,
+        EquivClasses    => ["RT::Catalog"],
+        Single          => ($role eq "Owner" ? 1 : 0),
     );
 }
 
@@ -56,6 +49,8 @@ Limited to 255 characters.
 =item Description
 
 Limited to 255 characters.
+
+=item Catalog
 
 =item Status
 
@@ -104,6 +99,10 @@ Create takes a hash of values and creates a row in the database.  Available keys
 
 =item Description
 
+=item Catalog
+
+Name or numeric ID
+
 =item CustomField-<ID>
 
 Sets the value for this asset of the custom field specified by C<< <ID> >>.
@@ -135,6 +134,7 @@ sub Create {
     my %args = (
         Name            => '',
         Description     => '',
+        Catalog         => undef,
 
         Owner           => undef,
         HeldBy          => undef,
@@ -145,13 +145,19 @@ sub Create {
     );
     my @non_fatal_errors;
 
+    return (0, $self->loc("Invalid Catalog"))
+        unless $self->ValidateCatalog( $args{'Catalog'} );
+
+    my $catalog = RT::Catalog->new( $self->CurrentUser );
+    $catalog->Load($args{'Catalog'});
+
     return (0, $self->loc("Permission Denied"))
-        unless $self->CurrentUserHasRight('CreateAsset');
+        unless $catalog->CurrentUserHasRight('CreateAsset');
 
     return (0, $self->loc('Invalid Name (names may not be all digits)'))
         unless $self->ValidateName( $args{'Name'} );
 
-    my $cycle = $self->Lifecycle;
+    my $cycle = $catalog->LifecycleObj;
     unless ( defined $args{'Status'} && length $args{'Status'} ) {
         $args{'Status'} = $cycle->DefaultOnCreate;
     }
@@ -173,7 +179,7 @@ sub Create {
     RT->DatabaseHandle->BeginTransaction();
 
     my ( $id, $msg ) = $self->SUPER::Create(
-        map { $_ => $args{$_} } qw(Name Description Status),
+        map { $_ => $args{$_} } qw(Name Description Catalog Status),
     );
     unless ($id) {
         RT->DatabaseHandle->Rollback();
@@ -248,16 +254,20 @@ sub ValidateName {
     return 1;
 }
 
-=head2 ValidateStatus STATUS
+=head2 ValidateCatalog
 
-Takes a string. Returns true if that status is a valid status for this asset.
-Returns false otherwise.
+Takes a catalog name or ID.  Returns true if the catalog exists and is not
+disabled, otherwise false.
 
 =cut
 
-sub ValidateStatus {
-    my $self   = shift;
-    return $self->Lifecycle->IsValid(@_);
+sub ValidateCatalog {
+    my $self    = shift;
+    my $name    = shift;
+    my $catalog = RT::Catalog->new( $self->CurrentUser );
+    $catalog->Load($name);
+    return 1 if $catalog->id and not $catalog->Disabled;
+    return 0;
 }
 
 =head2 Delete
@@ -348,50 +358,38 @@ sub URI {
     return $uri->URIForObject($self);
 }
 
-=head2 Lifecycle
+=head2 CatalogObj
 
-Returns an R<RT::Lifecycle> object for this asset.
+Returns the L<RT::Catalog> object for this asset's catalog.
 
 =cut
 
-sub Lifecycle {
-    return RT::Lifecycle->Load( Name => 'assets', Type => 'asset' );
+sub CatalogObj {
+    my $self = shift;
+    my $catalog = RT::Catalog->new($self->CurrentUser);
+    $catalog->Load( $self->__Value("Catalog") );
+    return $catalog;
 }
 
-=head2 SetStatus STATUS
+=head2 SetCatalog
 
-Set this asset's status.
+Validates the supplied catalog and updates the column if valid.  Transitions
+Status if necessary.  Returns a (status, message) tuple.
 
 =cut
 
-sub SetStatus {
-    my $self = shift;
+sub SetCatalog {
+    my $self  = shift;
+    my $value = shift;
 
-    my ($new) = @_;
-    my $old = $self->__Value('Status');
+    return (0, $self->loc("Permission Denied"))
+        unless $self->CurrentUserHasRight("ModifyAsset");
 
-    my $lifecycle = $self->Lifecycle;
-    unless ( $lifecycle->IsValid( $new ) ) {
-        return (0, $self->loc("Status '[_1]' isn't a valid status for assets.", $self->loc($new)));
-    }
-
-    unless ( $lifecycle->IsTransition( $old => $new ) ) {
-        return (0, $self->loc("You can't change status from '[_1]' to '[_2]'.", $self->loc($old), $self->loc($new)));
-    }
-
-    my $check_right = $lifecycle->CheckRight( $old => $new );
-    unless ( $self->CurrentUserHasRight( $check_right ) ) {
-        return ( 0, $self->loc('Permission Denied') );
-    }
-
-    # Actually update the status
-    my ($val, $msg) = $self->_Set(
-        Field           => 'Status',
-        Value           => $new,
-        CheckACL        => 0,
-        TransactionType => 'Status',
+    my ($ok, $msg, $status) = $self->_SetLifecycleColumn(
+        Value           => $value,
+        RequireRight    => "CreateAsset"
     );
-    return ($val, $msg);
+    return ($ok, $msg);
 }
 
 
@@ -475,59 +473,15 @@ extending Assets.
 
 =cut
 
-sub CustomFieldLookupType { "RT::Asset" }
+sub CustomFieldLookupType { "RT::Catalog-RT::Asset" }
 
-=head2 AddRights C<< RIGHT => DESCRIPTION >> [, ...]
-
-Adds the given rights to the list of possible rights.  This method
-should be called during server startup, not at runtime.
+=head2 ACLEquivalenceObjects
 
 =cut
 
-my (%RIGHTS, %RIGHT_CATEGORIES);
-
-sub AddRights {
+sub ACLEquivalenceObjects {
     my $self = shift;
-    my %new = @_;
-    %RIGHTS = ( %RIGHTS, %new );
-    %RT::ACE::LOWERCASERIGHTNAMES = ( %RT::ACE::LOWERCASERIGHTNAMES,
-                                      map { lc($_) => $_ } keys %new);
-    return;
-}
-
-=head2 AddRightCategories C<< RIGHT => CATEGORY>> [, ...]
-
-Adds the given right and category pairs to the list of right categories.
-This method should be called during server startup, not at runtime.
-
-=cut
-
-sub AddRightCategories {
-    my $self = shift;
-    %RIGHT_CATEGORIES = ( %RIGHT_CATEGORIES, @_ );
-    return;
-}
-
-=head2 AvailableRights
-
-Returns a hashref of available rights for this object. The keys are the
-right names and the values are a description of what the rights do.
-
-=cut
-
-sub AvailableRights {
-    return { %RIGHTS };
-}
-
-=head2 RightCategories
-
-Returns a hashref of C<Right> and C<Category> pairs, as added with
-L</AddRightCategories>.
-
-=cut
-
-sub RightCategories {
-    return { %RIGHT_CATEGORIES };
+    return $self->CatalogObj;
 }
 
 =head1 PRIVATE METHODS
@@ -590,6 +544,7 @@ sub _CoreAccessible {
         Name          => { read => 1, type => 'varchar(255)',   default => '',  write => 1 },
         Status        => { read => 1, type => 'varchar(64)',    default => '',  write => 1 },
         Description   => { read => 1, type => 'varchar(255)',   default => '',  write => 1 },
+        Catalog       => { read => 1, type => 'int(11)',        default => '0', write => 1 },
         Creator       => { read => 1, type => 'int(11)',        default => '0', auto => 1 },
         Created       => { read => 1, type => 'datetime',       default => '',  auto => 1 },
         LastUpdatedBy => { read => 1, type => 'int(11)',        default => '0', auto => 1 },
