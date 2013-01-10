@@ -37,7 +37,10 @@ for my $role ('Owner', 'HeldBy', 'Contact') {
     RT::Asset->RegisterRole(
         Name            => $role,
         EquivClasses    => ["RT::Catalog"],
-        Single          => ($role eq "Owner" ? 1 : 0),
+        ( $role eq "Owner"
+            ? ( Single         => 1,
+                ACLOnlyInEquiv => 1, )
+            : () ),
     );
 }
 
