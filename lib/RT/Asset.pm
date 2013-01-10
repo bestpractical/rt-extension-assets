@@ -5,7 +5,15 @@ package RT::Asset;
 use base 'RT::Record';
 
 use Role::Basic "with";
-with "RT::Role::Record::Status";
+with "RT::Role::Record::Status",
+     "RT::Role::Record::Roles" => {
+         -rename => {
+             # We provide ACL'd wraps of these.
+             AddRoleMember    => "_AddRoleMember",
+             DeleteRoleMember => "_DeleteRoleMember",
+             RoleGroup        => "_RoleGroup",
+         },
+     };
 
 use RT::Catalog;
 use RT::CustomField;
@@ -431,7 +439,7 @@ sub AddRoleMember {
     return (0, $self->loc("No permission to modify this asset"))
         unless $self->CurrentUserHasRight("ModifyAsset");
 
-    return $self->SUPER::AddRoleMember(@_);
+    return $self->_AddRoleMember(@_);
 }
 
 =head2 DeleteRoleMember
@@ -446,7 +454,7 @@ sub DeleteRoleMember {
     return (0, $self->loc("No permission to modify this asset"))
         unless $self->CurrentUserHasRight("ModifyAsset");
 
-    return $self->SUPER::DeleteRoleMember(@_);
+    return $self->_DeleteRoleMember(@_);
 }
 
 =head2 RoleGroup
@@ -458,7 +466,7 @@ An ACL'd version of L<RT::Record/RoleGroup>.  Checks I<ShowAsset>.
 sub RoleGroup {
     my $self = shift;
     if ($self->CurrentUserCanSee) {
-        return $self->SUPER::RoleGroup(@_);
+        return $self->_RoleGroup(@_);
     } else {
         return RT::Group->new( $self->CurrentUser );
     }

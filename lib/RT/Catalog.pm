@@ -5,7 +5,15 @@ package RT::Catalog;
 use base 'RT::Record';
 
 use Role::Basic 'with';
-with "RT::Role::Record::Lifecycle";
+with "RT::Role::Record::Lifecycle",
+     "RT::Role::Record::Roles" => {
+         -rename => {
+             # We provide ACL'd wraps of these.
+             AddRoleMember    => "_AddRoleMember",
+             DeleteRoleMember => "_DeleteRoleMember",
+             RoleGroup        => "_RoleGroup",
+         },
+     };
 
 =head1 NAME
 
@@ -290,7 +298,7 @@ sub AddRoleMember {
     return (0, $self->loc("No permission to modify this catalog"))
         unless $self->CurrentUserHasRight("AdminCatalog");
 
-    return $self->SUPER::AddRoleMember(@_);
+    return $self->_AddRoleMember(@_);
 }
 
 =head2 DeleteRoleMember
@@ -305,7 +313,7 @@ sub DeleteRoleMember {
     return (0, $self->loc("No permission to modify this catalog"))
         unless $self->CurrentUserHasRight("AdminCatalog");
 
-    return $self->SUPER::DeleteRoleMember(@_);
+    return $self->_DeleteRoleMember(@_);
 }
 
 =head2 RoleGroup
@@ -317,7 +325,7 @@ An ACL'd version of L<RT::Record/RoleGroup>.  Checks I<ShowCatalog>.
 sub RoleGroup {
     my $self = shift;
     if ($self->CurrentUserCanSee) {
-        return $self->SUPER::RoleGroup(@_);
+        return $self->_RoleGroup(@_);
     } else {
         return RT::Group->new( $self->CurrentUser );
     }
