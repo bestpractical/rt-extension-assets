@@ -1,7 +1,7 @@
 <table>
   <tr class="catalog">
     <td class="label"><&|/l&>Catalog</&></td>
-    <td><% $AssetObj->CatalogObj->Name || '' %></td>
+    <td><& ShowCatalog, Asset => $AssetObj &></td>
   </tr>
   <tr>
     <td class="label"><&|/l&>Name</&></td>
