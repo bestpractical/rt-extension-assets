@@ -162,6 +162,8 @@ sub Create {
     my $catalog = RT::Catalog->new( $self->CurrentUser );
     $catalog->Load($args{'Catalog'});
 
+    $args{'Catalog'} = $catalog->id;
+
     return (0, $self->loc("Permission Denied"))
         unless $catalog->CurrentUserHasRight('CreateAsset');
 
