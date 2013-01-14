@@ -9,6 +9,16 @@ for my $key (keys %ARGS) {
             OPERATOR => 'LIKE',
             VALUE => $ARGS{$key},
         );
+    } elsif ($key =~ /^Role\.(.+)/) {
+        my $role = $1;
+        $assets->RoleLimit(
+            TYPE      => $role,
+            FIELD     => $_,
+            VALUE     => $ARGS{$key},
+            SUBCLAUSE => $role,
+            ENTRYAGGREGATOR => "OR",
+            CASESENSITIVE   => 0,
+        ) for qw/EmailAddress Name/;
     } elsif ($key =~ /^CF\.\{(.+?)\}$/ or $key =~ /^CF\.(.*)/) {
         my $cf = RT::Asset->new( $session{CurrentUser} )
             ->LoadCustomFieldByIdentifier( $1 );
@@ -47,6 +57,16 @@ my $Format = RT->Config->Get('AssetSearchFormat') || q[
     <td class="value"><input type="text" id="Name" name="Name" value="<% $ARGS{Name} || ''%>" /></td></tr>
 <tr><td class="label"><label for="Description"><&|/l&>Description</&></label></td>
     <td class="value"><input type="text" id="Description" name="Description" value="<% $ARGS{Description} || ''%>" /></td></tr>
+
+% for my $role (RT::Asset->Roles) {
+<tr>
+  <td class="label"><label for="Role.<% $role %>"><% loc($role) %></td>
+  <td class="value">
+      <input type="text" id="Role.<% $role %>" name="Role.<% $role %>"
+             value="<% $ARGS{"Role.$role"} || '' %>" />
+  </td>
+</tr>
+% }
 
 % my $CFs = RT::CustomFields->new( $session{CurrentUser} );
 % $CFs->LimitToChildType( 'RT::Asset' );
