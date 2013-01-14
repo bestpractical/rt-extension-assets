@@ -87,10 +87,10 @@ RT->AddJavaScript("RTx-Assets.js");
             }
             elsif ($arg =~ /^SetRoleMember-(.+)$/) {
                 my $type = $1;
-                my $group = $asset->RoleGroup($type);
+                my $group = $object->RoleGroup($type);
                 next unless $group->id and $group->SingleMemberRoleGroup;
                 next if $ARGS{$arg} eq $group->UserMembersObj->First->Name;
-                my ($ok, $msg) = $asset->AddRoleMember(
+                my ($ok, $msg) = $object->AddRoleMember(
                     Type => $type,
                     User => $ARGS{$arg},
                 );
