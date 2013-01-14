@@ -1,8 +1,8 @@
 <%init>
 my $assets = RT::Assets->new($session{CurrentUser});
-$assets->LimitRoleMember(
-    Type        => "HeldBy",
-    PrincipalId => $session{CurrentUser}->PrincipalId,
+$assets->RoleLimit(
+    TYPE => "HeldBy",
+    VALUE => $session{CurrentUser}->PrincipalId,
 );
 </%init>
 <&| /Widgets/TitleBox, title => loc("My Assets") &>
