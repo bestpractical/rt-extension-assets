@@ -1,4 +1,10 @@
 <table>
+% if ($AssetObj->id) {
+  <tr class="catalog">
+    <td class="label"><label for="Catalog"><&|/l&>Catalog</&></label></td>
+    <td><& /Asset/Elements/SelectCatalog, Default => $current{Catalog} &></td>
+  </tr>
+% }
   <tr>
     <td class="label"><label for="Name"><&|/l&>Name</&></label></td>
     <td><input name="Name" value="<% $current{Name} %>" size="50"></td>

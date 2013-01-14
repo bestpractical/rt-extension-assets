@@ -7,7 +7,7 @@ use lib qw(/opt/rt4/local/lib /opt/rt4/lib);
 package RT::Extension::Assets::Test;
 use base 'RT::Test';
 
-our @EXPORT = qw(create_asset create_assets create_cf apply_cfs);
+our @EXPORT = qw(create_catalog create_asset create_assets create_cf apply_cfs);
 
 sub import {
     my $class = shift;
@@ -29,6 +29,20 @@ sub import {
 
 sub diag {
     Test::More::diag(@_) if $ENV{TEST_VERBOSE};
+}
+
+sub create_catalog {
+    my %info  = @_;
+    my $catalog = RT::Catalog->new( RT->SystemUser );
+    my ($id, $msg) = $catalog->Create( %info );
+    if ($id) {
+        diag("Created catalog #$id: " . $catalog->Name);
+        return $catalog;
+    } else {
+        my $spec = join "/", map { "$_=$info{$_}" } keys %info;
+        RT->Logger->error("Failed to create catalog ($spec): $msg");
+        return;
+    }
 }
 
 sub create_asset {
@@ -58,7 +72,7 @@ sub create_cf {
     my %args = (
         Name        => "Test Asset CF ".($$ + rand(1024)),
         Type        => "FreeformSingle",
-        LookupType  => 'RT::Asset',
+        LookupType  => RT::Asset->CustomFieldLookupType,
         @_,
     );
     my $cf = RT::CustomField->new( RT->SystemUser );
@@ -70,7 +84,7 @@ sub create_cf {
 sub apply_cfs {
     my $success = 1;
     for my $cf (@_) {
-        my ($ok, $msg) = $cf->AddToObject( RT::Asset->new(RT->SystemUser) );
+        my ($ok, $msg) = $cf->AddToObject( RT::Catalog->new(RT->SystemUser) );
         if (not $ok) {
             RT->Logger->error("Couldn't apply CF: $msg");
             $success = 0;

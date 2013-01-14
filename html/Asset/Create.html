@@ -1,16 +1,19 @@
-<& /Elements/Header, Title => loc("Create a new asset") &>
+<& /Elements/Header, Title => loc("Create a new asset in catalog [_1]", $catalog->Name) &>
 <& /Elements/Tabs &>
 
 <& /Elements/ListActions, actions => \@results &>
 
 <form method="post" enctype="multipart/form-data" id="CreateAsset" action="Create.html">
   <input type="hidden" name="id" value="new">
+  <input type="hidden" name="Catalog" value="<% $catalog->id %>">
 
   <&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics" &>
     <& Elements/EditBasics, %ARGS, AssetObj => $asset &>
   </&>
 
-  <& /Elements/EditCustomFieldCustomGroupings, Object => $asset &>
+  <& /Elements/EditCustomFieldCustomGroupings,
+        Object => $asset,
+        CustomFieldGenerator => sub { $catalog->AssetCustomFields } &>
 
   <!-- XXX TODO: People -->
   <!-- XXX TODO: Links -->
@@ -20,29 +23,36 @@
 
 <%args>
 $id => ""
+$Catalog => undef
 </%args>
 <%init>
-my $asset = RT::Asset->new( $session{CurrentUser} );
+my $asset   = RT::Asset->new( $session{CurrentUser} );
+my $catalog = RT::Catalog->new( $session{CurrentUser} );
+$catalog->Load($Catalog);
 
-Abort(loc("You don't have permission to create assets."))
-    unless $asset->CurrentUserHasRight("CreateAsset");
+Abort(loc("Unable to find catalog '[_1]'", $Catalog))
+    unless $catalog->id;
+
+Abort(loc("You don't have permission to create assets in catalog [_1].",
+          $catalog->Name || $catalog->id))
+    unless $catalog->CurrentUserHasRight("CreateAsset");
 
 my @results;
 
 if ($id eq "new") {
     my $skip_create = 0;
 
-    # XXX TODO: validation prevents creation b/c of CFs not displayed!
     my ($cf_ok, @cf_errors) = $m->comp(
         '/Elements/ValidateCustomFields',
         Object          => $asset,
-        CustomFields    => $asset->CustomFields,
+        CustomFields    => $catalog->AssetCustomFields,
         ARGSRef         => \%ARGS
     );
 
     $m->callback(
         CallbackName    => 'BeforeCreate',
         AssetObj        => $asset,
+        CatalogObj      => $catalog,
         results         => \@results,
         cf_ok           => \$cf_ok,
         skip_create     => \$skip_create,
@@ -58,7 +68,7 @@ if ($id eq "new") {
             $create{$_} = $ARGS{$_} if exists $ARGS{$_};
         }
 
-        $m->callback( %ARGS, AssetObj => $asset, Create => \%create, CallbackName => 'MassageCreate' );
+        $m->callback( %ARGS, AssetObj => $asset, CatalogObj => $catalog, Create => \%create, CallbackName => 'MassageCreate' );
 
         my ($ok, $msg, $nonfatal) = $asset->Create( %create );
         push @results, $msg, @{$nonfatal || []};

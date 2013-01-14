@@ -10,6 +10,9 @@ RT->Config->Set("CustomFieldGroupings",
     },
 );
 
+my $catalog = create_catalog( Name => "Office" );
+ok $catalog->id, "Created Catalog";
+
 my $purchased = create_cf( Name => 'Purchased', Pattern => '(?#Year)^(?:19|20)\d{2}$' );
 ok $purchased->id, "Created CF";
 
@@ -31,6 +34,7 @@ ok $m->login, "Logged in agent";
 diag "Create basic asset (no CFs)";
 {
     $m->follow_link_ok({ id => "assets-create" }, "Asset create link");
+    $m->submit_form_ok({ with_fields => { Catalog => $catalog->id } }, "Picked a catalog");
     $m->submit_form_ok({
         with_fields => {
             id          => 'new',
@@ -53,6 +57,8 @@ diag "Create with CFs";
     ok apply_cfs($height, $material), "Applied CFs";
 
     $m->follow_link_ok({ id => "assets-create" }, "Asset create link");
+    $m->submit_form_ok({ with_fields => { Catalog => $catalog->id } }, "Picked a catalog");
+
     ok $m->form_with_fields(qw(id Name Description)), "Found form";
     $m->submit_form_ok({
         fields => {
@@ -86,9 +92,9 @@ diag "Create with CFs in other groups";
     ok apply_cfs($purchased), "Applied CF";
 
     $m->follow_link_ok({ id => "assets-create" }, "Asset create link");
-    ok $m->form_with_fields(qw(id Name Description)), "Found form";
+    $m->submit_form_ok({ with_fields => { Catalog => $catalog->id } }, "Picked a catalog");
 
-    my $has_purchased = $m->current_form->find_input($CF{Purchased});
+    ok $m->form_with_fields(qw(id Name Description)), "Found form";
 
     $m->submit_form_ok({
         fields => {
@@ -98,16 +104,8 @@ diag "Create with CFs in other groups";
         },
     }, "submited create form");
 
-    TODO: {
-        local $TODO = "We validate too much on create, even CFs which aren't displayed.";
-        if ($has_purchased) {
-            $m->content_unlike(qr/Asset .* created/, "Lacks created message");
-            $m->content_like(qr/Purchased.*?must match .*?Year/, "Has validation error for Purchased");
-        } else {
-            $m->content_like(qr/Asset .* created/, "Found created message");
-            $m->content_unlike(qr/Purchased.*?must match .*?Year/, "Lacks validation error for Purchased");
-        }
-    }
+    $m->content_like(qr/Asset .* created/, "Found created message");
+    $m->content_unlike(qr/Purchased.*?must match .*?Year/, "Lacks validation error for Purchased");
 }
 
 # XXX TODO: test other modify pages

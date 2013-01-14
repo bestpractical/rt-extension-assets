@@ -27,3 +27,10 @@ Set(%Lifecycles,
         },
     },
 );
+
+Set(%AdminSearchResultFormat,
+    Catalogs =>
+        q{'<a href="__WebPath__/Admin/Assets/Catalogs/Modify.html?id=__id__">__id__</a>/TITLE:#'}
+        .q{,'<a href="__WebPath__/Admin/Assets/Catalogs/Modify.html?id=__id__">__Name__</a>/TITLE:Name'}
+        .q{,__Description__,__Lifecycle__,__Disabled__},
+);

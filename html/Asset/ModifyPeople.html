@@ -9,8 +9,8 @@
   <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
     <table width="100%" class="edit">
       <tr>
-        <td width="30%"><& Elements/EditPeople, %ARGS, AssetObj => $asset &></td>
-        <td width="30%"><& Elements/AddPeople, AssetObj => $asset &></td>
+        <td width="30%"><& /Elements/Assets/EditPeople, %ARGS, Object => $asset &></td>
+        <td width="30%"><& /Elements/Assets/AddPeople, Object => $asset &></td>
         <td>
           <& /Elements/EditCustomFields, Object => $asset, Grouping => 'People', AsTable => 1 &>
         </td>
@@ -37,7 +37,7 @@ if ($Update) {
     );
 
     if ($cf_ok) {
-        push @results, ProcessAssetPeople( $asset => %ARGS );
+        push @results, ProcessRoleMembers( $asset => %ARGS );
         push @results, ProcessObjectCustomFieldUpdates( Object => $asset, ARGSRef => \%ARGS );
 
         MaybeRedirectForResults(

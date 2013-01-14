@@ -1,0 +1,22 @@
+<% $value %>
+<%ARGS>
+$Asset   => undef
+$Catalog => undef
+</%ARGS>
+<%INIT>
+$Catalog ||= $Asset->CatalogObj if $Asset;
+return unless $Catalog;
+
+my $value = $Catalog->Name;
+
+if ( $Asset and $Asset->CurrentUserHasRight('ShowCatalog') ) {
+    # Grab the name anyway if the current user can see the catalog based on his
+    # role for this asset.  Simply checking ShowCatalog on the catalog itself
+    # won't work since the role membership is on the asset.  We need to
+    # implement context objects (like CFs do) for catalogs.
+    $value = $Catalog->__Value('Name');
+}
+
+$value = '#'. $Catalog->id
+    unless defined $value and length $value;
+</%INIT>

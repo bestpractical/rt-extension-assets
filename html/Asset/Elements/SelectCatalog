@@ -1,0 +1,9 @@
+<& /Elements/SelectObject,
+    Name            => "Catalog",
+    CheckRight      => "CreateAsset",
+    ShowAll         => 0,
+    ShowNullOption  => 0,
+    %ARGS,
+    ObjectType          => "Catalog",
+    CacheNeedsUpdate    => RT::Catalog->CacheNeedsUpdate,
+    &>

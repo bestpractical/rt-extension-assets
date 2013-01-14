@@ -1,9 +1,9 @@
 <%args>
-$AssetObj
+$Object
 </%args>
 <div class="add-user">
 <h3>Add a person</h3>
-<& SelectRoleType, AssetObj => $AssetObj, Name => "AddRoleMember-User-Type" &>
+<& SelectRoleType, Object => $Object, Name => "AddRoleMember-User-Type" &>
 <input type="text" name="AddRoleMember-User"
        data-autocomplete="Users"
        data-autocomplete-return="Name"
@@ -12,7 +12,7 @@ $AssetObj
 
 <div class="add-group">
 <h3>Add a group</h3>
-<& SelectRoleType, AssetObj => $AssetObj, Name => "AddRoleMember-Group-Type" &>
+<& SelectRoleType, Object => $Object, Name => "AddRoleMember-Group-Type" &>
 <input type="text" name="AddRoleMember-Group"
        data-autocomplete="Groups"
        data-autocomplete-return="Name"

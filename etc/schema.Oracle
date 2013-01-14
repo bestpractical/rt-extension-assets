@@ -2,6 +2,7 @@ CREATE SEQUENCE RTxAssets_seq;
 CREATE TABLE RTxAssets (
     id              NUMBER(11,0)    CONSTRAINT RTxAssets_key PRIMARY KEY,
     Name            varchar2(255)   DEFAULT '',
+    Catalog         NUMBER(11,0)    DEFAULT 0 NOT NULL,
     Status          varchar2(64)    DEFAULT '',
     Description     varchar2(255)   DEFAULT '',
     Creator         NUMBER(11,0)    DEFAULT 0 NOT NULL,
@@ -12,3 +13,20 @@ CREATE TABLE RTxAssets (
 
 CREATE INDEX RTxAssetsName ON RTxAssets (LOWER(Name));
 CREATE INDEX RTxAssetsStatus ON RTxAssets (Status);
+CREATE INDEX RTxAssetsCatalog ON RTxAssets (Catalog);
+
+CREATE SEQUENCE RTxCatalogs_seq;
+CREATE TABLE RTxCatalogs (
+    id              NUMBER(11,0)    CONSTRAINT RTxCatalogs_key PRIMARY KEY,
+    Name            varchar2(255)   DEFAULT '',
+    Lifecycle       varchar2(32)    DEFAULT 'assets',
+    Description     varchar2(255)   DEFAULT '',
+    Disabled        NUMBER(11,0)    DEFAULT 0 NOT NULL,
+    Creator         NUMBER(11,0)    DEFAULT 0 NOT NULL,
+    Created         DATE,
+    LastUpdatedBy   NUMBER(11,0)    DEFAULT 0 NOT NULL,
+    LastUpdated     DATE
+);
+
+CREATE INDEX RTxCatalogsName ON RTxCatalogs (LOWER(Name));
+CREATE INDEX RTxCatalogsDisabled ON RTxCatalogs (Disabled);

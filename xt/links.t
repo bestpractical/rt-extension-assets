@@ -5,11 +5,14 @@ use lib 'xt/lib';
 use RT::Extension::Assets::Test tests => undef;
 use Test::Warn;
 
+my $catalog = create_catalog( Name => "BPS" );
+ok $catalog && $catalog->id, "Created Catalog";
+
 ok(
     create_assets(
-        { Name => "Thinkpad T420s" },
-        { Name => "Standing desk" },
-        { Name => "Chair" },
+        { Name => "Thinkpad T420s", Catalog => $catalog->id },
+        { Name => "Standing desk", Catalog => $catalog->id },
+        { Name => "Chair", Catalog => $catalog->id },
     ),
     "Created assets"
 );

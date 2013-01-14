@@ -5,11 +5,14 @@ if ($AssetObj and $AssetObj->Id) {
     $ARGS{Default} = $DECODED_ARGS->{Status} || $ARGS{Default};
     $ARGS{Object} = $AssetObj;
 } else {
+    my $lifecycle = ($CatalogObj || "RT::Catalog")->LifecycleObj;
+
     $ARGS{DefaultValue} = 0;
-    $ARGS{Default} ||= $DECODED_ARGS->{Status} || RT::Asset->Lifecycle->DefaultOnCreate;
-    $ARGS{Statuses} = [ RT::Asset->Lifecycle->Transitions('') ];
+    $ARGS{Default} ||= $DECODED_ARGS->{Status} || $lifecycle->DefaultOnCreate;
+    $ARGS{Statuses} = [ $lifecycle->Name ? $lifecycle->Transitions("") : $lifecycle->Valid ];
 }
 </%init>
 <%args>
-$AssetObj => undef
+$AssetObj   => undef
+$CatalogObj => undef
 </%args>

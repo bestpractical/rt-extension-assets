@@ -4,7 +4,10 @@ package RT::Extension::Assets;
 
 our $VERSION = '0.01';
 
-use RT::Asset;  # Load so it's available and rights are injected
+# Loaded so they're available and rights are injected.
+use RT::Catalog;
+use RT::Catalogs;
+use RT::Asset;
 use RT::Assets;
 
 =head1 NAME
@@ -17,19 +20,39 @@ RT->AddStyleSheets("RTx-Assets.css");
 RT->AddJavaScript("RTx-Assets.js");
 
 {
-    use RT::CustomField;
-    my $ORIGINAL = RT::CustomField->can('IsOnlyGlobal');
-    no warnings 'redefine';
-    *RT::CustomField::IsOnlyGlobal = sub {
+    package RT::Transaction;
+    our %_BriefDescriptions;
+
+    $_BriefDescriptions{"RT::Asset-Set-Catalog"} = sub {
         my $self = shift;
-        return 1 if lc($self->LookupType) eq lc("RT::Asset");
-        return $ORIGINAL->($self);
+        return ("[_1] changed from [_2] to [_3]",   #loc
+                $self->loc($self->Field), map {
+                    my $c = RT::Catalog->new($self->CurrentUser);
+                    $c->Load($_);
+                    $c->Name || $self->loc("~[a hidden catalog~]")
+                } $self->OldValue, $self->NewValue);
     };
 }
 
 {
     require RT::Interface::Web;
     package HTML::Mason::Commands;
+
+    sub LoadCatalog {
+        my $id = shift
+            or Abort(loc("No catalog specified."));
+
+        my $catalog = RT::Catalog->new( $session{CurrentUser} );
+        $catalog->Load($id);
+
+        Abort(loc("Unable to find catalog [_1]", $id))
+            unless $catalog->id;
+
+        Abort(loc("You don't have permission to view this catalog."))
+            unless $catalog->CurrentUserCanSee;
+
+        return $catalog;
+    }
 
     sub LoadAsset {
         my $id = shift
@@ -47,16 +70,16 @@ RT->AddJavaScript("RTx-Assets.js");
         return $asset;
     }
 
-    sub ProcessAssetPeople {
-        my $asset = shift;
-        my %ARGS  = (@_);
+    sub ProcessRoleMembers {
+        my $object = shift;
+        my %ARGS   = (@_);
         my @results;
 
         for my $arg (keys %ARGS) {
             if ($arg =~ /^AddRoleMember-(User|Group)$/) {
                 next unless $ARGS{$arg} and $ARGS{"$arg-Type"};
 
-                my ($ok, $msg) = $asset->AddRoleMember(
+                my ($ok, $msg) = $object->AddRoleMember(
                     Type => $ARGS{"$arg-Type"},
                     $1   => $ARGS{$arg},
                 );
@@ -74,7 +97,7 @@ RT->AddJavaScript("RTx-Assets.js");
                 push @results, $msg;
             }
             elsif ($arg =~ /^RemoveRoleMember-(.+)$/) {
-                my ($ok, $msg) = $asset->DeleteRoleMember(
+                my ($ok, $msg) = $object->DeleteRoleMember(
                     Type        => $1,
                     PrincipalId => $ARGS{$arg},
                 );

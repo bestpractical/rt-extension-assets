@@ -1,0 +1,17 @@
+<& /Admin/Elements/Header, Title => loc("Catalog [_1]: Modify user rights", $Catalog->Name) &>
+<& /Elements/Tabs &>
+<& /Elements/ListActions, actions => \@results &>
+
+<form method="post" action="UserRights.html" id="ModifyUserRights" name="ModifyUserRights">
+  <input type="hidden" class="hidden" name="id" value="<% $Catalog->id %>" />
+  <& /Admin/Elements/EditRights, Context => $Catalog, Principals => \@principals &>
+  <& /Elements/Submit, Label => loc('Save Changes') &>
+</form>
+<%init>
+my $Catalog    = LoadCatalog($id);
+my @results    = ProcessACLs(\%ARGS);
+my @principals = GetPrincipalsMap($Catalog, qw(Users));
+</%init>
+<%args>
+$id => undef
+</%args>

@@ -1,0 +1,35 @@
+<table>
+  <tr>
+    <td class="label"><label for="Name"><&|/l&>Name</&></label></td>
+    <td><input name="Name" value="<% $current{Name} %>" size="50"></td>
+  </tr>
+  <tr>
+    <td class="label"><label for="Description"><&|/l&>Description</&></label></td>
+    <td><input name="Description" value="<% $current{Description} %>" size="75"></td>
+  </tr>
+  <tr class="lifecycle">
+    <td class="label"><label for="Lifecycle"><&|/l&>Lifecycle</&></label></td>
+    <td>
+      <& /Widgets/Form/Select:InputOnly,
+          Name         => 'Lifecycle',
+          Values       => [ sort { loc($a) cmp loc($b) } RT::Lifecycle->List( $CatalogObj->LifecycleType ) ],
+          CurrentValue => $current{Lifecycle},
+          Default      => 0,
+      &>
+    </td>
+  </tr>
+  <tr>
+    <td class="label"><label for="Disabled"><&|/l&>Disabled?</&></label></td>
+    <td>
+      <input name="Disabled" type="checkbox" value="1" <% $current{Disabled} ? "checked" : "" %>>
+      <input name="SetDisabled" type="hidden" value="1">
+    </td>
+  </tr>
+</table>
+<%args>
+$CatalogObj
+</%args>
+<%init>
+my %current = map { $_ => ($ARGS{$_} || $CatalogObj->$_ || '') }
+                  $CatalogObj->WritableAttributes;
+</%init>

@@ -21,7 +21,7 @@ sub LimitToActiveStatus {
     my $self = shift;
 
     $self->Limit( FIELD => 'Status', VALUE => $_ )
-        for RT::Asset->Lifecycle->Valid('initial', 'active');
+        for RT::Catalog->LifecycleObj->Valid('initial', 'active');
 }
 
 =head2 Limit

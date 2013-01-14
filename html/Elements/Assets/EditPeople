@@ -1,14 +1,14 @@
 <%args>
-$AssetObj
+$Object
 </%args>
 <%init>
 </%init>
 %# XXX TODO: these should be ordered non-alphabetically... add ordering as
 %# supported metadata in core RT for roles?
-% for my $role ($AssetObj->Roles) {
-<div class="role-<% $role %> role">
+% for my $role ($Object->Roles( ACLOnly => 0 )) {
+<div class="role-<% CSSClass($role) %> role">
   <h3><% loc($role) %></h3>
-  <& EditRoleMembers, Group => $AssetObj->RoleGroup($role) &>
+  <& EditRoleMembers, Group => $Object->RoleGroup($role) &>
 </div>
 % }
 <em><&|/l&>(Check box to delete)</&></em>

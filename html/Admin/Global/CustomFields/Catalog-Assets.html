@@ -1,0 +1,7 @@
+<& /Admin/Elements/Header, Title => $title &>
+<& /Elements/Tabs &>
+<& /Admin/Elements/EditCustomFields, %ARGS, title => $title, ObjectType => "RT::Catalog", Object=> $object, SubType => "RT::Asset" &>
+<%init>
+my $title = loc('Edit Custom Fields for Assets in all Catalogs');
+my $object = RT::Catalog->new($session{'CurrentUser'});
+</%init>
