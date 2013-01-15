@@ -70,7 +70,7 @@ my $Format = RT->Config->Get('AssetSearchFormat') || q[
 % }
 
 % my $CFs = RT::CustomFields->new( $session{CurrentUser} );
-% $CFs->LimitToChildType( 'RT::Asset' );
+% $CFs->LimitToChildType( RT::Asset->CustomFieldLookupType );
 % while (my $cf = $CFs->Next) {
 % my $name = "CF.{" . $cf->Name . "}";
 <tr>
