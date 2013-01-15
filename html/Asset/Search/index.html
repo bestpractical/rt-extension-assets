@@ -1,6 +1,11 @@
+<%args>
+$Order => "ASC"
+$OrderBy => "Name"
+</%args>
 <%init>
 my $assets = RT::Assets->new($session{CurrentUser});
 
+my @PassArguments = qw( Order OrderBy );
 for my $key (keys %ARGS) {
     next unless defined $ARGS{$key} and length $ARGS{$key};
     if ($key =~ /^(Name|Description)$/) {
@@ -29,6 +34,7 @@ for my $key (keys %ARGS) {
             VALUE       => $ARGS{$key},
         );
     }
+    push @PassArguments, $key;
 }
 $assets->LimitToActiveStatus;
 
@@ -43,11 +49,13 @@ my $Format = RT->Config->Get('AssetSearchFormat') || q[
 <& /Elements/Tabs &>
 
 <& /Elements/CollectionList,
+    (map {+($_ => $ARGS{$_})} @PassArguments),
     Collection      => $assets,
-    OrderBy         => 'Name',
-    Order           => 'ASC',
+    OrderBy         => $OrderBy,
+    Order           => $Order,
     Format          => $Format,
-    AllowSorting    => 0,
+    AllowSorting    => 1,
+    PassArguments   => \@PassArguments,
     &>
 
 <&|/Widgets/TitleBox, title => "Search Assets" &>
