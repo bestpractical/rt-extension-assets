@@ -25,6 +25,7 @@ for my $key (keys %ARGS) {
         next unless $cf->id;
         $assets->LimitCustomField(
             CUSTOMFIELD => $cf->Id,
+            OPERATOR    => "LIKE",
             VALUE       => $ARGS{$key},
         );
     }
