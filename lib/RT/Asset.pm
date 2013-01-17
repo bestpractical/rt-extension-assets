@@ -434,7 +434,7 @@ sub Contacts { $_[0]->RoleGroup("Contact") }
 
 =head2 AddRoleMember
 
-Checks I<ModifyAsset> before calling L<RT::Record/AddRoleMember>.
+Checks I<ModifyAsset> before calling L<RT::Role::Record::Roles/_AddRoleMember>.
 
 =cut
 
@@ -449,7 +449,7 @@ sub AddRoleMember {
 
 =head2 DeleteRoleMember
 
-Checks I<ModifyAsset> before calling L<RT::Record/DeleteRoleMember>.
+Checks I<ModifyAsset> before calling L<RT::Role::Record::Roles/_DeleteRoleMember>.
 
 =cut
 
@@ -464,7 +464,7 @@ sub DeleteRoleMember {
 
 =head2 RoleGroup
 
-An ACL'd version of L<RT::Record/RoleGroup>.  Checks I<ShowAsset>.
+An ACL'd version of L<RT::Role::Record::Roles/_RoleGroup>.  Checks I<ShowAsset>.
 
 =cut
 

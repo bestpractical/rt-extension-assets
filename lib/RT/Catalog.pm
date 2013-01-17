@@ -288,7 +288,7 @@ sub Contacts { $_[0]->RoleGroup("Contact") }
 
 =head2 AddRoleMember
 
-Checks I<AdminCatalog> before calling L<RT::Record/AddRoleMember>.
+Checks I<AdminCatalog> before calling L<RT::Role::Record::Roles/_AddRoleMember>.
 
 =cut
 
@@ -303,7 +303,7 @@ sub AddRoleMember {
 
 =head2 DeleteRoleMember
 
-Checks I<AdminCatalog> before calling L<RT::Record/DeleteRoleMember>.
+Checks I<AdminCatalog> before calling L<RT::Role::Record::Roles/_DeleteRoleMember>.
 
 =cut
 
@@ -318,7 +318,7 @@ sub DeleteRoleMember {
 
 =head2 RoleGroup
 
-An ACL'd version of L<RT::Record/RoleGroup>.  Checks I<ShowCatalog>.
+An ACL'd version of L<RT::Role::Record::Roles/_RoleGroup>.  Checks I<ShowCatalog>.
 
 =cut
 
