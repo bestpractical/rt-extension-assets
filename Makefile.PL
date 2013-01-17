@@ -4,6 +4,7 @@ RTx 'RT-Extension-Assets';
 all_from 'lib/RT/Extension/Assets.pm';
 readme_from 'lib/RT/Extension/Assets.pm';
 license  'gplv2';
+perl_version 5.010001;
 
 no_index package => "HTML::Mason::Commands";
 

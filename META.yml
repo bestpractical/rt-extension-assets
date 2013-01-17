@@ -3,10 +3,10 @@ abstract: 'RT Extension-Assets Extension'
 author:
   - 'Thomas Sibley <trs@bestpractical.com>'
 build_requires:
-  ExtUtils::MakeMaker: 6.36
+  ExtUtils::MakeMaker: 6.59
   Test::Warn: 0
 configure_requires:
-  ExtUtils::MakeMaker: 6.36
+  ExtUtils::MakeMaker: 6.59
 distribution_type: module
 dynamic_config: 1
 generated_by: 'Module::Install version 1.06'
@@ -24,6 +24,8 @@ no_index:
     - xt
   package:
     - HTML::Mason::Commands
+requires:
+  perl: 5.10.1
 resources:
   license: http://opensource.org/licenses/gpl-license.php
 version: 0.01

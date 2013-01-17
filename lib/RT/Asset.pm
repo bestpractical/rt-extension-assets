@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use 5.10.1;
 
 package RT::Asset;
 use base 'RT::Record';
@@ -34,9 +35,11 @@ RT::CustomField->RegisterBuiltInGroupings(
 );
 
 for my $role ('Owner', 'HeldBy', 'Contact') {
+    state $i = 1;
     RT::Asset->RegisterRole(
         Name            => $role,
         EquivClasses    => ["RT::Catalog"],
+        SortOrder       => $i++,
         ( $role eq "Owner"
             ? ( Single         => 1,
                 ACLOnlyInEquiv => 1, )
