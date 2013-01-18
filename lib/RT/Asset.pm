@@ -7,6 +7,7 @@ use base 'RT::Record';
 
 use Role::Basic "with";
 with "RT::Role::Record::Status",
+     "RT::Role::Record::Links",
      "RT::Role::Record::Roles" => {
          -rename => {
              # We provide ACL'd wraps of these.
@@ -135,6 +136,11 @@ respective role groups for the new asset.
 User Names and EmailAddresses may also be used, but Groups must be referenced
 by ID.
 
+=item RefersTo, ReferredToBy, DependsOn, DependedOnBy, Parents, Children, and aliases
+
+Any of these link types accept either a single value or arrayref of values
+parseable by L<RT::URI>.
+
 =back
 
 Returns a tuple of (status, msg) on failure and (id, msg, non-fatal errors) on
@@ -239,14 +245,15 @@ sub Create {
         }
     }
 
-    # XXX TODO: Handle Links
-
     # Create transaction
     my ( $txn_id, $txn_msg, $txn ) = $self->_NewTransaction( Type => 'Create' );
     unless ($txn_id) {
         RT->DatabaseHandle->Rollback();
         return (0, $self->loc( 'Asset Create txn failed: [_1]', $txn_msg ));
     }
+
+    # Add links
+    push @non_fatal_errors, $self->_AddLinksOnCreate(\%args);
 
     RT->DatabaseHandle->Commit();
 
@@ -328,38 +335,6 @@ created it or they have the I<ShowAsset> right.
 sub CurrentUserCanSee {
     my $self = shift;
     return $self->{_object_is_readable} || $self->CurrentUserHasRight('ShowAsset');
-}
-
-=head2 AddLink
-
-Checks I<ModifyAsset> before calling L<RT::Record/_AddLink>.
-
-=cut
-
-sub AddLink {
-    my $self = shift;
-    my %args = (@_);
-
-    return (0, $self->loc("Permission Denied"))
-        unless $self->CurrentUserHasRight("ModifyAsset");
-
-    return $self->_AddLink(%args);
-}
-
-=head2 DeleteLink
-
-Checks I<ModifyAsset> before calling L<RT::Record/_DeleteLink>.
-
-=cut
-
-sub DeleteLink {
-    my $self = shift;
-    my %args = (@_);
-
-    return (0, $self->loc("Permission Denied"))
-        unless $self->CurrentUserHasRight("ModifyAsset");
-
-    return $self->_DeleteLink(%args);
 }
 
 =head2 URI
@@ -499,6 +474,18 @@ sub ACLEquivalenceObjects {
     my $self = shift;
     return $self->CatalogObj;
 }
+
+=head2 ModifyLinkRight
+
+=cut
+
+# Used for StrictLinkACL and RT::Role::Record::Links.
+#
+# Historically StrictLinkACL has only applied between tickets, but
+# if you care about it enough to turn it on, you probably care when
+# linking an asset to an asset or an asset to a ticket.
+
+sub ModifyLinkRight { "ModifyAsset" }
 
 =head1 PRIVATE METHODS
 

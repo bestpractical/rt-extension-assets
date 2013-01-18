@@ -104,4 +104,27 @@ diag "Linking to tickets";
     ok $ok, "Deleted link from opposite side: $msg";
 }
 
+diag "Links on ->Create";
+{
+    my $desk = RT::Asset->new( RT->SystemUser );
+    $desk->LoadByCols( Name => "Standing desk" );
+    ok $desk->id, "Loaded standing desk asset";
+
+    my $asset = create_asset(
+        Name            => "Anti-fatigue mat",
+        Catalog         => $catalog->id,
+        Parent          => $desk->URI,
+        ReferredToBy    => [$ticket->id],
+    );
+    ok $asset->id, "Created asset with Parent link";
+
+    my $parents = $asset->MemberOf;
+    is $parents->Count, 1, "Found one Parent";
+    is $parents->First->Target, $desk->URI, "... it's a desk!";
+
+    my $referrals = $asset->ReferredToBy;
+    is $referrals->Count, 1, "Found one ReferredToBy";
+    is $referrals->First->Base, $ticket->URI, "... it's the ticket!";
+}
+
 done_testing;
