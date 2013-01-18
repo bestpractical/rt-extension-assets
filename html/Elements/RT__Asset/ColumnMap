@@ -66,6 +66,18 @@ my $COLUMN_MAP = {
         attribute => 'Status',
         value     => sub { loc($_[0]->Status) }
     },
+    OwnerName => {
+        title     => 'Owner', # loc
+        value     => sub { return $_[0]->Owner->Name }
+    },
+    HeldBy => {
+        title     => 'Held By', # loc
+        value     => sub { return $_[0]->HeldBy->MemberEmailAddressesAsString }
+    },
+    Contacts => {
+        title     => 'Contact', # loc
+        value     => sub { return $_[0]->Contacts->MemberEmailAddressesAsString }
+    },
 };
 </%ONCE>
 <%init>
