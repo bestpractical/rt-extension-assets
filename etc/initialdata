@@ -21,4 +21,15 @@ push @Final, sub {
     }
 };
 
+# Create default catalog
+push @Final, sub {
+    my $catalog = RT::Catalog->new( RT->SystemUser );
+    my ($ok, $msg) = $catalog->Create(
+        Name        => "General assets",
+        Description => "The default catalog",
+    );
+    RT->Logger->error("Couldn't create default catalog 'General assets': $msg")
+        unless $ok;
+};
+
 1;
