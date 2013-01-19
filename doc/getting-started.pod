@@ -16,6 +16,10 @@ Catalogs are managed by RT adminstrators, or anyone with the L</AdminCatalog>
 right.  You can find the list of catalogs, create new catalogs, and manage
 existing ones under the Tools → Configuration → Assets → Catalogs menu.
 
+Currently you need to log out and log back in to see changes to catalogs in any
+of the catalog selection dropdowns.  This doesn't affect the catalog name
+displayed on individual asset pages.
+
 =head2 Adding fields
 
 You can see the current asset CFs by navigating to Tools → Configuration →
