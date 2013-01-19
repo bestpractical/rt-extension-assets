@@ -10,6 +10,14 @@ Just like tickets are assigned to queues, assets are assigned to B<catalogs>.
 The default catalog is named "General assets", but we suggest you rename it and
 add additional catalogs to better fit your organization.
 
+You may want to use catalogs to separate assets into departments, general type
+of asset, hardware vs. software, etc.  Catalogs, like queues, are generally
+easiest to work with when there's more than few but less than many dozen.  The
+catalog of an asset should represent some fundamental quality of it (and many
+other assets!), that could just as easily be expressed as a custom field, but
+which is more important than other qualities for categorizing, sorting, and
+searching.
+
 =head2 Managing catalogs
 
 Catalogs are managed by RT adminstrators, or anyone with the L</AdminCatalog>
@@ -100,11 +108,21 @@ The roles provide ways to keep track of who is involved with each asset, as
 well as providing a place to grant rights that depend on the user's association
 with each asset.
 
+In addition to adding people to individual asset roles, you can also add role
+members at an entire catalog level.  These catalog-level roles are useful in
+cases when you might have an entire catalog of assets for which the same people
+should be the Contacts, or which are Held By the same group.  Unlike tickets
+where the queue watchers are invisible, catalog role members are visible
+because assets are generally much longer lived than tickets.  When a problem
+with an asset arises, it's easier to see who to create a ticket for.  On
+individual asset pages, catalog role members are shown with the text "(via this
+asset's catalog)" following each name.
+
 =head3 Owner
 
 The person responsible for the asset, perhaps the purchaser or manager.
 
-Restricted to a single user.
+Restricted to a single user.  Not available at a catalog level.
 
 =head3 Held By
 
