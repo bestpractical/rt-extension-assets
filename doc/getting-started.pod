@@ -6,20 +6,38 @@ Assets start as a small set of fundamental record data upon which you build
 custom fields (CFs) of any type you like to describe the assets you want to
 track.  By themselves, before you setup any CFs, assets are not very useful.
 
+Just like tickets are assigned to queues, assets are assigned to B<catalogs>.
+The default catalog is named "General assets", but we suggest you rename it and
+add additional catalogs to better fit your organization.
+
+=head2 Managing catalogs
+
+Catalogs are managed by RT adminstrators, or anyone with the L</AdminCatalog>
+right.  You can find the list of catalogs, create new catalogs, and manage
+existing ones under the Tools → Configuration → Assets → Catalogs menu.
+
 =head2 Adding fields
 
 You can see the current asset CFs by navigating to Tools → Configuration →
-Global → Custom Fields → Assets.  From there you can use the "Create new" link
-to create a new asset CF.  If you know you want to create a new CF right away,
-you can do so via Tools → Configuration → Custom Fields → Create.
+Assets → Custom Fields.  From there you can use the "Create" link to create a
+new asset CF.  If you know you want to create a new CF right away, you can do
+so via Tools → Configuration → Assets → Custom Fields → Create.
 
 When creating a CF, be sure to select "Assets" in the "Applies To" dropdown.
 You'll also need to grant rights to the groups and/or roles which need to see
 the fields, otherwise they'll be hidden.  See the following section.
 
+Similar to ticket CFs, asset custom fields are added globally or to specific
+catalogs.  Only assets within those specific catalogs will have the CFs
+available.  After creating a CF, you'll need to visit the "Applies To" page to
+add it to the catalogs you want or make it global.
+
 =head2 Rights
 
-There are three rights controlling basic access to assets:
+There are three rights controlling basic access to assets and two for
+catalogs.  Each right is grantable at the global level or individual catalog
+level, and grantable to system groups, asset roles, user groups, and individual
+users (just like ticket and queue rights).
 
 =head3 ShowAsset
 
@@ -45,15 +63,28 @@ B<SeeCustomField> and B<ModifyCustomField>.
 Rights related to assets may also come from the L</Lifecycle statuses>
 configuration and restrict status transitions.
 
+=head3 ShowCatalog
+
+Allows seeing a catalog's name and other details when associated with assets.
+Without it, users will see "[a hidden catalog]" or a blank space where the
+catalog name would normally be.  Similar to SeeQueue.
+
+=head3 AdminCatalog
+
+Allows creating new catalogs and modifying all aspects of existing catalogs,
+including changing the CFs associated with the catalog, granting/revoking
+rights, and adding/removing role members.  This right should only be granted to
+administrators of RT.  Similar to AdminQueue.
+
 =head3 Typical configuration
 
 A typical configuration grants the system Privileged group the following:
-B<ShowAsset>, B<CreateAsset>, B<ModifyAsset> globally, and B<SeeCustomField> and
-B<ModifyCustomField> globally on all asset CFs.
+B<ShowAsset>, B<CreateAsset>, B<ModifyAsset>, and B<ShowCatalog> globally, and
+B<SeeCustomField> and B<ModifyCustomField> globally on all asset CFs.
 
 If you want self service users (Unprivileged) to be able to view the assets
-they hold, grant the Held By role B<ShowAsset> globally and B<SeeCustomField>
-on the necessary asset CFs.
+they hold, grant the Held By role B<ShowAsset> and B<ShowCatalog> globally and
+B<SeeCustomField> on the necessary asset CFs.
 
 =head2 People and Roles
 
@@ -62,7 +93,25 @@ assigned to.  The intended usages of these roles are described below, but
 you're free to use them for whatever you'd like, of course.
 
 The roles provide ways to keep track of who is involved with each asset, as
-well as providing a place to grant rights to.
+well as providing a place to grant rights that depend on the user's association
+with each asset.
+
+=head3 Owner
+
+The person responsible for the asset, perhaps the purchaser or manager.
+
+Restricted to a single user.
+
+=head3 Held By
+
+The person or people who physically possess the asset or are actively using the
+asset (if it isn't physical).  This may be the same as the Contacts or may be
+different.  For example, a computer workstation may be "held by" a university
+professor, but the contact may be the IT staff member responsible for all
+assets in the professor's department.  This role is most similar to Requestor
+on tickets, although not equivalent.
+
+May be multiple users and/or groups.
 
 =head3 Contact
 
@@ -72,32 +121,15 @@ usages of both Requestors and Ccs on tickets.
 
 May be multiple users and/or groups.
 
-=head3 Held By
-
-The person or people who physically possess the asset or are actively using the
-asset (if it isn't physical).  This may be the same as the Contacts or may be
-different.  For example, a computer workstation may be "held by" a university
-professor, but the contact may be the IT staff member responsible for all
-assets in the professor's department.  This role is most similar to Requestor on tickets,
-although not equivalent.
-
-May be multiple users and/or groups.
-
-=head3 Owner
-
-The person responsible for the asset, perhaps the purchaser or manager.
-
-Restricted to a single user.
-
 =head2 Lifecycle statuses
 
 One of the basic asset fields is "Status".  Similar to tickets, the valid
 statuses and their transitions and actions can be customized via RT's standard
-Lifecycles configuration (see "Lifecycles" in F<RT_Config.pm>).  Currently only
-one lifecycle, named "assets", is supported, but you can modify it as much as
-you wish.
+Lifecycles configuration (see "Lifecycles" in F<RT_Config.pm>).  The default
+lifecycle is named "assets".  You're free to modify it as much as you'd like,
+or add your own lifecycles.  Each catalog may have its own lifecycle.
 
-For the default configuration, see F<etc/Assets_Config.pm>.
+For the default "assets" configuration, see F<etc/Assets_Config.pm>.
 
 =head2 Field organization
 
@@ -136,11 +168,15 @@ the "Weight" and "Color" CFs.
 Within a box, CFs come after any built-in asset fields such as Name,
 Description, Created, Last Updated, etc.  The CFs themselves are ordered
 according to the sorting seen (and adjustable) on the global Asset Custom
-Fields page (Tools → Configuration → Global → Custom Fields → Assets).
+Fields page (Tools → Configuration → Global → Custom Fields → Assets) and the
+individual catalog Custom Fields pages (Tools → Configuration → Assets →
+Catalogs → (Pick one) → Custom Fields).
+
+Global asset CFs may be intermixed with per-catalog CFs with ordering.
 
 =head2 Importing existing data
 
-Another extension, L<RT::Extension::Assets::Import> provides tools to import
+Another extension, L<RT::Extension::Assets::Import::CSV> provides tools to import
 new and update existing assets from a CSV dump.  Its configuration lets you
 map the fields in the CSV to the asset fields you've already created in RT.
 
