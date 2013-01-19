@@ -6,9 +6,9 @@ package RT::Asset;
 use base 'RT::Record';
 
 use Role::Basic "with";
-with "RT::Role::Record::Status",
-     "RT::Role::Record::Links",
-     "RT::Role::Record::Roles" => {
+with "RT::Record::Role::Status",
+     "RT::Record::Role::Links",
+     "RT::Record::Role::Roles" => {
          -rename => {
              # We provide ACL'd wraps of these.
              AddRoleMember    => "_AddRoleMember",
@@ -412,7 +412,7 @@ sub Contacts { $_[0]->RoleGroup("Contact") }
 
 =head2 AddRoleMember
 
-Checks I<ModifyAsset> before calling L<RT::Role::Record::Roles/_AddRoleMember>.
+Checks I<ModifyAsset> before calling L<RT::Record::Role::Roles/_AddRoleMember>.
 
 =cut
 
@@ -427,7 +427,7 @@ sub AddRoleMember {
 
 =head2 DeleteRoleMember
 
-Checks I<ModifyAsset> before calling L<RT::Role::Record::Roles/_DeleteRoleMember>.
+Checks I<ModifyAsset> before calling L<RT::Record::Role::Roles/_DeleteRoleMember>.
 
 =cut
 
@@ -442,7 +442,7 @@ sub DeleteRoleMember {
 
 =head2 RoleGroup
 
-An ACL'd version of L<RT::Role::Record::Roles/_RoleGroup>.  Checks I<ShowAsset>.
+An ACL'd version of L<RT::Record::Role::Roles/_RoleGroup>.  Checks I<ShowAsset>.
 
 =cut
 
@@ -479,7 +479,7 @@ sub ACLEquivalenceObjects {
 
 =cut
 
-# Used for StrictLinkACL and RT::Role::Record::Links.
+# Used for StrictLinkACL and RT::Record::Role::Links.
 #
 # Historically StrictLinkACL has only applied between tickets, but
 # if you care about it enough to turn it on, you probably care when

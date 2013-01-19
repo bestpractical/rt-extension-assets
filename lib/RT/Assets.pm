@@ -5,7 +5,7 @@ package RT::Assets;
 use base 'RT::SearchBuilder';
 
 use Role::Basic "with";
-with "RT::Role::SearchBuilder::Roles";
+with "RT::SearchBuilder::Role::Roles";
 
 =head1 NAME
 
