@@ -16,7 +16,12 @@
         CustomFieldGenerator => sub { $catalog->AssetCustomFields } &>
 
   <!-- XXX TODO: People -->
-  <!-- XXX TODO: Links -->
+
+  <&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links" &>
+    <& /Elements/AddLinks,
+        Object          => $asset,
+        CustomFields    => $catalog->AssetCustomFields &>
+  </&>
 
   <& /Elements/Submit, Label => loc('Create asset') &>
 </form>
@@ -60,8 +65,11 @@ if ($id eq "new") {
     );
 
     if ($cf_ok and not $skip_create) {
-        # Handle CFs
-        my %create = ProcessObjectCustomFieldUpdatesForCreate( ARGSRef => \%ARGS );
+        # Handle CFs and links
+        my %create = (
+            ProcessObjectCustomFieldUpdatesForCreate( ARGSRef => \%ARGS ),
+            ProcessLinksForCreate( ARGSRef => \%ARGS ),
+        );
 
         # Handle basic fields
         for ($asset->WritableAttributes) {
