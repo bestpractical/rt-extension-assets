@@ -11,7 +11,9 @@ my $CatalogObj = $AssetObj->CatalogObj;
   <td>
     <& ShowRoleMembers,
         Group           => $AssetObj->RoleGroup($role),
-        CatalogGroup    => $CatalogObj->RoleGroup($role),
+        ( !$AssetObj->Role($role)->{Single}
+            ? (CatalogGroup => $CatalogObj->RoleGroup($role))
+            : () ),
         &>
   </td>
 </tr>
