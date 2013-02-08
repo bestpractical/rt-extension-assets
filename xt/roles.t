@@ -17,11 +17,13 @@ for my $object ($asset, $catalog, RT->System) {
         ok $principal && $principal->id, "Found PrincipalObj for role group"
             or next;
 
-        my ($ok, $msg) = $principal->GrantRight(
-            Object  => $object,
-            Right   => "ShowAsset",
-        );
-        ok $ok, "Granted right" or diag "Error: $msg";
+        if ($RT::ACE::OBJECT_TYPES{ref $object}) {
+            my ($ok, $msg) = $principal->GrantRight(
+                Object  => $object,
+                Right   => "ShowAsset",
+            );
+            ok $ok, "Granted right" or diag "Error: $msg";
+        }
     }
 }
 
