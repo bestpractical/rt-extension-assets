@@ -15,6 +15,8 @@ with "RT::Record::Role::Lifecycle",
          },
      };
 
+require RT::ACE;
+
 =head1 NAME
 
 RT::Catalog - A logical set of assets
@@ -43,6 +45,19 @@ RT::Catalog->AddRightCategories(
     CreateAsset => 'Staff',
     ModifyAsset => 'Staff',
 );
+
+RT::ACE->RegisterCacheHandler(sub {
+    my %args = (
+        Action      => "",
+        RightName   => "",
+        @_
+    );
+
+    return unless $args{Action}    =~ /^(Grant|Revoke)$/i
+              and $args{RightName} =~ /^(ShowCatalog|CreateAsset)$/;
+
+    RT::Catalog->CacheNeedsUpdate(1);
+});
 
 =head1 DESCRIPTION
 
