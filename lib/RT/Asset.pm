@@ -17,9 +17,9 @@ with "RT::Record::Role::Status",
          },
      };
 
-use RT::Catalog;
-use RT::CustomField;
-use RT::URI::asset;
+require RT::Catalog;
+require RT::CustomField;
+require RT::URI::asset;
 
 =head1 NAME
 

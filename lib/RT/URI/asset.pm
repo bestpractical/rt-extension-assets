@@ -4,7 +4,7 @@ use warnings;
 package RT::URI::asset;
 use base qw/RT::URI::base/;
 
-use RT::Asset;
+require RT::Asset;
 
 =head1 NAME
 
