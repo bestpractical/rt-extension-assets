@@ -12,4 +12,5 @@ $id => undef
 </%args>
 <%init>
 my $asset = LoadAsset($id);
+$m->callback(CallbackName => 'BeforeDisplay', ARGSRef => \%ARGS, Asset => $asset);
 </%init>

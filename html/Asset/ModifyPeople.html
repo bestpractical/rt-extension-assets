@@ -50,6 +50,8 @@ if ($Update) {
         push @results, @cf_errors;
     }
 }
+
+$m->callback(CallbackName => 'BeforeDisplay', ARGSRef => \%ARGS, Asset => $asset);
 </%init>
 <%args>
 $id     => undef
