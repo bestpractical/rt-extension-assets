@@ -24,6 +24,8 @@ no_index:
     - xt
   package:
     - HTML::Mason::Commands
+    - RT::CustomField
+    - RT::CustomFields
 requires:
   perl: 5.10.1
 resources:

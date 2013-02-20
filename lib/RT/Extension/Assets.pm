@@ -108,6 +108,80 @@ RT->AddJavaScript("RTx-Assets.js");
     }
 }
 
+{
+    package RT::CustomField;
+
+    # To someday be merged into RT::CustomField::LoadByName
+    sub LoadByNameAndCatalog {
+        my $self = shift;
+        my %args = (
+                    Catalog => undef,
+                    Name  => undef,
+                    @_,
+                   );
+
+        unless ( defined $args{'Name'} && length $args{'Name'} ) {
+            $RT::Logger->error("Couldn't load Custom Field without Name");
+            return wantarray ? (0, $self->loc("No name provided")) : 0;
+        }
+
+        # if we're looking for a catalog by name, make it a number
+        if ( defined $args{'Catalog'} && ($args{'Catalog'} =~ /\D/ || !$self->ContextObject) ) {
+            my $CatalogObj = RT::Catalog->new( $self->CurrentUser );
+            my ($ok, $msg) = $CatalogObj->Load( $args{'Catalog'} );
+            if ( $ok ){
+                $args{'Catalog'} = $CatalogObj->Id;
+            }
+            else{
+                RT::Logger->error("Unable to load catalog " . $args{'Catalog'} . $msg);
+                return (0, $msg);
+            }
+            $self->SetContextObject( $CatalogObj )
+              unless $self->ContextObject;
+        }
+
+        my $CFs = RT::CustomFields->new( $self->CurrentUser );
+        $CFs->SetContextObject( $self->ContextObject );
+        my $field = $args{'Name'} =~ /\D/? 'Name' : 'id';
+        $CFs->Limit( FIELD => $field, VALUE => $args{'Name'}, CASESENSITIVE => 0);
+
+        # Limit to catalog, if provided. This will also limit to RT::Asset types.
+        $CFs->LimitToCatalog( $args{'Catalog'} );
+
+        # When loading by name, we _can_ load disabled fields, but prefer
+        # non-disabled fields.
+        $CFs->FindAllRows;
+        $CFs->OrderByCols(
+                          {
+                           FIELD => "Disabled", ORDER => 'ASC' },
+                         );
+
+        # We only want one entry.
+        $CFs->RowsPerPage(1);
+
+        return (0, $self->loc("Not found")) unless my $first = $CFs->First;
+        return $self->LoadById( $first->id );
+    }
+
+}
+
+{
+    package RT::CustomFields;
+
+    sub LimitToCatalog  {
+        my $self = shift;
+        my $catalog = shift;
+
+        $self->Limit (ALIAS => $self->_OCFAlias,
+                      ENTRYAGGREGATOR => 'OR',
+                      FIELD => 'ObjectId',
+                      VALUE => "$catalog")
+          if defined $catalog;
+
+        $self->LimitToLookupType( RT::Asset->CustomFieldLookupType );
+    }
+}
+
 =head1 INSTALLATION
 
 =over
@@ -145,6 +219,30 @@ or add C<RT::Extension::Assets> to your existing C<@Plugins> line.
 =item Restart your webserver
 
 =back
+
+=head1 METHODS ADDED TO OTHER CLASSES
+
+=head2 RT::CustomField::LoadByNameAndCatalog (Catalog => CATALOGID, Name => NAME)
+
+Loads the Custom field named NAME.
+
+Will load a Disabled Custom Field even if there is a non-disabled Custom Field
+with the same Name.
+
+If a Catalog parameter is specified, only look for asset custom fields tied to that Catalog.
+
+If the Catalog parameter is '0', look for global asset custom fields.
+
+If no Catalog parameter is specified, look for any and all custom fields
+with this name, limiting the results to catalog/asset CFs.
+
+=head2 RT::CustomFields::LimitToCatalog (CATALOGID)
+
+Takes a numeric C<CATALOGID>, and limits the Custom Field collection to
+those only applied directly to it; this limit is OR'd with other
+L</LimitToCatalog> and L</LimitToGlobal> limits.
+
+Note that this will cause the collection to only return asset CFs.
 
 =head1 AUTHOR
 

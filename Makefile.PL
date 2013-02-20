@@ -7,6 +7,8 @@ license  'gplv2';
 perl_version 5.010001;
 
 no_index package => "HTML::Mason::Commands";
+no_index package => "RT::CustomField";
+no_index package => "RT::CustomFields";
 
 requires_rt("4.0.0");
 test_requires "Test::Warn";

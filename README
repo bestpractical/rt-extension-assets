@@ -28,6 +28,28 @@ INSTALLATION
 
     Restart your webserver
 
+METHODS ADDED TO OTHER CLASSES
+  RT::CustomField::LoadByNameAndCatalog (Catalog => CATALOGID, Name => NAME)
+    Loads the Custom field named NAME.
+
+    Will load a Disabled Custom Field even if there is a non-disabled Custom
+    Field with the same Name.
+
+    If a Catalog parameter is specified, only look for asset custom fields
+    tied to that Catalog.
+
+    If the Catalog parameter is '0', look for global asset custom fields.
+
+    If no Catalog parameter is specified, look for any and all custom fields
+    with this name, limiting the results to catalog/asset CFs.
+
+  RT::CustomFields::LimitToCatalog (CATALOGID)
+    Takes a numeric "CATALOGID", and limits the Custom Field collection to
+    those only applied directly to it; this limit is OR'd with other
+    "LimitToCatalog" and "LimitToGlobal" limits.
+
+    Note that this will cause the collection to only return asset CFs.
+
 AUTHOR
     Thomas Sibley <trs@bestpractical.com>
 
