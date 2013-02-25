@@ -21,6 +21,7 @@ no_index:
     - html
     - inc
     - po
+    - static
     - xt
   package:
     - HTML::Mason::Commands
