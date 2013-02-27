@@ -25,6 +25,7 @@ no_index:
     - xt
   package:
     - HTML::Mason::Commands
+    - RT::Transaction
 requires:
   perl: 5.10.1
 resources:
