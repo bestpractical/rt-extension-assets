@@ -7,6 +7,8 @@
 
 <& Elements/ShowSummary, AssetObj => $asset &>
 
+% $m->callback(CallbackName => 'AfterShowSummary', ARGSRef => \%ARGS, Asset => $asset);
+
 <%args>
 $id => undef
 </%args>
