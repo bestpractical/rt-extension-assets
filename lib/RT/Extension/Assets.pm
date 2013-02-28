@@ -222,25 +222,45 @@ or add C<RT::Extension::Assets> to your existing C<@Plugins> line.
 
 =head1 METHODS ADDED TO OTHER CLASSES
 
-=head2 RT::CustomField::LoadByNameAndCatalog (Catalog => CATALOGID, Name => NAME)
+=head2 L<RT::CustomField>
 
-Loads the Custom field named NAME.
+=head3 LoadByNameAndCatalog
 
-Will load a Disabled Custom Field even if there is a non-disabled Custom Field
-with the same Name.
+Loads the described asset custom field, if one is found, into the current
+object.  This method only consults custom fields applied to L<RT::Catalog> for
+L<RT::Asset> objects.
 
-If a Catalog parameter is specified, only look for asset custom fields tied to that Catalog.
+Takes a hash with the keys:
 
-If the Catalog parameter is '0', look for global asset custom fields.
+=over
 
-If no Catalog parameter is specified, look for any and all custom fields
-with this name, limiting the results to catalog/asset CFs.
+=item Name
 
-=head2 RT::CustomFields::LimitToCatalog (CATALOGID)
+A L<RT::CustomField> ID or Name which applies to L<assets|RT::Asset>.
 
-Takes a numeric C<CATALOGID>, and limits the Custom Field collection to
-those only applied directly to it; this limit is OR'd with other
-L</LimitToCatalog> and L</LimitToGlobal> limits.
+=item Catalog
+
+Optional.  An L<RT::Catalog> ID or Name.
+
+=back
+
+If Catalog is specified, only a custom field added to that Catalog will be loaded.
+
+If Catalog is C<0>, only global asset custom fields will be loaded.
+
+If no Catalog is specified, all asset custom fields are searched including
+global and catalog-specific CFs.
+
+Please note that this method may load a Disabled custom field if no others
+matching the same criteria are found.  Enabled CFs are preferentially loaded.
+
+=head2 RT::CustomFields
+
+=head3 LimitToCatalog
+
+Takes a numeric L<RT::Catalog> ID.  Limits the L<RT::CustomFields> collection
+to only those fields applied directly to the specified catalog.  This limit is
+OR'd with other L</LimitToCatalog> and L</LimitToGlobal> calls.
 
 Note that this will cause the collection to only return asset CFs.
 
