@@ -138,4 +138,43 @@ note "Create/update with Roles";
     is $txn[0]->OldValue, $bps->PrincipalId, "... for the right principal";
 }
 
+diag "Custom Field handling";
+{
+    diag "Make sure we don't load queue CFs";
+    my $queue_cf = RT::CustomField->new( RT->SystemUser );
+    my ($ok, $msg) = $queue_cf->Create(
+        Name       => "Queue CF",
+        Type       => "Text",
+        LookupType => RT::Queue->CustomFieldLookupType,
+    );
+    ok( $queue_cf->Id, "Created test CF: " . $queue_cf->Id);
+
+    my $cf1 = RT::CustomField->new( RT->SystemUser );
+    $cf1->LoadByNameAndCatalog ( Name => "Queue CF" );
+
+    ok( (not $cf1->Id), "Queue CF not loaded with LoadByNameAndCatalog");
+
+    my $cf2 = RT::CustomField->new( RT->SystemUser );
+    $cf2->LoadByNameAndCatalog ( Name => "Height" );
+    ok( $cf2->Id, "Loaded CF id: " . $cf2->Id . " with name");
+    ok( $cf2->Name, "Loaded CF name: " . $cf2->Name . " with name");
+
+    my $cf3 = RT::CustomField->new( RT->SystemUser );
+    ($ok, $msg) = $cf3->LoadByNameAndCatalog ( Name => "Height", Catalog => $catalog->Name );
+    ok( (not $cf3->Id), "CF 'Height'"
+      . " not added to catalog: " . $catalog->Name);
+
+    my $color = create_cf( Name => 'Color'  );
+    ok $color->Id, "Created CF " . $color->Name;
+    ($ok, $msg) = $color->AddToObject( $catalog );
+
+    ($ok, $msg) = $color->LoadByNameAndCatalog ( Name => "Color", Catalog => $catalog->Name );
+    ok( $color->Id, "Loaded CF id: " . $color->Id
+      . " for catalog: " . $catalog->Name);
+    ok( $color->Name, "Loaded CF name: " . $color->Name
+    . " for catalog: " . $catalog->Name);
+
+}
+
+
 done_testing;

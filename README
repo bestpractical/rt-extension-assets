@@ -28,6 +28,41 @@ INSTALLATION
 
     Restart your webserver
 
+METHODS ADDED TO OTHER CLASSES
+  RT::CustomField
+   LoadByNameAndCatalog
+    Loads the described asset custom field, if one is found, into the
+    current object. This method only consults custom fields applied to
+    RT::Catalog for RT::Asset objects.
+
+    Takes a hash with the keys:
+
+    Name
+        A RT::CustomField ID or Name which applies to assets.
+
+    Catalog
+        Optional. An RT::Catalog ID or Name.
+
+    If Catalog is specified, only a custom field added to that Catalog will
+    be loaded.
+
+    If Catalog is 0, only global asset custom fields will be loaded.
+
+    If no Catalog is specified, all asset custom fields are searched
+    including global and catalog-specific CFs.
+
+    Please note that this method may load a Disabled custom field if no
+    others matching the same criteria are found. Enabled CFs are
+    preferentially loaded.
+
+  RT::CustomFields
+   LimitToCatalog
+    Takes a numeric RT::Catalog ID. Limits the RT::CustomFields collection
+    to only those fields applied directly to the specified catalog. This
+    limit is OR'd with other "LimitToCatalog" and "LimitToGlobal" calls.
+
+    Note that this will cause the collection to only return asset CFs.
+
 AUTHOR
     Thomas Sibley <trs@bestpractical.com>
 

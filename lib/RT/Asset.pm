@@ -487,6 +487,28 @@ sub ACLEquivalenceObjects {
 
 sub ModifyLinkRight { "ModifyAsset" }
 
+=head2 LoadCustomFieldByIdentifier
+
+Finds and returns the custom field of the given name for the asset,
+overriding L<RT::Record/LoadCustomFieldByIdentifier> to look for
+catalog-specific CFs before global ones.
+
+=cut
+
+sub LoadCustomFieldByIdentifier {
+    my $self  = shift;
+    my $field = shift;
+
+    return $self->SUPER::LoadCustomFieldByIdentifier($field)
+        if ref $field or $field =~ /^\d+$/;
+
+    my $cf = RT::CustomField->new( $self->CurrentUser );
+    $cf->SetContextObject( $self );
+    $cf->LoadByNameAndCatalog( Name => $field, Catalog => $self->Catalog );
+    $cf->LoadByNameAndCatalog( Name => $field, Catalog => 0 ) unless $cf->id;
+    return $cf;
+}
+
 =head1 PRIVATE METHODS
 
 Documented for internal use only, do not call these from outside RT::Asset
