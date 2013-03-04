@@ -7,17 +7,19 @@ for my $role (@Roles) {
         SUBCLAUSE   => $role,
     );
 }
+my $Format = q[
+    '<b><a href="__WebHomePath__/Asset/Display.html?id=__id__">__id__</a></b>/TITLE:#',
+    '<b><a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a></b>/TITLE:Name',
+    Description,
+];
+$m->callback( CallbackName => 'ModifyFormat', %ARGS, Format => \$Format );
 </%init>
 <&| /Widgets/TitleBox, title => $Title &>
     <& /Elements/CollectionList,
         Collection      => $assets,
         OrderBy         => 'Name',
         Order           => 'ASC',
-        Format          => q[
-            '<b><a href="__WebHomePath__/Asset/Display.html?id=__id__">__id__</a></b>/TITLE:#',
-            '<b><a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a></b>/TITLE:Name',
-            Description,
-        ],
+        Format          => $Format,
         AllowSorting    => 0,
         &>
 </&>
