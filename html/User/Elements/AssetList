@@ -4,7 +4,7 @@ for my $role (@Roles) {
     $assets->RoleLimit(
         TYPE        => $role,
         VALUE       => $User->PrincipalId,
-        SUBCLAUSE   => $role,
+        SUBCLAUSE   => "Role$role",
     );
 }
 my $Format = q[
