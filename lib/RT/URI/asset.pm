@@ -149,7 +149,7 @@ Returns a description of this object
 sub AsString {
     my $self = shift;
     if ($self->IsLocal and $self->Object) {
-        return $self->loc('Asset [_1]', $self->Object->id);
+        return $self->loc('Asset #[_1]', $self->Object->id);
     } else {
         return $self->SUPER::AsString(@_);
     }
