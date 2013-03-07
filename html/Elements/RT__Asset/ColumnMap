@@ -61,6 +61,11 @@ my $COLUMN_MAP = {
         title     => 'Description',
         value     => sub { $_[0]->Description },
     },
+    Catalog => {
+        attribute => 'Catalog',
+        title     => 'Catalog', # loc
+        value     => sub { $_[0]->CatalogObj->Name },
+    },
     Status => {
         title     => 'Status',
         attribute => 'Status',
