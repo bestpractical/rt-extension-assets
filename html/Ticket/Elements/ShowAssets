@@ -1,0 +1,71 @@
+<%args>
+$Ticket
+</%args>
+<%init>
+my $linked_assets = $Ticket->Links("Base")->Clone;
+$linked_assets->Limit(
+    FIELD       => "Target",
+    OPERATOR    => "STARTSWITH",
+    VALUE       => RT::URI::asset->LocalURIPrefix,
+);
+
+my @linked_assets = grep { defined }
+                     map { $_->TargetURI->IsLocal }         # Returns the local asset ID
+                        @{ $linked_assets->ItemsArrayRef };
+return unless @linked_assets;
+
+my $assets = RT::Assets->new( $session{CurrentUser} );
+$assets->OrderBy( FIELD => "Name", ORDER => "ASC" );
+$assets->Limit(
+    FIELD       => "id",
+    OPERATOR    => "IN",
+    VALUE       => \@linked_assets,
+);
+
+# Handle when a user can see the asset links, but not the assets themselves.
+my $can_see = 0;
+while (my $asset = $assets->Next) {
+    $can_see++, last if $asset->CurrentUserCanSee;
+}
+return unless $can_see;
+$assets->GotoFirstItem;
+
+# XXX TODO: Make configurable
+my $Format = q[
+    '<a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a>/TITLE:Name',
+    Description,
+    Catalog,
+    Status,
+];
+
+$m->callback(
+    CallbackName    => 'ModifyCollection',
+    Ticket          => $Ticket,
+    Assets          => $assets,
+    Format          => \$Format,
+);
+</%init>
+<&| /Widgets/TitleBox,
+    title => loc('Assets'),
+    class => 'ticket-assets'
+    &>
+
+% $m->callback( CallbackName => "Start", Ticket => $Ticket, Assets => $assets );
+<div id="assets-accordion" class="rt-accordion">
+% while (my $asset = $assets->Next) {
+  <h3><a href="#"><&|/l, $asset->id, $asset->Name &>#[_1]: [_2]</&></a></h3>
+  <div class="details">
+    <& /Elements/ShowRecord,
+        Object  => $asset,
+        Format  => $Format,
+        &>
+
+    <!-- XXX TODO: Show other tickets which link to this asset? -->
+
+% $m->callback( CallbackName => "PerAsset", Ticket => $Ticket, Asset => $asset );
+  </div>
+% }
+</div>
+% $m->callback( CallbackName => "End", Ticket => $Ticket, Assets => $assets );
+
+</&>

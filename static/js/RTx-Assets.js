@@ -12,4 +12,13 @@ jQuery(function() {
                     + (wants ? "?return=" + wants : "")
         });
     });
+
+    var assets = jQuery("#assets-accordion");
+    assets.accordion({
+        // Open the accordion if there's only one fold, otherwise start with
+        // all assets collapsed.
+        active:         assets.find("h3").length == 1 ? 0 : false,
+        collapsible:    true,
+        autoHeight:     false
+    });
 });
