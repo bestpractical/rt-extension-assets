@@ -28,9 +28,21 @@ Set(%Lifecycles,
     },
 );
 
+Set($AssetSummaryFormat, q[
+    '<a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a>/TITLE:Name',
+    Description,
+    '__Status__ (__Catalog__)/TITLE:Status',
+    OwnerName,
+    HeldBy,
+    Contacts,
+    '__ActiveTickets__ __InactiveTickets__/TITLE:Related tickets',
+]);
+
 Set(%AdminSearchResultFormat,
     Catalogs =>
         q{'<a href="__WebPath__/Admin/Assets/Catalogs/Modify.html?id=__id__">__id__</a>/TITLE:#'}
         .q{,'<a href="__WebPath__/Admin/Assets/Catalogs/Modify.html?id=__id__">__Name__</a>/TITLE:Name'}
         .q{,__Description__,__Lifecycle__,__Disabled__},
 );
+
+1;

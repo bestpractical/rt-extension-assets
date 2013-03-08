@@ -30,12 +30,11 @@ while (my $asset = $assets->Next) {
 return unless $can_see;
 $assets->GotoFirstItem;
 
-# XXX TODO: Make configurable
-my $Format = q[
+my $Format = RT->Config->Get("AssetSummaryFormat") || q[
     '<a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a>/TITLE:Name',
     Description,
-    Catalog,
     Status,
+    Catalog,
 ];
 
 $m->callback(
@@ -56,8 +55,9 @@ $m->callback(
   <h3><a href="#"><&|/l, $asset->id, $asset->Name &>#[_1]: [_2]</&></a></h3>
   <div class="details">
     <& /Elements/ShowRecord,
-        Object  => $asset,
-        Format  => $Format,
+        Object      => $asset,
+        Format      => $Format,
+        TrustFormat => 1,
         &>
 
     <!-- XXX TODO: Show other tickets which link to this asset? -->
