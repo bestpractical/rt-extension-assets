@@ -57,3 +57,14 @@
 .asset-people .edit .add-user {
     margin-bottom: 1em;
 }
+
+/* Asset summary */
+
+.ticket-assets .related-tickets {
+    margin-top: 1em;
+}
+
+.ticket-assets .related-tickets .label a {
+    font-weight: bold;
+    color: black;
+}

@@ -38,6 +38,14 @@ Set($AssetSummaryFormat, q[
     '__ActiveTickets__ __InactiveTickets__/TITLE:Related tickets',
 ]);
 
+Set($AssetSummaryRelatedTicketsFormat, q[
+    '<a href="__WebPath__/Ticket/Display.html?id=__id__">__id__</a>',
+    '(__OwnerName__)',
+    '<a href="__WebPath__/Ticket/Display.html?id=__id__">__Subject__</a>',
+    QueueName,
+    Status,
+]);
+
 Set(%AdminSearchResultFormat,
     Catalogs =>
         q{'<a href="__WebPath__/Admin/Assets/Catalogs/Modify.html?id=__id__">__id__</a>/TITLE:#'}

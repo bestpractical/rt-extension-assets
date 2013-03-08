@@ -1,5 +1,6 @@
 <%args>
 $Ticket
+$ShowRelatedTickets => 10
 </%args>
 <%init>
 my $linked_assets = $Ticket->Links("Base")->Clone;
@@ -43,6 +44,8 @@ $m->callback(
     Assets          => $assets,
     Format          => \$Format,
 );
+
+
 </%init>
 <&| /Widgets/TitleBox,
     title => loc('Assets'),
@@ -60,7 +63,34 @@ $m->callback(
         TrustFormat => 1,
         &>
 
-    <!-- XXX TODO: Show other tickets which link to this asset? -->
+<%perl>
+if ($ShowRelatedTickets) {
+    my %search = (
+        Query   => "id != '@{[$Ticket->id]}' AND LinkedTo = 'asset:@{[$asset->id]}'",
+        OrderBy => "LastUpdated",
+        Order   => "DESC",
+    );
+    my $url = RT->Config->Get("WebPath")
+            . "/Search/Results.html?"
+            . $m->comp("/Elements/QueryString", %search);
+</%perl>
+    <div class="related-tickets">
+      <span class="label">
+        <a href="<% $url %>">
+          <&|/l, $ShowRelatedTickets &>[_1] most recently updated related tickets</&>
+        </a>
+      </span>
+      <& /Elements/CollectionList,
+          %search,
+          Class             => "RT::Tickets",
+          Format            => RT->Config->Get("AssetSummaryRelatedTicketsFormat"),
+          Rows              => $ShowRelatedTickets,
+          ShowHeader        => 0,
+          AllowSorting      => 0,
+          ShowNavigation    => 0,
+      &>
+    </div>
+% }
 
 % $m->callback( CallbackName => "PerAsset", Ticket => $Ticket, Asset => $asset );
   </div>
