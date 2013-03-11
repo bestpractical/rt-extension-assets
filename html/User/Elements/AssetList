@@ -7,6 +7,7 @@ for my $role (@Roles) {
         SUBCLAUSE   => "Role$role",
     );
 }
+$m->callback( CallbackName => 'ModifyAssetSearch', %ARGS, Assets => $assets );
 my $Format = q[
     '<b><a href="__WebHomePath__/Asset/Display.html?id=__id__">__id__</a></b>/TITLE:#',
     '<b><a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a></b>/TITLE:Name',
