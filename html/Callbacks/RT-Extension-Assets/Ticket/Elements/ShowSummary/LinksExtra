@@ -1,0 +1,3 @@
+%# The LinksExtra callback is intended to modify the Links box, but we just want
+%# to put another box before it.
+<& /Ticket/Elements/ShowAssets, Ticket => $ARGS{Ticket} &>

@@ -1,0 +1,101 @@
+<%args>
+$Ticket
+$ShowRelatedTickets => 10
+</%args>
+<%init>
+my $linked_assets = $Ticket->Links("Base")->Clone;
+$linked_assets->Limit(
+    FIELD       => "Target",
+    OPERATOR    => "STARTSWITH",
+    VALUE       => RT::URI::asset->LocalURIPrefix,
+);
+
+my @linked_assets = grep { defined }
+                     map { $_->TargetURI->IsLocal }         # Returns the local asset ID
+                        @{ $linked_assets->ItemsArrayRef };
+return unless @linked_assets;
+
+my $assets = RT::Assets->new( $session{CurrentUser} );
+$assets->OrderBy( FIELD => "Name", ORDER => "ASC" );
+$assets->Limit(
+    FIELD       => "id",
+    OPERATOR    => "IN",
+    VALUE       => \@linked_assets,
+);
+
+# Handle when a user can see the asset links, but not the assets themselves.
+my $can_see = 0;
+while (my $asset = $assets->Next) {
+    $can_see++, last if $asset->CurrentUserCanSee;
+}
+return unless $can_see;
+$assets->GotoFirstItem;
+
+my $Format = RT->Config->Get("AssetSummaryFormat") || q[
+    '<a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a>/TITLE:Name',
+    Description,
+    Status,
+    Catalog,
+];
+
+$m->callback(
+    CallbackName    => 'ModifyCollection',
+    Ticket          => $Ticket,
+    Assets          => $assets,
+    Format          => \$Format,
+);
+
+
+</%init>
+<&| /Widgets/TitleBox,
+    title => loc('Assets'),
+    class => 'ticket-assets'
+    &>
+
+% $m->callback( CallbackName => "Start", Ticket => $Ticket, Assets => $assets );
+<div id="assets-accordion" class="rt-accordion">
+% while (my $asset = $assets->Next) {
+  <h3><a href="#"><&|/l, $asset->id, $asset->Name &>#[_1]: [_2]</&></a></h3>
+  <div class="details">
+    <& /Elements/ShowRecord,
+        Object      => $asset,
+        Format      => $Format,
+        TrustFormat => 1,
+        &>
+
+<%perl>
+if ($ShowRelatedTickets) {
+    my %search = (
+        Query   => "id != '@{[$Ticket->id]}' AND LinkedTo = 'asset:@{[$asset->id]}'",
+        OrderBy => "LastUpdated",
+        Order   => "DESC",
+    );
+    my $url = RT->Config->Get("WebPath")
+            . "/Search/Results.html?"
+            . $m->comp("/Elements/QueryString", %search);
+</%perl>
+    <div class="related-tickets">
+      <span class="label">
+        <a href="<% $url %>">
+          <&|/l, $ShowRelatedTickets &>[_1] most recently updated related tickets</&>
+        </a>
+      </span>
+      <& /Elements/CollectionList,
+          %search,
+          Class             => "RT::Tickets",
+          Format            => RT->Config->Get("AssetSummaryRelatedTicketsFormat"),
+          Rows              => $ShowRelatedTickets,
+          ShowHeader        => 0,
+          AllowSorting      => 0,
+          ShowNavigation    => 0,
+      &>
+    </div>
+% }
+
+% $m->callback( CallbackName => "PerAsset", Ticket => $Ticket, Asset => $asset );
+  </div>
+% }
+</div>
+% $m->callback( CallbackName => "End", Ticket => $Ticket, Assets => $assets );
+
+</&>
