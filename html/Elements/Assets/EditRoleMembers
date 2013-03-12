@@ -8,14 +8,7 @@ my $field_name = "RemoveRoleMember-" . $Group->Type;
 <ul class="role-members">
 % my $Users = $Group->UserMembersObj( Recursively => $Recursively );
 % if ($Group->SingleMemberRoleGroup) {
-<input type="text" value="<% $Users->First->Name %>" name="SetRoleMember-<% $Group->Type %>" id="SetRoleMember-<% $Group->Type %>" /><br />
-<script type="text/javascript">
-jQuery(function(){
-    jQuery("#SetRoleMember-"+<% $Group->Type |n,j%>).autocomplete({
-        source: <% RT->Config->Get('WebPath') |n,j%>+"/Helpers/Autocomplete/Users?return=Name"
-    });
-});
-</script>
+<input type="text" value="<% $Users->First->Name %>" name="SetRoleMember-<% $Group->Type %>" id="SetRoleMember-<% $Group->Type %>" data-autocomplete="Users" data-autocomplete-return="Name" /><br />
 % } else {
 % while ( my $user = $Users->Next ) {
 <li>
