@@ -25,8 +25,8 @@ jQuery(function() {
     });
     jQuery("#page-actions-create-linked-ticket").click(function(ev){
         ev.preventDefault();
-        var url = this.href.replace(/\/Asset\/CreateLinkedTicket\.html\?id=/g,
-                                    '/Asset/Helpers/CreateLinkedTicket?Asset=');
+        var url = this.href.replace(/\/Asset\/CreateLinkedTicket\.html\?/g,
+                                    '/Asset/Helpers/CreateLinkedTicket?');
         jQuery.get(
             url,
             showModal

@@ -1,8 +1,8 @@
 <%args>
-$id => undef
+$Asset => undef
 </%args>
 <%init>
-my $asset = LoadAsset($id);
+my $asset = LoadAsset($Asset);
 </%init>
 <& /Elements/Header,
     Title => loc("Create linked ticket for asset #[_1]: [_2]", $asset->id, $asset->Name) &>

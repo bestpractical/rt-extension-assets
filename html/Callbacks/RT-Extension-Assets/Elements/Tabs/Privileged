@@ -65,7 +65,7 @@ if ($Path =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /\D/
         }
 
         my $actions = $page->child("actions", title => loc("Actions"));
-        $actions->child("create-linked-ticket", title => loc("Create linked ticket"), path => "/Asset/CreateLinkedTicket.html?id=$id");
+        $actions->child("create-linked-ticket", title => loc("Create linked ticket"), path => "/Asset/CreateLinkedTicket.html?Asset=$id");
 
         my $status    = $asset->Status;
         my $lifecycle = $asset->LifecycleObj;
