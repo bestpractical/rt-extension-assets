@@ -1,8 +1,9 @@
 <%args>
 $Asset
+$Requestors => ''
 </%args>
 <%init>
 my $asset = LoadAsset($Asset);
 </%init>
-<& /Asset/Elements/CreateLinkedTicket, AssetObj => $asset &>
+<& /Asset/Elements/CreateLinkedTicket, AssetObj => $asset, Requestors => $Requestors &>
 % $m->abort;

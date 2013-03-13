@@ -1,5 +1,6 @@
 <%args>
 $AssetObj
+$Requestors => ''
 </%args>
 <%init>
 my @description = map { $m->interp->apply_escapes($_, 'h') }
@@ -11,16 +12,20 @@ my @description = map { $m->interp->apply_escapes($_, 'h') }
   <&|/l_unsafe,
     $m->scomp("/Elements/SelectNewTicketQueue"),
     @description &>Create a new ticket in the [_1] queue about asset #[_2]: [_3].</&>
-% my $first = 1;
-% for my $role ($AssetObj->Roles) {
-%     my $addr = $AssetObj->RoleGroup($role)->MemberEmailAddressesAsString;
-%     next unless defined $addr and length $addr;
+% if ($Requestors) {
+    <input type="hidden" name="Requestors" value="<% $Requestors%>" />
+% } else {
+%     my $first = 1;
+%     for my $role ($AssetObj->Roles) {
+%         my $addr = $AssetObj->RoleGroup($role)->MemberEmailAddressesAsString;
+%         next unless defined $addr and length $addr;
   <br>
   <label>
     <input type="radio" name="Requestors" value="<% $addr %>" <% $first ? 'checked="checked"' : '' |n%>/>
     <&|/l, loc($role), $addr &>Use asset [_1] as ticket Requestor: [_2]</&>
   </label>
-%     $first = 0;
+%         $first = 0;
+%     }
 % }
   <& /Elements/Submit, Label => loc("Go"), Caption => loc("This will take you to a partially prefilled ticket creation form.") &>
 </form>
