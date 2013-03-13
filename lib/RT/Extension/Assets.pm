@@ -132,7 +132,7 @@ RT->AddJavaScript("RTx-Assets.js");
             if ( $ok ){
                 $args{'Catalog'} = $CatalogObj->Id;
             }
-            else{
+            elsif ($args{'Catalog'}) {
                 RT::Logger->error("Unable to load catalog " . $args{'Catalog'} . $msg);
                 return (0, $msg);
             }
