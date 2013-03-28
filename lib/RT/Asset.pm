@@ -201,7 +201,8 @@ sub Create {
     RT->DatabaseHandle->BeginTransaction();
 
     my ( $id, $msg ) = $self->SUPER::Create(
-        map { $_ => $args{$_} } qw(Name Description Catalog Status),
+        map { $_ => $args{$_} } grep {exists $args{$_}}
+            qw(id Name Description Catalog Status),
     );
     unless ($id) {
         RT->DatabaseHandle->Rollback();
