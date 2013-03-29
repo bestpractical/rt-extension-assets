@@ -20,7 +20,7 @@ if ( $ARGS{'SearchAssets'} ){
                 OPERATOR => 'LIKE',
                 VALUE => $ARGS{$key},
             );
-        } elsif ($key =~ /^Catalog$/) {
+        } elsif ($key =~ /^(Catalog|Status)$/) {
             $assets->Limit(
                 FIELD => $key,
                 VALUE => $ARGS{$key},
@@ -47,7 +47,6 @@ if ( $ARGS{'SearchAssets'} ){
         }
         push @PassArguments, $key;
     }
-    $assets->LimitToActiveStatus;
 }
 
 my $Format = RT->Config->Get('AssetSearchFormat') || q[
@@ -73,7 +72,7 @@ my $Format = RT->Config->Get('AssetSearchFormat') || q[
 %}
 <form action="<% RT->Config->Get('WebPath') %>/Asset/Search/index.html" name="AssetSearch">
 <&| /Widgets/TitleBox, title => "Search Assets" &>
-<& /Asset/Elements/AssetSearchBasics, %ARGS &>
+<& /Asset/Elements/AssetSearchBasics, %ARGS, CatalogObj => $catalog_obj &>
 % foreach my $group ( RT::CustomField->CustomGroupings( $asset_obj ), '' ) {
     <& /Asset/Elements/AssetSearchCFs, %ARGS, Grouping => $group, AssetObj => $asset_obj,
        CatalogObj => $catalog_obj &>
