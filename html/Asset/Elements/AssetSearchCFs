@@ -1,0 +1,21 @@
+<&| /Widgets/TitleBox, title => $Grouping, hide_empty => 1 &>
+<table>
+% my $CFs = RT::CustomFields->new( $session{CurrentUser} );
+% $CFs->LimitToGrouping( $AssetObj => $Grouping );
+% while (my $cf = $CFs->Next) {
+% my $name = "CF.{" . $cf->Name . "}";
+<tr>
+  <td class="label"><label for="<% $name %>"><% $cf->Name %></label></td>
+  <td class="value">
+% if ($cf->Type =~ /^Date(Time)?$/) {
+<& /Elements/SelectDate, ShowTime => ($1 ? 1 : 0), Name => $name, Value => $ARGS{$name} || '' &>
+% } else {
+<& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => $name, Default => $ARGS{$name} || '' &>
+% }
+% }
+</table>
+</&>
+<%args>
+$Grouping
+$AssetObj => undef
+</%args>

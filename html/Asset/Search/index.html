@@ -61,43 +61,13 @@ my $Format = RT->Config->Get('AssetSearchFormat') || q[
     PassArguments   => \@PassArguments,
     &>
 %}
-<&|/Widgets/TitleBox, title => "Search Assets" &>
 <form action="<% RT->Config->Get('WebPath') %>/Asset/Search/index.html" name="AssetSearch">
-
-<table>
-<tr><td class="label"><label for="Name"><&|/l&>Name</&></label></td>
-    <td class="value"><input type="text" id="Name" name="Name" value="<% $ARGS{Name} || ''%>" /></td></tr>
-<tr><td class="label"><label for="Description"><&|/l&>Description</&></label></td>
-    <td class="value"><input type="text" id="Description" name="Description" value="<% $ARGS{Description} || ''%>" /></td></tr>
-
-% for my $role (RT::Asset->Roles) {
-<tr>
-  <td class="label"><label for="Role.<% $role %>"><% loc($role) %></td>
-  <td class="value">
-      <input type="text" id="Role.<% $role %>" name="Role.<% $role %>"
-             value="<% $ARGS{"Role.$role"} || '' %>" />
-  </td>
-</tr>
+% my $asset_obj = RT::Asset->new($session{'CurrentUser'});
+<&| /Widgets/TitleBox, title => "Search Assets" &>
+<& /Asset/Elements/AssetSearchBasics, %ARGS &>
+% foreach my $group ( RT::CustomField->CustomGroupings( $asset_obj ), '' ) {
+    <& /Asset/Elements/AssetSearchCFs, %ARGS, Grouping => $group, AssetObj => $asset_obj &>
 % }
-
-% my $CFs = RT::CustomFields->new( $session{CurrentUser} );
-% $CFs->LimitToChildType( RT::Asset->CustomFieldLookupType );
-% while (my $cf = $CFs->Next) {
-% my $name = "CF.{" . $cf->Name . "}";
-<tr>
-  <td class="label"><label for="<% $name %>"><% $cf->Name %></label></td>
-  <td class="value">
-% if ($cf->Type =~ /^Date(Time)?$/) {
-<& /Elements/SelectDate, ShowTime => ($1 ? 1 : 0), Name => $name, Value => $ARGS{$name} || '' &>
-% } else {
-<& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => $name, Default => $ARGS{$name} || '' &>
-% }
-% }
-
-</table>
-
 <& /Elements/Submit, Label => loc('Search'), Name => 'SearchAssets' &>
-</form>
-
 </&>
-
+</form>
