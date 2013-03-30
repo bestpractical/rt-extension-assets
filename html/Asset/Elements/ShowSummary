@@ -24,4 +24,7 @@ for my $section (@sections) {
 </&>
 % }
 
-<& /Elements/ShowCustomFieldCustomGroupings, Object => $AssetObj &>
+<& /Elements/ShowCustomFieldCustomGroupings,
+     Object => $AssetObj,
+     title_href => RT->Config->Get("WebPath") . "/Asset/ModifyCFs.html",
+ &>
