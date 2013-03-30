@@ -3,6 +3,11 @@ $Order => "ASC"
 $OrderBy => "Name"
 </%args>
 <%init>
+my $asset_obj = RT::Asset->new($session{'CurrentUser'});
+my $catalog_obj = $m->comp('/Asset/Elements/GetCatalogObj',
+                      Catalog => ($ARGS{'Catalog'} || ''));
+$ARGS{'Catalog'} = $catalog_obj->Id;
+
 my $assets = RT::Assets->new($session{CurrentUser});
 my @PassArguments = qw( Order OrderBy );
 
@@ -13,6 +18,11 @@ if ( $ARGS{'SearchAssets'} ){
             $assets->Limit(
                 FIELD => $key,
                 OPERATOR => 'LIKE',
+                VALUE => $ARGS{$key},
+            );
+        } elsif ($key =~ /^Catalog$/) {
+            $assets->Limit(
+                FIELD => $key,
                 VALUE => $ARGS{$key},
             );
         } elsif ($key =~ /^Role\.(.+)/) {
@@ -62,11 +72,11 @@ my $Format = RT->Config->Get('AssetSearchFormat') || q[
     &>
 %}
 <form action="<% RT->Config->Get('WebPath') %>/Asset/Search/index.html" name="AssetSearch">
-% my $asset_obj = RT::Asset->new($session{'CurrentUser'});
 <&| /Widgets/TitleBox, title => "Search Assets" &>
 <& /Asset/Elements/AssetSearchBasics, %ARGS &>
 % foreach my $group ( RT::CustomField->CustomGroupings( $asset_obj ), '' ) {
-    <& /Asset/Elements/AssetSearchCFs, %ARGS, Grouping => $group, AssetObj => $asset_obj &>
+    <& /Asset/Elements/AssetSearchCFs, %ARGS, Grouping => $group, AssetObj => $asset_obj,
+       CatalogObj => $catalog_obj &>
 % }
 <& /Elements/Submit, Label => loc('Search'), Name => 'SearchAssets' &>
 </&>

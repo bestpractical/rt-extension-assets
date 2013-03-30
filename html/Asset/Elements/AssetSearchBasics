@@ -1,5 +1,10 @@
 <&| /Widgets/TitleBox, title => 'Basics' &>
 <table>
+<tr><td class="label"><label for="Catalog"><&|/l&>Catalog</&></label></td>
+    <td class="value">
+<& /Elements/SelectCatalog, Name => 'Catalog', ShowNullOption => 0, ShowAll => 0,
+       Default => $ARGS{'Catalog'}, OnChange => 'document.AssetSearch.submit()' &>
+</td></tr>
 <tr><td class="label"><label for="Name"><&|/l&>Name</&></label></td>
     <td class="value"><input type="text" id="Name" name="Name" value="<% $ARGS{Name} || ''%>" /></td></tr>
 <tr><td class="label"><label for="Description"><&|/l&>Description</&></label></td>
