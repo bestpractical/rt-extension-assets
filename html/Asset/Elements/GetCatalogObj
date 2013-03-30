@@ -5,11 +5,26 @@
 
 my $catalog_obj = RT::Catalog->new($session{CurrentUser});
 
-if ( $Catalog ) {
+if ( $Catalog ){
     $catalog_obj->Load($Catalog);
     RT::Logger->error("Unable to load catalog: " . $Catalog)
         unless $catalog_obj->Id;
-} else {
+    $session{'DefaultCatalog'} = $catalog_obj->Id
+        if $catalog_obj->Id;
+}
+elsif ( $session{'DefaultCatalog'} ){
+    $catalog_obj->Load($session{'DefaultCatalog'});
+    RT::Logger->error("Unable to load remembered catalog: " .
+        $session{'DefaultCatalog'})
+        unless $catalog_obj->Id;
+}
+elsif ( RT->Config->Get("DefaultCatalog") ){
+    $catalog_obj->Load( RT->Config->Get("DefaultCatalog") );
+    RT::Logger->error("Unable to load default catalog: "
+        . RT->Config->Get("DefaultCatalog"))
+        unless $catalog_obj->Id;
+}
+else {
     # If no catalog, default to the first active catalog
     my $catalogs = RT::Catalogs->new($session{CurrentUser});
     $catalogs->UnLimit;

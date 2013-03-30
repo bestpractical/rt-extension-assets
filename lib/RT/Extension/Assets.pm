@@ -232,6 +232,15 @@ RT_SiteConfig.pm and add UserAssets to the list.
 
 =back
 
+=head1 CONFIGURATION
+
+=head2 C<$DefaultCatalog>
+
+Use this to define the default catalog name that will be used when first
+searching for assets; thereafter, it will defaultto the last-searched
+catalog. You may use either the catalog's name or its ID. This only
+affects the catalog selection on the asset search interface.
+
 =head1 METHODS ADDED TO OTHER CLASSES
 
 =head2 L<RT::CustomField>
