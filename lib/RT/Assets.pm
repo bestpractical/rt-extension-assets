@@ -102,14 +102,14 @@ Limits to non-deleted assets unless the C<allow_deleted_search> flag is set.
 
 sub _DoSearch {
     my $self = shift;
-    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted')
+    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted', SUBCLAUSE => "not_deleted" )
         unless $self->{'allow_deleted_search'};
     $self->SUPER::_DoSearch(@_);
 }
 
 sub _DoCount {
     my $self = shift;
-    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted')
+    $self->Limit( FIELD => 'Status', OPERATOR => '!=', VALUE => 'deleted', SUBCLAUSE => "not_deleted" )
         unless $self->{'allow_deleted_search'};
     $self->SUPER::_DoCount(@_);
 }
