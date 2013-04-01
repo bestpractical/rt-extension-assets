@@ -7,8 +7,10 @@ if ($AssetObj and $AssetObj->Id) {
 } else {
     my $lifecycle = ($CatalogObj || "RT::Catalog")->LifecycleObj;
 
-    $ARGS{DefaultValue} = 0;
-    $ARGS{Default} ||= $DECODED_ARGS->{Status} || $lifecycle->DefaultOnCreate;
+    if ( not $ARGS{DefaultValue} ){
+        $ARGS{DefaultValue} = 0;
+        $ARGS{Default} ||= $DECODED_ARGS->{Status} || $lifecycle->DefaultOnCreate;
+    }
     $ARGS{Statuses} = [ $lifecycle->Name ? $lifecycle->Transitions("") : $lifecycle->Valid ];
 }
 </%init>

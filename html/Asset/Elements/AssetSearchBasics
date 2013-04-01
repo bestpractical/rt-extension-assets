@@ -1,0 +1,31 @@
+<&| /Widgets/TitleBox, title => 'Basics' &>
+<table>
+<tr><td class="label"><label for="Catalog"><&|/l&>Catalog</&></label></td>
+    <td class="value">
+<& /Elements/SelectCatalog, Name => 'Catalog', ShowNullOption => 0, ShowAll => 0,
+       Default => $ARGS{'Catalog'}, OnChange => 'document.AssetSearch.submit()' &>
+</td></tr>
+<tr><td class="label"><label for="Status"><&|/l&>Status</&></label></td>
+    <td class="value">
+<& /Asset/Elements/SelectStatus, Name => 'Status', CatalogObj => $CatalogObj, DefaultValue => 1,
+       Default => ($ARGS{'Status'} || '') &>
+</td></tr>
+<tr><td class="label"><label for="Name"><&|/l&>Name</&></label></td>
+    <td class="value"><input type="text" id="Name" name="Name" value="<% $ARGS{Name} || ''%>" /></td></tr>
+<tr><td class="label"><label for="Description"><&|/l&>Description</&></label></td>
+    <td class="value"><input type="text" id="Description" name="Description" value="<% $ARGS{Description} || ''%>" /></td></tr>
+% for my $role (RT::Asset->Roles) {
+<tr>
+  <td class="label"><label for="Role.<% $role %>"><% loc($role) %></td>
+  <td class="value">
+      <input type="text" id="Role.<% $role %>" name="Role.<% $role %>"
+             value="<% $ARGS{"Role.$role"} || '' %>" />
+  </td>
+</tr>
+% }
+</table>
+<& /Elements/Submit, Label => loc('Search'), Name => 'SearchAssets' &>
+</&>
+<%args>
+$CatalogObj => undef
+</%args>
