@@ -15,7 +15,37 @@
         Object => $asset,
         CustomFieldGenerator => sub { $catalog->AssetCustomFields } &>
 
-  <!-- XXX TODO: People -->
+  <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
+    <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+    <td class="label">
+    <&|/l&>Owner</&>:
+    </td>
+    <td class="value" colspan="5">
+    <& /Elements/EmailInput, Name => 'Owner', Size => undef, Default => $ARGS{Owner} &>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="label">
+    <&|/l&>Held By</&>:
+    </td>
+    <td class="value" colspan="5">
+    <& /Elements/EmailInput, Name => 'HeldBy', Size => undef, Default => $ARGS{HeldBy} &>
+    </td>
+    </tr>
+
+    <tr>
+    <td class="label">
+    <&|/l&>Contact</&>:
+    </td>
+    <td class="value" colspan="5">
+    <& /Elements/EmailInput, Name => 'Contact', Size => undef, Default => $ARGS{Contact} &>
+    </td>
+    </tr>
+    </table>
+  </&>
+
 
   <&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links" &>
     <& /Elements/AddLinks,
@@ -69,6 +99,9 @@ if ($id eq "new") {
         my %create = (
             ProcessObjectCustomFieldUpdatesForCreate( ARGSRef => \%ARGS ),
             ProcessLinksForCreate( ARGSRef => \%ARGS ),
+            map {
+                $_ => $ARGS{$_}
+            } qw/Owner HeldBy Contact/,
         );
 
         # Handle basic fields
