@@ -1,2 +1,2 @@
 <& /SelfService/Elements/Header, Title => loc("My Assets") &>
-<& /Elements/MyAssets &>
+<& /User/Elements/AssetList, User => $session{'CurrentUser'}->UserObj, Roles => [RT::Asset->Roles], Title => loc('My Assets') &>
