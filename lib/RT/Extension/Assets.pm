@@ -92,7 +92,7 @@ RT->AddJavaScript("RTx-Assets.js");
                 next if $ARGS{$arg} eq $group->UserMembersObj->First->Name;
                 my ($ok, $msg) = $object->AddRoleMember(
                     Type => $type,
-                    User => $ARGS{$arg},
+                    User => $ARGS{$arg} || 'Nobody',
                 );
                 push @results, $msg;
             }
