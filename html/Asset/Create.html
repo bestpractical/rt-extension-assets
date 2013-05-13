@@ -72,6 +72,9 @@ Abort(loc("You don't have permission to create assets in catalog [_1].",
           $catalog->Name || $catalog->id))
     unless $catalog->CurrentUserHasRight("CreateAsset");
 
+# Update the current default with the latest selection
+$session{'DefaultCatalog'} = $catalog->Id;
+
 my @results;
 
 if ($id eq "new") {

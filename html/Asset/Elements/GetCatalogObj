@@ -9,8 +9,6 @@ if ( $Catalog ){
     $catalog_obj->Load($Catalog);
     RT::Logger->error("Unable to load catalog: " . $Catalog)
         unless $catalog_obj->Id;
-    $session{'DefaultCatalog'} = $catalog_obj->Id
-        if $catalog_obj->Id;
 }
 elsif ( $session{'DefaultCatalog'} ){
     $catalog_obj->Load($session{'DefaultCatalog'});
