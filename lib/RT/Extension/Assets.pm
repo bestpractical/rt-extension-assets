@@ -106,6 +106,43 @@ RT->AddJavaScript("RTx-Assets.js");
         }
         return @results;
     }
+
+
+    # If provided a catalog, load it and return the object.
+    # If no catalog is passed, load the first active catalog.
+
+    sub LoadDefaultCatalog {
+        my $catalog = shift;
+        my $catalog_obj = RT::Catalog->new($session{CurrentUser});
+
+        if ( $catalog ){
+            $catalog_obj->Load($catalog);
+            RT::Logger->error("Unable to load catalog: " . $catalog)
+                unless $catalog_obj->Id;
+        }
+        elsif ( $session{'DefaultCatalog'} ){
+            $catalog_obj->Load($session{'DefaultCatalog'});
+            RT::Logger->error("Unable to load remembered catalog: " .
+                              $session{'DefaultCatalog'})
+                unless $catalog_obj->Id;
+        }
+        elsif ( RT->Config->Get("DefaultCatalog") ){
+            $catalog_obj->Load( RT->Config->Get("DefaultCatalog") );
+            RT::Logger->error("Unable to load default catalog: "
+                              . RT->Config->Get("DefaultCatalog"))
+                unless $catalog_obj->Id;
+        }
+        else {
+            # If no catalog, default to the first active catalog
+            my $catalogs = RT::Catalogs->new($session{CurrentUser});
+            $catalogs->UnLimit;
+            $catalog_obj = $catalogs->First();
+            RT::Logger->error("No active catalogs.")
+                unless $catalog_obj and $catalog_obj->Id;
+        }
+
+        return $catalog_obj;
+    }
 }
 
 {

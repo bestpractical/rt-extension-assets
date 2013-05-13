@@ -60,8 +60,7 @@ $ShowAll => 0
 $Default => undef
 </%args>
 <%init>
-my $catalog_obj = $m->comp('/Asset/Elements/GetCatalogObj',
-                           Catalog => ($Default || ''));
+my $catalog_obj = LoadDefaultCatalog($Default || '');
 if ( $catalog_obj->Id ){
     $session{'DefaultCatalog'} = $catalog_obj->Id;
     $Default = $catalog_obj->Id;
