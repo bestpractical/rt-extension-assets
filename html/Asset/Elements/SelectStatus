@@ -1,12 +1,11 @@
 <& /Elements/SelectStatus, %ARGS &>
 <%init>
 if ($AssetObj and $AssetObj->Id) {
-    $ARGS{DefaultLabel} = loc("[_1] (Unchanged)", loc($AssetObj->Status));
+    $ARGS{DefaultValue} = 0;
     $ARGS{Default} = $DECODED_ARGS->{Status} || $ARGS{Default};
     $ARGS{Object} = $AssetObj;
 } else {
     my $lifecycle = ($CatalogObj || "RT::Catalog")->LifecycleObj;
-
     if ( not $ARGS{DefaultValue} ){
         $ARGS{DefaultValue} = 0;
         $ARGS{Default} ||= $DECODED_ARGS->{Status} || $lifecycle->DefaultOnCreate;
