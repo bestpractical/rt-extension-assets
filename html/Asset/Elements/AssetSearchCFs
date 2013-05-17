@@ -7,10 +7,11 @@
 %}
 % while (my $cf = $CFs->Next) {
 % my $name = "CF.{" . $cf->Name . "}";
+% my $value = ref($ARGS{$name}) ? $ARGS{$name}[0] : $ARGS{$name} || '';
 <tr>
   <td class="label"><label for="<% $name %>"><% $cf->Name %></label></td>
   <td class="value">
-<& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => $name, Default => $ARGS{$name} || '' &>
+<& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => $name, Default => $value &>
 % }
 % if ( $CFs->Count > 0 ){
 </table>

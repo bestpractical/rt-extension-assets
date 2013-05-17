@@ -12,24 +12,25 @@ my @PassArguments = qw( Order OrderBy );
 
 if ( $ARGS{'SearchAssets'} ){
     for my $key (keys %ARGS) {
-        next unless defined $ARGS{$key} and length $ARGS{$key};
+        my $value = ref $ARGS{$key} ? $ARGS{$key}[0] : $ARGS{$key};
+        next unless defined $value and length $value;
         if ($key =~ /^(Name|Description)$/) {
             $assets->Limit(
                 FIELD => $key,
                 OPERATOR => 'LIKE',
-                VALUE => $ARGS{$key},
+                VALUE => $value,
             );
         } elsif ($key =~ /^(Catalog|Status)$/) {
             $assets->Limit(
                 FIELD => $key,
-                VALUE => $ARGS{$key},
+                VALUE => $value,
             );
         } elsif ($key =~ /^Role\.(.+)/) {
             my $role = $1;
             $assets->RoleLimit(
                 TYPE      => $role,
                 FIELD     => $_,
-                VALUE     => $ARGS{$key},
+                VALUE     => $value,
                 SUBCLAUSE => $role,
                 ENTRYAGGREGATOR => "OR",
                 CASESENSITIVE   => 0,
@@ -41,7 +42,7 @@ if ( $ARGS{'SearchAssets'} ){
             $assets->LimitCustomField(
                 CUSTOMFIELD => $cf->Id,
                 OPERATOR    => "LIKE",
-                VALUE       => $ARGS{$key},
+                VALUE       => $value,
             );
         }
         push @PassArguments, $key;
