@@ -10,11 +10,7 @@
 <tr>
   <td class="label"><label for="<% $name %>"><% $cf->Name %></label></td>
   <td class="value">
-% if ($cf->Type =~ /^Date(Time)?$/) {
-<& /Elements/SelectDate, ShowTime => ($1 ? 1 : 0), Name => $name, Value => $ARGS{$name} || '' &>
-% } else {
 <& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => $name, Default => $ARGS{$name} || '' &>
-% }
 % }
 % if ( $CFs->Count > 0 ){
 </table>
