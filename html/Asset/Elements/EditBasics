@@ -1,19 +1,19 @@
 <table>
 % if ($AssetObj->id) {
-  <tr class="catalog">
+  <tr class="asset-catalog">
     <td class="label"><label for="Catalog"><&|/l&>Catalog</&></label></td>
     <td><& /Asset/Elements/SelectCatalog, Default => $current{Catalog} &></td>
   </tr>
 % }
-  <tr>
+  <tr class="asset-name">
     <td class="label"><label for="Name"><&|/l&>Name</&></label></td>
     <td><input name="Name" value="<% $current{Name} %>" size="50"></td>
   </tr>
-  <tr>
+  <tr class="asset-description">
     <td class="label"><label for="Description"><&|/l&>Description</&></label></td>
     <td><input name="Description" value="<% $current{Description} %>" size="75"></td>
   </tr>
-  <tr class="status">
+  <tr class="asset-status">
     <td class="label"><label for="Status"><&|/l&>Status</&></label></td>
     <td><& /Asset/Elements/SelectStatus, Name => 'Status', AssetObj => $AssetObj &></td>
   </tr>

@@ -1,17 +1,17 @@
 <table>
-  <tr class="catalog">
+  <tr class="asset-catalog">
     <td class="label"><&|/l&>Catalog</&></td>
     <td><& ShowCatalog, Asset => $AssetObj &></td>
   </tr>
-  <tr>
+  <tr class="asset-name">
     <td class="label"><&|/l&>Name</&></td>
     <td><% $AssetObj->Name || '' %></td>
   </tr>
-  <tr>
+  <tr class="asset-description">
     <td class="label"><&|/l&>Description</&></td>
     <td><% $AssetObj->Description || '' %></td>
   </tr>
-  <tr class="status">
+  <tr class="asset-status">
     <td class="label"><&|/l&>Status</&>:</td>
     <td class="value"><% loc($AssetObj->Status) %></td>
   </tr>
