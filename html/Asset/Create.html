@@ -11,20 +11,20 @@
     <& Elements/EditBasics, %ARGS, AssetObj => $asset &>
   </&>
 
-  <& /Elements/EditCustomFieldCustomGroupings,
-        Object => $asset,
-        CustomFieldGenerator => sub { $catalog->AssetCustomFields } &>
-
   <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
     <& Elements/EditPeople, %ARGS, AssetObj => $asset &>
   </&>
-
 
   <&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links" &>
     <& /Elements/AddLinks,
         Object          => $asset,
         CustomFields    => $catalog->AssetCustomFields &>
   </&>
+
+  <& /Elements/EditCustomFieldCustomGroupings,
+        Object => $asset,
+        CustomFieldGenerator => sub { $catalog->AssetCustomFields } &>
+
 
   <& /Elements/Submit, Label => loc('Create asset') &>
 </form>
