@@ -5,17 +5,17 @@ my $assets = Menu->child("tools")->add_before(
 $assets->child("create", title => loc("Create"), path => "/Asset/CreateInCatalog.html");
 $assets->child("search", title => loc("Search"), path => "/Asset/Search/");
 
+Menu->child("search")->child("assets", title => loc("Assets"), path => "/Asset/Search/");
+
 # Add global Assets custom field admin page
 my $global_cfs = Menu();
    $global_cfs = $global_cfs->child($_) or last
-        for "tools" => "config" => "global" => "custom-fields";
+        for "admin" => "global" => "custom-fields";
 $global_cfs->child("assets", title => loc("Assets"), path => "/Admin/Global/CustomFields/Catalog-Assets.html")
     if $global_cfs;
 
 # Add a Catalog admin menu
-my $config = Menu();
-   $config = $config->child($_) or last
-        for "tools" => "config";
+my $config = Menu()->child("admin");
 if ($config) {
     my $assets   = $config->child("tools")->add_before("assets", title => loc("Assets"), path => "/Admin/Assets/");
     my $catalogs = $assets->child("catalogs", title => loc("Catalogs"), path => "/Admin/Assets/Catalogs/");
