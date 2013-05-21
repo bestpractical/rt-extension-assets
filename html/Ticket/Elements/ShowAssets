@@ -125,7 +125,7 @@ if ($ShowRelatedTickets) {
   <div class="add-asset">
     <label>
       <&|/l&>Add an asset to this ticket</&>
-    <input size="5" name="<% $Ticket->id %>-RefersTo" placeholder="Asset #" type="text">
+    <input size="5" name="<% $Ticket->id %>-RefersTo" placeholder="<&|/l&>Asset #</&>" type="text">
     </label>
     <input type="submit" value="+">
   </div>
