@@ -13,7 +13,15 @@ $linked_assets->Limit(
 my @linked_assets = grep { defined }
                      map { $_->TargetURI->IsLocal }         # Returns the local asset ID
                         @{ $linked_assets->ItemsArrayRef };
-return unless @linked_assets;
+
+my $asset_queue;
+if (RT->Config->Get('AssetQueues')) {
+    $asset_queue = 1 if grep {$_ eq $Ticket->QueueObj->Name} @{RT->Config->Get('AssetQueues')}
+} else {
+    $asset_queue = 1;
+}
+return unless @linked_assets or ($Ticket->CurrentUserHasRight("ModifyTicket")
+                                     and $asset_queue);
 
 my $assets = RT::Assets->new( $session{CurrentUser} );
 $assets->OrderBy( FIELD => "Name", ORDER => "ASC" );
