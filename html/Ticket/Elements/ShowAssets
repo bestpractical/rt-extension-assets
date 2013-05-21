@@ -25,19 +25,13 @@ return unless @linked_assets or ($Ticket->CurrentUserHasRight("ModifyTicket")
 
 my $assets = RT::Assets->new( $session{CurrentUser} );
 $assets->OrderBy( FIELD => "Name", ORDER => "ASC" );
-$assets->Limit(
-    FIELD       => "id",
-    OPERATOR    => "IN",
-    VALUE       => \@linked_assets,
-);
-
-# Handle when a user can see the asset links, but not the assets themselves.
-my $can_see = 0;
-while (my $asset = $assets->Next) {
-    $can_see++, last if $asset->CurrentUserCanSee;
+if ( @linked_assets ) {
+    $assets->Limit(
+        FIELD       => "id",
+        OPERATOR    => "IN",
+        VALUE       => \@linked_assets,
+    );
 }
-return unless $can_see;
-$assets->GotoFirstItem;
 
 my $Format = RT->Config->Get("AssetSummaryFormat") || q[
     '<a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a>/TITLE:Name',
@@ -60,10 +54,32 @@ $m->callback(
     class => 'ticket-assets'
     &>
 
+<form action="<% RT->Config->Get("WebPath") %>/Ticket/Display.html" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="id" value="<% $Ticket->id %>">
+
 % $m->callback( CallbackName => "Start", Ticket => $Ticket, Assets => $assets );
+
 <div id="assets-accordion" class="rt-accordion">
 % while (my $asset = $assets->Next) {
-  <h3><a href="<% RT->Config->Get('WebPath') %>/Asset/Display.html?id=<% $asset->id %>"><&|/l, $asset->id, $asset->Name &>#[_1]: [_2]</&></a></h3>
+  <h3><a href="<% RT->Config->Get('WebPath') %>/Asset/Display.html?id=<% $asset->id %>"><&|/l, $asset->id, $asset->Name &>#[_1]: [_2]</&></a>
+<%perl>
+if ($Ticket->CurrentUserHasRight("ModifyTicket")) {
+    my $links = $asset->Links("Target")->Clone;
+    $links->Limit(
+        FIELD   => "LocalBase",
+        VALUE   => $Ticket->id,
+    );
+
+    my %params = map { join("-", "DeleteLink", "", $_->Type, $_->Target) => 1 }
+                    @{ $links->ItemsArrayRef };
+
+    my $delete_url = RT->Config->Get("WebPath")
+        . "/Ticket/Display.html?"
+        . $m->comp("/Elements/QueryString", id => $Ticket->id, %params);
+</%perl>
+<a href="<% $delete_url %>" class="unlink-asset ui-icon ui-icon-circle-close" title="Unlink asset">X</a>
+% }
+  </h3>
   <div class="details">
     <& /Elements/ShowRecord,
         Object      => $asset,
@@ -101,9 +117,21 @@ if ($ShowRelatedTickets) {
 % }
 
 % $m->callback( CallbackName => "PerAsset", Ticket => $Ticket, Asset => $asset );
+
   </div>
 % }
 </div>
+
+  <div class="add-asset">
+    <label>
+      <&|/l&>Add an asset to this ticket</&>
+    <input size="5" name="<% $Ticket->id %>-RefersTo" placeholder="Asset #" type="text">
+    </label>
+    <input type="submit" value="+">
+  </div>
+
 % $m->callback( CallbackName => "End", Ticket => $Ticket, Assets => $assets );
+
+</form>
 
 </&>

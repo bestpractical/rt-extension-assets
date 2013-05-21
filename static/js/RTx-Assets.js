@@ -19,6 +19,15 @@ jQuery(function() {
         // all assets collapsed.
         active:         assets.find("h3").length == 1 ? 0 : false,
         collapsible:    true,
-        autoHeight:     false
+        heightStyle:    'content',
+        header: "h3"
+    }).find("h3 a.unlink-asset").click(function(ev){
+        ev.stopPropagation();
+        return true;
+    });
+    jQuery(".ticket-assets form").submit(function(){
+        var input = jQuery("[name*=RefersTo]", this);
+        if (input.val())
+            input.val("asset:" + input.val());
     });
 });
