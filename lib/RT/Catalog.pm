@@ -13,7 +13,8 @@ with "RT::Record::Role::Lifecycle",
              DeleteRoleMember => "_DeleteRoleMember",
              RoleGroup        => "_RoleGroup",
          },
-     };
+     },
+     "RT::Record::Role::Rights";
 
 require RT::ACE;
 
@@ -27,24 +28,12 @@ RT::Catalog - A logical set of assets
 sub LifecycleType { "asset" }
 
 # Setup rights
-$RT::ACE::OBJECT_TYPES{'RT::Catalog'} = 1;
+__PACKAGE__->AddRight( Staff => ShowCatalog  => 'See catalogs' ); # loc_pair
+__PACKAGE__->AddRight( Admin => AdminCatalog => 'Create, modify, and disable catalogs' ); #loc_pair
 
-RT::Catalog->AddRights(
-    ShowCatalog         => 'See catalogs',                          # loc_pair
-    AdminCatalog        => 'Create, modify, and disable catalogs',  # loc_pair
-
-    ShowAsset           => 'See assets',        # loc_pair
-    CreateAsset         => 'Create assets',     # loc_pair
-    ModifyAsset         => 'Modify assets',     # loc_pair
-);
-RT::Catalog->AddRightCategories(
-    ShowCatalog     => 'Staff',
-    AdminCatalog    => 'Admin',
-
-    ShowAsset   => 'Staff',
-    CreateAsset => 'Staff',
-    ModifyAsset => 'Staff',
-);
+__PACKAGE__->AddRight( Staff => ShowAsset    => 'See assets' ); #loc_pair
+__PACKAGE__->AddRight( Staff => CreateAsset  => 'Create assets' ); #loc_pair
+__PACKAGE__->AddRight( Staff => ModifyAsset  => 'Modify assets' ); #loc_pair
 
 RT::ACE->RegisterCacheHandler(sub {
     my %args = (
@@ -243,25 +232,6 @@ sub Delete {
     return (0, $self->loc("Catalogs may not be deleted"));
 }
 
-=head2 CurrentUserHasRight RIGHTNAME
-
-Returns true if the current user has the right for this catalog, or globally if
-this is called on an unloaded object.
-
-=cut
-
-sub CurrentUserHasRight {
-    my $self  = shift;
-    my $right = shift;
-
-    return (
-        $self->CurrentUser->HasRight(
-            Right        => $right,
-            Object       => ($self->id ? $self : RT->System),
-        )
-    );
-}
-
 =head2 CurrentUserCanSee
 
 Returns true if the current user can see the catalog via the I<ShowCatalog> or
@@ -368,62 +338,6 @@ sub AssetCustomFields {
 }
 
 =head1 INTERNAL METHODS
-
-Public methods, but you shouldn't need to call these unless you're
-extending Assets and Catalogs.
-
-=head2 AddRights C<< RIGHT => DESCRIPTION >> [, ...]
-
-Adds the given rights to the list of possible rights.  This method
-should be called during server startup, not at runtime.
-
-=cut
-
-my (%RIGHTS, %RIGHT_CATEGORIES);
-
-sub AddRights {
-    my $self = shift;
-    my %new = @_;
-    %RIGHTS = ( %RIGHTS, %new );
-    %RT::ACE::LOWERCASERIGHTNAMES = ( %RT::ACE::LOWERCASERIGHTNAMES,
-                                      map { lc($_) => $_ } keys %new);
-    return;
-}
-
-=head2 AddRightCategories C<< RIGHT => CATEGORY>> [, ...]
-
-Adds the given right and category pairs to the list of right categories.
-This method should be called during server startup, not at runtime.
-
-=cut
-
-sub AddRightCategories {
-    my $self = shift;
-    %RIGHT_CATEGORIES = ( %RIGHT_CATEGORIES, @_ );
-    return;
-}
-
-=head2 AvailableRights
-
-Returns a hashref of available rights for this object. The keys are the
-right names and the values are a description of what the rights do.
-
-=cut
-
-sub AvailableRights {
-    return { %RIGHTS };
-}
-
-=head2 RightCategories
-
-Returns a hashref of C<Right> and C<Category> pairs, as added with
-L</AddRightCategories>.
-
-=cut
-
-sub RightCategories {
-    return { %RIGHT_CATEGORIES };
-}
 
 =head2 CacheNeedsUpdate
 
