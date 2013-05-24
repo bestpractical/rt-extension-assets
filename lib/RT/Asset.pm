@@ -179,11 +179,14 @@ sub Create {
     return (0, $self->loc('Invalid Name (names may not be all digits)'))
         unless $self->ValidateName( $args{'Name'} );
 
+    # XXX TODO: This status/lifecycle pattern is duplicated in RT::Ticket and
+    # should be refactored into a role helper.
     my $cycle = $catalog->LifecycleObj;
     unless ( defined $args{'Status'} && length $args{'Status'} ) {
         $args{'Status'} = $cycle->DefaultOnCreate;
     }
 
+    $args{'Status'} = lc $args{'Status'};
     unless ( $cycle->IsValid( $args{'Status'} ) ) {
         return ( 0,
             $self->loc("Status '[_1]' isn't a valid status for assets.",
