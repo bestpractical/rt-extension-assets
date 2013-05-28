@@ -28,12 +28,12 @@ RT::Catalog - A logical set of assets
 sub LifecycleType { "asset" }
 
 # Setup rights
-__PACKAGE__->AddRight( Staff => ShowCatalog  => 'See catalogs' ); # loc_pair
-__PACKAGE__->AddRight( Admin => AdminCatalog => 'Create, modify, and disable catalogs' ); #loc_pair
+__PACKAGE__->AddRight( General => ShowCatalog  => 'See catalogs' ); # loc_pair
+__PACKAGE__->AddRight( Admin   => AdminCatalog => 'Create, modify, and disable catalogs' ); #loc_pair
 
-__PACKAGE__->AddRight( Staff => ShowAsset    => 'See assets' ); #loc_pair
-__PACKAGE__->AddRight( Staff => CreateAsset  => 'Create assets' ); #loc_pair
-__PACKAGE__->AddRight( Staff => ModifyAsset  => 'Modify assets' ); #loc_pair
+__PACKAGE__->AddRight( General => ShowAsset    => 'See assets' ); #loc_pair
+__PACKAGE__->AddRight( Staff   => CreateAsset  => 'Create assets' ); #loc_pair
+__PACKAGE__->AddRight( Staff   => ModifyAsset  => 'Modify assets' ); #loc_pair
 
 RT::ACE->RegisterCacheHandler(sub {
     my %args = (
