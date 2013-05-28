@@ -13,7 +13,7 @@ push @Final, sub {
         my $group = RT::Group->new( RT->SystemUser );
         my ($ok, $msg) = $group->CreateRoleGroup(
             Object              => RT->System,
-            Type                => $type,
+            Name                => $type,
             InsideTransaction   => 0,
         );
         RT->Logger->error("Couldn't create global asset role group '$type': $msg")
