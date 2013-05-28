@@ -35,6 +35,9 @@ __PACKAGE__->AddRight( General => ShowAsset    => 'See assets' ); #loc_pair
 __PACKAGE__->AddRight( Staff   => CreateAsset  => 'Create assets' ); #loc_pair
 __PACKAGE__->AddRight( Staff   => ModifyAsset  => 'Modify assets' ); #loc_pair
 
+__PACKAGE__->AddRight( General => SeeCustomField      => 'View custom field values' ); # loc_pair
+__PACKAGE__->AddRight( Staff   => ModifyCustomField   => 'Modify custom field values' ); # loc_pair
+
 RT::ACE->RegisterCacheHandler(sub {
     my %args = (
         Action      => "",
