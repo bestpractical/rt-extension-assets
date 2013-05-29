@@ -46,6 +46,9 @@ if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /
         $page->child("dates",       title => loc("Dates"),          path => "/Asset/ModifyDates.html?id=$id");
 
         for my $grouping (RT::CustomField->CustomGroupings($asset)) {
+            my $cfs = $asset->CustomFields;
+            $cfs->LimitToGrouping( $asset => $grouping );
+            next unless $cfs->Count;
             $page->child(
                 "cf-grouping-$grouping",
                 title   => loc($grouping),
