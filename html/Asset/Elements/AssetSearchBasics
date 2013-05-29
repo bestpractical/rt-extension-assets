@@ -3,7 +3,7 @@
 <tr class="asset-catalog"><td class="label"><label for="Catalog"><&|/l&>Catalog</&></label></td>
     <td class="value">
 <& /Asset/Elements/SelectCatalog, Name => 'Catalog', CheckRight => "ShowCatalog",
-       Default => $ARGS{'Catalog'}, OnChange => 'document.AssetSearch.submit()' &>
+       Default => $ARGS{'Catalog'}, OnChange => "jQuery('#AssetSearch').submit()" &>
 </td></tr>
 <tr class="asset-status"><td class="label"><label for="Status"><&|/l&>Status</&></label></td>
     <td class="value">
