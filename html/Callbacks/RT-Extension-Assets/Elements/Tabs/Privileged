@@ -79,7 +79,7 @@ elsif ($request =~ m{^/Admin/Global/CustomFields/Catalog-Assets\.html$}) {
     $page->child("create", title => loc("Create New"), path => "/Admin/CustomFields/Modify.html?Create=1;LookupType=" . RT::Asset->CustomFieldLookupType);
 }
 elsif ($request =~ m{^/Admin/CustomFields(/|/index\.html)?$}
-       and $DECODED_ARGS->{'Type'} eq RT::Asset->CustomFieldLookupType) {
+       and $DECODED_ARGS->{'Type'} and $DECODED_ARGS->{'Type'} eq RT::Asset->CustomFieldLookupType) {
     $page->child("create")->path( $page->child("create")->path . "&LookupType=" . RT::Asset->CustomFieldLookupType );
 }
 elsif ($request =~ m{^/Admin/Assets/Catalogs/}) {
