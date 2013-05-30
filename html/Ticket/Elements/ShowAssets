@@ -3,16 +3,24 @@ $Ticket
 $ShowRelatedTickets => 10
 </%args>
 <%init>
-my $linked_assets = $Ticket->Links("Base")->Clone;
-$linked_assets->Limit(
-    FIELD       => "Target",
-    OPERATOR    => "STARTSWITH",
-    VALUE       => RT::URI::asset->LocalURIPrefix,
+my $target_assets = $Ticket->Links("Base")->Clone;
+$target_assets->Limit(
+    FIELD    => "Target",
+    OPERATOR => "STARTSWITH",
+    VALUE    => RT::URI::asset->LocalURIPrefix,
+);
+my $base_assets = $Ticket->Links("Target")->Clone;
+$base_assets->Limit(
+    FIELD    => "Base",
+    OPERATOR => "STARTSWITH",
+    VALUE    => RT::URI::asset->LocalURIPrefix,
 );
 
-my @linked_assets = grep { defined }
-                     map { $_->TargetURI->IsLocal }         # Returns the local asset ID
-                        @{ $linked_assets->ItemsArrayRef };
+my @linked_assets;
+push @linked_assets, grep { defined } map { $_->TargetURI->IsLocal }
+    @{ $target_assets->ItemsArrayRef };
+push @linked_assets, grep { defined } map { $_->BaseURI->IsLocal }
+    @{ $base_assets->ItemsArrayRef };
 
 my $asset_queue;
 if (RT->Config->Get('AssetQueues')) {
@@ -64,14 +72,22 @@ $m->callback(
   <h3><a href="<% RT->Config->Get('WebPath') %>/Asset/Display.html?id=<% $asset->id %>"><&|/l, $asset->id, $asset->Name &>#[_1]: [_2]</&></a>
 <%perl>
 if ($Ticket->CurrentUserHasRight("ModifyTicket")) {
-    my $links = $asset->Links("Target")->Clone;
-    $links->Limit(
+    my $targets = $asset->Links("Target")->Clone;
+    $targets->Limit(
         FIELD   => "LocalBase",
         VALUE   => $Ticket->id,
     );
+    my $bases = $asset->Links("Base")->Clone;
+    $bases->Limit(
+        FIELD   => "LocalTarget",
+        VALUE   => $Ticket->id,
+    );
 
-    my %params = map { join("-", "DeleteLink", "", $_->Type, $_->Target) => 1 }
-                    @{ $links->ItemsArrayRef };
+    my %params;
+    $params{join("-", "DeleteLink", "", $_->Type, $_->Target)} = 1
+        for @{ $targets->ItemsArrayRef };
+    $params{join("-", "DeleteLink", $_->Base, $_->Type, "")} = 1
+        for @{ $bases->ItemsArrayRef };
 
     my $delete_url = RT->Config->Get("WebPath")
         . "/Ticket/Display.html?"
