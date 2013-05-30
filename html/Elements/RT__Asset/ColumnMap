@@ -50,6 +50,22 @@ $Name => undef
 $Attr => undef
 </%ARGS>
 <%ONCE>
+my $linkUsers;
+$linkUsers = sub {
+    my ($what, $more) = @_;
+    if ($what->isa("RT::Group")) {
+        my @ret = map {$linkUsers->($_->[1], $more), ", "}
+            sort {$a->[0] cmp $b->[0]}
+            map {+[($_->EmailAddress||''), $_]}
+            @{ $what->UserMembersObj->ItemsArrayRef };
+        pop @ret; # Remove ending ", "
+        return @ret;
+    } else {
+        my @ret = \($m->scomp("/Elements/ShowUser", User => $what));
+        push @ret, $more->($what) if $more;
+        return @ret;
+    }
+};
 my $COLUMN_MAP = {
     Name => {
         attribute => 'Name',
@@ -71,17 +87,17 @@ my $COLUMN_MAP = {
         attribute => 'Status',
         value     => sub { loc($_[0]->Status) }
     },
-    OwnerName => {
+    Owner => {
         title     => 'Owner', # loc
-        value     => sub { return $_[0]->Owner->Name }
+        value     => sub { return $linkUsers->($_[0]->Owner) }
     },
     HeldBy => {
         title     => 'Held By', # loc
-        value     => sub { return $_[0]->HeldBy->MemberEmailAddressesAsString }
+        value     => sub { return $linkUsers->($_[0]->HeldBy) }
     },
     Contacts => {
         title     => 'Contact', # loc
-        value     => sub { return $_[0]->Contacts->MemberEmailAddressesAsString }
+        value     => sub { return $linkUsers->($_[0]->Contacts) }
     },
     ActiveTickets => {
         title     => 'Active tickets', # loc
