@@ -5,7 +5,7 @@ $AssetObj
 my @description = map { $m->interp->apply_escapes($_, 'h') }
     $AssetObj->id, $AssetObj->Name;
 </%init>
-<form action="<% RT->Config->Get("WebPath") %>/Ticket/Create.html" id="AssetCreateLinkedTicket">
+<form action="<% RT->Config->Get("WebPath") %><% $session{CurrentUser}->Privileged ? "/Ticket" : "/SelfService" %>/Create.html" id="AssetCreateLinkedTicket">
   <input name="new-RefersTo" value="asset:<% $AssetObj->id %>" type="hidden">
   <input name="Subject" value="<% $AssetObj->Name %>" type="hidden">
   <&|/l_unsafe,
