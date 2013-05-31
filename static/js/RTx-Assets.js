@@ -1,4 +1,11 @@
 jQuery(function() {
+    var showModal = function(html) {
+        jQuery("<div class='modal'></div>")
+            .append(html).appendTo("body")
+            .bind('modal:close', function(ev,modal) { modal.elm.remove(); })
+            .modal();
+    };
+
     jQuery("input[data-autocomplete]").each(function(){
         var input = jQuery(this);
         var what  = input.attr("data-autocomplete");
@@ -29,5 +36,21 @@ jQuery(function() {
         var input = jQuery("[name*=RefersTo]", this);
         if (input.val())
             input.val("asset:" + input.val());
+    });
+    jQuery("#page-actions-create-linked-ticket").click(function(ev){
+        ev.preventDefault();
+        var url = this.href.replace(/\/Asset\/CreateLinkedTicket\.html\?id=/g,
+                                    '/Asset/Helpers/CreateLinkedTicket?Asset=');
+        jQuery.get(
+            url,
+            showModal
+        );
+    });
+    jQuery("#assets-create").click(function(ev){
+        ev.preventDefault();
+        jQuery.get(
+            RT.Config.WebHomePath + "/Asset/Helpers/CreateInCatalog",
+            showModal
+        );
     });
 });
