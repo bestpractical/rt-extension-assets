@@ -69,7 +69,10 @@ my $Format = RT->Config->Get('AssetSearchFormat') || q[
     AllowSorting    => 1,
     PassArguments   => \@PassArguments,
     &>
-%}
+%   if (not $assets->Count) {
+<em><&|/l&>No assets matching search criteria found.</&></em>
+%   }
+% }
 <form action="<% RT->Config->Get('WebPath') %>/Asset/Search/index.html" id="AssetSearch">
 <&| /Widgets/TitleBox, title => "Search Assets" &>
 <& /Asset/Elements/AssetSearchBasics, %ARGS, CatalogObj => $catalog_obj &>
