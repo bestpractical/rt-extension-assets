@@ -217,9 +217,11 @@ RT->AddJavaScript("RTx-Assets.js");
 
         $self->LimitToLookupType( RT::Asset->CustomFieldLookupType );
 
-        my $obj = RT::Catalog->new( $self->CurrentUser );
-        $obj->Load( $catalog );
-        $self->SetContextObject( $obj );
+        unless ($self->ContextObject) {
+            my $obj = RT::Catalog->new( $self->CurrentUser );
+            $obj->Load( $catalog );
+            $self->SetContextObject( $obj );
+        }
     }
 }
 
