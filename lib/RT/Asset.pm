@@ -489,7 +489,7 @@ sub ACLEquivalenceObjects {
 # if you care about it enough to turn it on, you probably care when
 # linking an asset to an asset or an asset to a ticket.
 
-sub ModifyLinkRight { "ModifyAsset" }
+sub ModifyLinkRight { "ShowAsset" }
 
 =head2 LoadCustomFieldByIdentifier
 
