@@ -1,7 +1,7 @@
+<%args>
+$Path
+</%args>
 <%init>
-my $request = $r->path_info;
-   $request =~ s{/+}{/}g;
-
 # Top level Assets menu
 my $assets = Menu->child("tools")->add_before(
                "assets", title => loc("Assets"), path => "/Asset/Search/");
@@ -31,7 +31,7 @@ if ($config) {
 }
 
 # Asset search
-if ($request =~ m{^/Asset/}) {
+if ($Path =~ m{^/Asset/}) {
     PageWidgets()->child( asset_search => raw_html => $m->scomp('/Elements/Assets/Search') );
     PageWidgets()->delete('create_ticket');
     PageWidgets()->delete('simple_search');
@@ -40,7 +40,7 @@ if ($request =~ m{^/Asset/}) {
 # Page menus
 my $page    = PageMenu();
 
-if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /\D/) {
+if ($Path =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /\D/) {
     my $id    = $DECODED_ARGS->{id};
     my $asset = RT::Asset->new( $session{CurrentUser} );
     $asset->Load($id);
@@ -86,15 +86,15 @@ if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /
         }
     }
 }
-elsif ($request =~ m{^/Admin/Global/CustomFields/Catalog-Assets\.html$}) {
+elsif ($Path =~ m{^/Admin/Global/CustomFields/Catalog-Assets\.html$}) {
     $page->child("create", title => loc("Create New"), path => "/Admin/CustomFields/Modify.html?Create=1;LookupType=" . RT::Asset->CustomFieldLookupType);
 }
-elsif ($request =~ m{^/Admin/CustomFields(/|/index\.html)?$}
+elsif ($Path =~ m{^/Admin/CustomFields(/|/index\.html)?$}
        and $DECODED_ARGS->{'Type'} and $DECODED_ARGS->{'Type'} eq RT::Asset->CustomFieldLookupType) {
     $page->child("create")->path( $page->child("create")->path . "&LookupType=" . RT::Asset->CustomFieldLookupType );
 }
-elsif ($request =~ m{^/Admin/Assets/Catalogs/}) {
-    my $actions = $request =~ m{/((index|Create)\.html)?$}
+elsif ($Path =~ m{^/Admin/Assets/Catalogs/}) {
+    my $actions = $Path =~ m{/((index|Create)\.html)?$}
         ? $page
         : $page->child("catalogs", title => loc("Catalogs"), path => "/Admin/Assets/Catalogs/");
 

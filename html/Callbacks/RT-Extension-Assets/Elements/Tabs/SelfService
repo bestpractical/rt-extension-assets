@@ -1,3 +1,6 @@
+<%args>
+$Path
+</%args>
 <%init>
 Menu->child("tickets")->add_after(
     "assets",
@@ -7,10 +10,8 @@ Menu->child("tickets")->add_after(
 
 # Page menus
 my $page    = PageMenu();
-my $request = $r->path_info;
-   $request =~ s{/+}{/}g;
 
-if ($request =~ m{^/SelfService/Asset/} and $DECODED_ARGS->{id}) {
+if ($Path =~ m{^/SelfService/Asset/} and $DECODED_ARGS->{id}) {
     my $id = $DECODED_ARGS->{id};
     $page->child("display",     title => loc("Display"),        path => "/SelfService/Asset/Display.html?id=$id");
     $page->child("history",     title => loc("History"),        path => "/SelfService/Asset/History.html?id=$id");
