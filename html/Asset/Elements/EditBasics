@@ -17,11 +17,20 @@
     <td class="label"><label for="Status"><&|/l&>Status</&></label></td>
     <td><& /Asset/Elements/SelectStatus, Name => 'Status', AssetObj => $AssetObj &></td>
   </tr>
+% if ( $AssetObj->id ) {
   <& /Elements/EditCustomFields, Object => $AssetObj, Grouping => 'Basics', InTable => 1 &>
+% } elsif ( my @cf_names = grep { defined } RT->Config->Get( 'AssetBasicCustomFieldsOnCreate' ) ) {
+%   my $cfs = $CatalogObj->AssetCustomFields;
+%   for my $name ( @cf_names ) {
+%       $cfs->Limit( FIELD => 'Name', VALUE => $name );
+%   }
+  <& /Elements/EditCustomFields, Object => $AssetObj, CustomFields => $cfs, InTable => 1 &>
+% }
 % $m->callback(%ARGS, CallbackName => "AfterFields");
 </table>
 <%args>
 $AssetObj
+$CatalogObj => undef
 </%args>
 <%init>
 my %current = map { $_ => ($ARGS{$_} || $AssetObj->$_ || '') }

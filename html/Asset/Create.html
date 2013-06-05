@@ -1,4 +1,6 @@
-<& /Elements/Header, Title => loc("Create a new asset in catalog [_1]", $catalog->Name) &>
+<& /Elements/Header, Title => loc("Create a new asset in catalog [_1]", $catalog->Name),
+    onload => "function () { hide('Asset-Create-details') }",
+ &>
 <& /Elements/Tabs &>
 
 <& /Elements/ListActions, actions => \@results &>
@@ -7,14 +9,21 @@
   <input type="hidden" name="id" value="new">
   <input type="hidden" name="Catalog" value="<% $catalog->id %>">
 
+<div id="Asset-Create-basics">
+<a name="basics"></a>
+
   <&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics" &>
-    <& Elements/EditBasics, %ARGS, AssetObj => $asset &>
+    <& Elements/EditBasics, %ARGS, AssetObj => $asset, CatalogObj => $catalog &>
   </&>
 
   <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
     <& Elements/EditPeople, %ARGS, AssetObj => $asset &>
   </&>
 
+</div>
+
+<div id="Asset-Create-details">
+<a name="details"></a>
   <&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links" &>
     <& /Elements/AddLinks,
         Object          => $asset,
@@ -24,7 +33,7 @@
   <& /Elements/EditCustomFieldCustomGroupings,
         Object => $asset,
         CustomFieldGenerator => sub { $catalog->AssetCustomFields } &>
-
+</div>
 
   <& /Elements/Submit, Label => loc('Create asset') &>
 </form>
@@ -101,4 +110,8 @@ if ($id eq "new") {
         push @results, @cf_errors;
     }
 }
+
+PageMenu->child( basics => raw_html =>  q[<a href="#basics" onclick="return switchVisibility('Asset-Create-basics','Asset-Create-details');">] . loc('Basics') . q[</a>]);
+PageMenu->child( details => raw_html =>  q[<a href="#details" onclick="return switchVisibility('Asset-Create-details','Asset-Create-basics');">] . loc('Details') . q[</a>]);
+
 </%init>
