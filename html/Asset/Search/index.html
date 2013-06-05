@@ -7,7 +7,10 @@ my $assets = RT::Assets->new($session{CurrentUser});
 
 my @PassArguments;
 
-if ( $ARGS{'SearchAssets'} ){
+if ($ARGS{q}) {
+    $assets->SimpleSearch( Term => $ARGS{q} );
+    push @PassArguments, "q";
+} elsif ( $ARGS{'SearchAssets'} ){
     for my $key (keys %ARGS) {
         my $value = ref $ARGS{$key} ? $ARGS{$key}[0] : $ARGS{$key};
         next unless defined $value and length $value;
@@ -58,7 +61,7 @@ push @PassArguments, qw/OrderBy Order Page/;
 <& /Elements/Header, Title => loc("Assets") &>
 <& /Elements/Tabs &>
 
-% if ( $ARGS{'SearchAssets'} ){
+% if ( $ARGS{'SearchAssets'} or $ARGS{q} ){
 <& /Elements/CollectionList,
     OrderBy         => 'Name',
     Order           => 'ASC',

@@ -1,4 +1,7 @@
 <%init>
+my $request = $r->path_info;
+   $request =~ s{/+}{/}g;
+
 # Top level Assets menu
 my $assets = Menu->child("tools")->add_before(
                "assets", title => loc("Assets"), path => "/Asset/Search/");
@@ -27,10 +30,15 @@ if ($config) {
     $cfs->child("create", title => loc("Create"), path => "/Admin/CustomFields/Modify.html?Create=1&LookupType=" . RT::Asset->CustomFieldLookupType);
 }
 
+# Asset search
+if ($request =~ m{^/Asset/}) {
+    PageWidgets()->child( asset_search => raw_html => $m->scomp('/Elements/Assets/Search') );
+    PageWidgets()->delete('create_ticket');
+    PageWidgets()->delete('simple_search');
+}
+
 # Page menus
 my $page    = PageMenu();
-my $request = $r->path_info;
-   $request =~ s{/+}{/}g;
 
 if ($request =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /\D/) {
     my $id    = $DECODED_ARGS->{id};

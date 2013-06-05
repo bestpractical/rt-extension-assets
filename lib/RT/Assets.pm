@@ -92,6 +92,67 @@ sub _Init {
     return $self->SUPER::_Init( @_ );
 }
 
+sub SimpleSearch {
+    my $self = shift;
+    my %args = (
+        Fields      => RT->Config->Get('AssetSearchFields'),
+        Catalog     => RT->Config->Get('DefaultCatalog'),
+        Term        => undef,
+        @_
+    );
+
+    # Searching for an asset by id short-circuits
+    if ($args{Fields}{id} and $args{Term} =~ /^\d+$/) {
+        $self->Limit( FIELD => "id", VALUE => $args{Term} );
+        return $self;
+    }
+
+    # XXX: We only search a single catalog so that we can map CF names
+    # to their ids, as searching CFs by CF name is rather complicated
+    # and currently fails in odd ways.  Such a mapping obviously assumes
+    # that names are unique within the catalog, but ids are also
+    # allowable as well.
+    my %cfs;
+    my $catalog = RT::Catalog->new( $self->CurrentUser );
+    $catalog->Load( $args{Catalog} );
+    my $cfs = $catalog->AssetCustomFields;
+    while (my $customfield = $cfs->Next) {
+        $cfs{$customfield->id} = $cfs{$customfield->Name}
+            = $customfield;
+    }
+
+    $self->Limit( FIELD => 'Catalog', VALUE => $catalog->id );
+
+    while (my ($name, $op) = each %{$args{Fields}}) {
+        # id has been dealt with above; we skip it here, or we'd get
+        # errors from the database when searching for non-numbers.
+        next if $name eq 'id';
+
+        $op = 'STARTSWITH'
+            unless $op =~ /^(?:LIKE|(?:START|END)SWITH|=|!=)$/i;
+
+        if ($name =~ /^CF\.(?:\{(.*)}|(.*))$/) {
+            my $cfname = $1 || $2;
+            $self->LimitCustomField(
+                CUSTOMFIELD     => $cfs{$cfname},
+                OPERATOR        => $op,
+                VALUE           => $args{Term},
+                ENTRYAGGREGATOR => 'OR',
+                SUBCLAUSE       => 'autocomplete',
+            ) if $cfs{$cfname};
+        } else {
+            $self->Limit(
+                FIELD           => $name,
+                OPERATOR        => $op,
+                VALUE           => $args{Term},
+                ENTRYAGGREGATOR => 'OR',
+                SUBCLAUSE       => 'autocomplete',
+            );
+        }
+    }
+    return $self;
+}
+
 =head2 _DoSearch
 
 =head2 _DoCount

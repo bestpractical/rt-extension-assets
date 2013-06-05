@@ -74,6 +74,22 @@ last-selected catalog thereafter.
 
 Set($DefaultCatalog, 'General assets');
 
+=item C<$AssetSearchFields>
+
+Specifies which fields of L<RT::Asset> to match against and how to match
+each field when performing a quick search on assets.  Valid match
+methods are LIKE, STARTSWITH, ENDSWITH, =, and !=.  Valid search fields
+are id, Name, Description, or custom fields, which are specified as
+"CF.1234" or "CF.Name"
+
+=cut
+
+Set($AssetSearchFields, {
+    id          => '=',
+    Name        => 'LIKE',
+    Description => 'LIKE',
+});
+
 =item C<$AssetSearchFormat>
 
 The format that results of the asset search are displayed with.
