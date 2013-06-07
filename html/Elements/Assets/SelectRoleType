@@ -1,7 +1,7 @@
 <%args>
 $Object
 $Name
-$AllowNull  => 1
+$AllowNull  => 0
 </%args>
 <select name="<% $Name %>">
 % if ($AllowNull) {
