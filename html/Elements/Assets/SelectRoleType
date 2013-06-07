@@ -7,7 +7,7 @@ $AllowNull  => 0
 % if ($AllowNull) {
   <option value=""></option>
 % }
-% for my $role ($Object->Roles( ACLOnly => 0 )) {
+% for my $role ($Object->Roles( ACLOnly => 0, Single => 0 )) {
   <option value="<% $role %>"><% loc($role) %></option>
 % }
 </select>
