@@ -18,7 +18,7 @@ $m->callback( CallbackName => 'ModifyFormat', %ARGS, Format => \$Format );
 <&| /Widgets/TitleBox, title => $Title &>
     <& /Elements/CollectionList,
         Collection      => $assets,
-        OrderBy         => 'Name',
+        OrderBy         => 'id',
         Order           => 'ASC',
         Format          => $Format,
         AllowSorting    => 0,
