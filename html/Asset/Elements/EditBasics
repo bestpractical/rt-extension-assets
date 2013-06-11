@@ -19,7 +19,7 @@
   </tr>
 % if ( $AssetObj->id ) {
   <& /Elements/EditCustomFields, Object => $AssetObj, Grouping => 'Basics', InTable => 1 &>
-% } elsif ( my @cf_names = grep { defined } RT->Config->Get( 'AssetBasicCustomFieldsOnCreate' ) ) {
+% } elsif ( my @cf_names = grep { defined } @{RT->Config->Get('AssetBasicCustomFieldsOnCreate') || []} ) {
 %   my $cfs = $CatalogObj->AssetCustomFields;
 %   for my $name ( @cf_names ) {
 %       $cfs->Limit( FIELD => 'Name', VALUE => $name );

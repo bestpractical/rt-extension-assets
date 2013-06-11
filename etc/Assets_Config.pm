@@ -155,13 +155,17 @@ Set(%AdminSearchResultFormat,
         .q{,__Description__,__Lifecycle__,__Disabled__},
 );
 
-=item C<@AssetBasicCustomFieldsOnCreate>
+=item C<$AssetBasicCustomFieldsOnCreate>
 
-Specify a list of Asset custom fields to show in "Basics" widget on create
+Specify a list of Asset custom fields to show in "Basics" widget on create.
+
+e.g.
+
+Set( $AssetBasicCustomFieldsOnCreate, [ 'foo', 'bar' ] );
 
 =cut
 
-Set(@AssetBasicCustomFieldsOnCreate, () );
+Set($AssetBasicCustomFieldsOnCreate, undef );
 
 =back
 

@@ -1,5 +1,9 @@
 <& /Elements/Header, Title => loc("Create a new asset in catalog [_1]", $catalog->Name),
-    onload => "function () { hide('Asset-Create-details') }",
+    RT->Config->Get('AssetBasicCustomFieldsOnCreate')
+      ? (
+        onload => "function () { hide('Asset-Create-details') }"
+      )
+      : (),
  &>
 <& /Elements/Tabs &>
 
@@ -111,7 +115,9 @@ if ($id eq "new") {
     }
 }
 
-PageMenu->child( basics => raw_html =>  q[<a href="#basics" onclick="return switchVisibility('Asset-Create-basics','Asset-Create-details');">] . loc('Basics') . q[</a>]);
-PageMenu->child( details => raw_html =>  q[<a href="#details" onclick="return switchVisibility('Asset-Create-details','Asset-Create-basics');">] . loc('Details') . q[</a>]);
+if ( RT->Config->Get('AssetBasicCustomFieldsOnCreate') ) {
+    PageMenu->child( basics => raw_html =>  q[<a href="#basics" onclick="return switchVisibility('Asset-Create-basics','Asset-Create-details');">] . loc('Basics') . q[</a>]);
+    PageMenu->child( details => raw_html =>  q[<a href="#details" onclick="return switchVisibility('Asset-Create-details','Asset-Create-basics');">] . loc('Details') . q[</a>]);
+}
 
 </%init>
