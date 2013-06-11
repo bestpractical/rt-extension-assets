@@ -5,7 +5,7 @@
 <&|/l&><% $role %></&>:
 </td>
 <td class="value" colspan="5">
-<& /Elements/EmailInput, Name => $role, Size => undef, Default => $ARGS{$role} &>
+<& /Elements/EmailInput, Name => $role, Size => undef, Default => $ARGS{$role}, Autocomplete => 1 &>
 </td>
 </tr>
 % }
