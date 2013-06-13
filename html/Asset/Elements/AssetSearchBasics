@@ -19,7 +19,7 @@
   <td class="label"><label for="Role.<% $role %>"><% loc($role) %></td>
   <td class="value">
       <input type="text" id="Role.<% $role %>" name="Role.<% $role %>"
-             value="<% $ARGS{"Role.$role"} || '' %>" />
+             data-autocomplete="Users" value="<% $ARGS{"Role.$role"} || '' %>" />
   </td>
 </tr>
 % }
