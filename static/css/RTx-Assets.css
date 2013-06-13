@@ -52,11 +52,11 @@
     list-style: none;
 }
 
-.asset-people td {
+.asset-people .edit td {
     vertical-align: top;
 }
 
-.asset-people .note {
+.asset-people .edit .note {
     font-size: 0.9em;
 }
 
