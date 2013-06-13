@@ -93,18 +93,6 @@ my $COLUMN_MAP = {
         attribute => 'Status',
         value     => sub { loc($_[0]->Status) }
     },
-    Owner => {
-        title     => 'Owner', # loc
-        value     => sub { return $linkUsers->($_[0]->Owner) }
-    },
-    HeldBy => {
-        title     => 'Held By', # loc
-        value     => sub { return $linkUsers->($_[0]->HeldBy) }
-    },
-    Contacts => {
-        title     => 'Contact', # loc
-        value     => sub { return $linkUsers->($_[0]->Contacts) }
-    },
     ActiveTickets => {
         title     => 'Active tickets', # loc
         value     => sub {
