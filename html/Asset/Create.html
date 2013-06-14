@@ -86,7 +86,10 @@ if ($id eq "new") {
     if ($cf_ok and not $skip_create) {
         # Handle CFs and links
         my %create = (
-            ProcessObjectCustomFieldUpdatesForCreate( ARGSRef => \%ARGS ),
+            ProcessObjectCustomFieldUpdatesForCreate(
+                ARGSRef       => \%ARGS,
+                ContextObject => $catalog,
+            ),
             ProcessLinksForCreate( ARGSRef => \%ARGS ),
             map {
                 $_ => $ARGS{$_}
