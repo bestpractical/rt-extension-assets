@@ -101,12 +101,6 @@ sub SimpleSearch {
         @_
     );
 
-    # Searching for an asset by id short-circuits
-    if ($args{Fields}{id} and $args{Term} =~ /^\d+$/) {
-        $self->Limit( FIELD => "id", VALUE => $args{Term} );
-        return $self;
-    }
-
     # XXX: We only search a single catalog so that we can map CF names
     # to their ids, as searching CFs by CF name is rather complicated
     # and currently fails in odd ways.  Such a mapping obviously assumes
@@ -124,10 +118,6 @@ sub SimpleSearch {
     $self->Limit( FIELD => 'Catalog', VALUE => $catalog->id );
 
     while (my ($name, $op) = each %{$args{Fields}}) {
-        # id has been dealt with above; we skip it here, or we'd get
-        # errors from the database when searching for non-numbers.
-        next if $name eq 'id';
-
         $op = 'STARTSWITH'
             unless $op =~ /^(?:LIKE|(?:START|END)SWITH|=|!=)$/i;
 
@@ -140,6 +130,14 @@ sub SimpleSearch {
                 ENTRYAGGREGATOR => 'OR',
                 SUBCLAUSE       => 'autocomplete',
             ) if $cfs{$cfname};
+        } elsif ($name eq 'id' and $op =~ /(?:LIKE|(?:START|END)SWITH)$/i) {
+            $self->Limit(
+                FUNCTION        => "CAST( main.$name AS TEXT )",
+                OPERATOR        => $op,
+                VALUE           => $args{Term},
+                ENTRYAGGREGATOR => 'OR',
+                SUBCLAUSE       => 'autocomplete',
+            ) if $args{Term} =~ /^\d+$/;
         } else {
             $self->Limit(
                 FIELD           => $name,
