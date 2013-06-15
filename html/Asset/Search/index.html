@@ -63,7 +63,7 @@ push @PassArguments, qw/OrderBy Order Page/;
 
 % if ( $ARGS{'SearchAssets'} or $ARGS{q} ){
 <& /Elements/CollectionList,
-    OrderBy         => 'Name',
+    OrderBy         => 'id',
     Order           => 'ASC',
     Rows            => 50,
     (map {+($_ => $ARGS{$_})} grep {defined $ARGS{$_}} @PassArguments),
