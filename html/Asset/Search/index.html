@@ -13,25 +13,30 @@ if ($ARGS{q}) {
     for my $key (keys %ARGS) {
         my $value = ref $ARGS{$key} ? $ARGS{$key}[0] : $ARGS{$key};
         next unless defined $value and length $value;
+        my $negative = ($key =~ s/^!// ? 1 : 0);
         if ($key =~ /^(Name|Description)$/) {
             $assets->Limit(
                 FIELD => $key,
-                OPERATOR => 'LIKE',
+                OPERATOR => ($negative ? 'NOT LIKE' : 'LIKE'),
                 VALUE => $value,
+                ENTRYAGGREGATOR => "AND",
             );
         } elsif ($key =~ /^(Catalog|Status)$/) {
             $assets->Limit(
                 FIELD => $key,
+                OPERATOR => ($negative ? '!=' : '='),
                 VALUE => $value,
+                ENTRYAGGREGATOR => "AND",
             );
         } elsif ($key =~ /^Role\.(.+)/) {
             my $role = $1;
             $assets->RoleLimit(
                 TYPE      => $role,
                 FIELD     => $_,
+                OPERATOR  => ($negative ? '!=' : '='),
                 VALUE     => $value,
                 SUBCLAUSE => $role,
-                ENTRYAGGREGATOR => "OR",
+                ENTRYAGGREGATOR => ($negative ? "AND" : "OR"),
                 CASESENSITIVE   => 0,
             ) for qw/EmailAddress Name/;
         } elsif ($key =~ /^CF\.\{(.+?)\}$/ or $key =~ /^CF\.(.*)/) {
@@ -40,8 +45,9 @@ if ($ARGS{q}) {
             next unless $cf->id;
             $assets->LimitCustomField(
                 CUSTOMFIELD => $cf->Id,
-                OPERATOR    => "LIKE",
+                OPERATOR    => ($negative ? "NOT LIKE" : "LIKE"),
                 VALUE       => $value,
+                ENTRYAGGREGATOR => "AND",
             );
         }
         push @PassArguments, $key;
