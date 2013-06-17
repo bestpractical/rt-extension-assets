@@ -15,7 +15,7 @@ my $Format = q[
 ];
 $m->callback( CallbackName => 'ModifyFormat', %ARGS, Format => \$Format );
 </%init>
-<&| /Widgets/TitleBox, title => $Title &>
+<&| /Widgets/TitleBox, title => $Title, class => "user asset-list" &>
     <& /Elements/CollectionList,
         Collection      => $assets,
         OrderBy         => 'id',
