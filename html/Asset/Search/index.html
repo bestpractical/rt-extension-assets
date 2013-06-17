@@ -1,5 +1,4 @@
 <%init>
-my $asset_obj = RT::Asset->new($session{'CurrentUser'});
 my $catalog_obj = LoadDefaultCatalog($ARGS{'Catalog'} || '');
 $ARGS{'Catalog'} = $catalog_obj->Id;
 
@@ -79,8 +78,8 @@ push @PassArguments, qw/OrderBy Order Page/;
 <form action="<% RT->Config->Get('WebPath') %>/Asset/Search/index.html" id="AssetSearch">
 <&| /Widgets/TitleBox, title => "Search Assets" &>
 <& /Asset/Elements/AssetSearchBasics, %ARGS, CatalogObj => $catalog_obj &>
-% foreach my $group ( RT::CustomField->CustomGroupings( $asset_obj ), '' ) {
-    <& /Asset/Elements/AssetSearchCFs, %ARGS, Grouping => $group, AssetObj => $asset_obj,
+% foreach my $group ( RT::CustomField->CustomGroupings( "RT::Asset" ), '' ) {
+    <& /Asset/Elements/AssetSearchCFs, %ARGS, Grouping => $group,
        CatalogObj => $catalog_obj &>
 % }
 <& /Elements/Submit, Label => loc('Search'), Name => 'SearchAssets' &>
