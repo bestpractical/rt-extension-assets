@@ -61,6 +61,18 @@ my $Format = RT->Config->Get('AssetSearchFormat') || q[
     Status,
 ];
 
+$ARGS{OrderBy} ||= 'id';
+if ($ARGS{OrderBy} =~ /^CF\.(?:\{(.*)\}|(.*))$/) {
+    my $name = $1 || $2;
+    my $cf = RT::CustomField->new( $session{'CurrentUser'} );
+    $cf->LoadByNameAndCatalog(
+        Name => $name,
+        Catalog => $catalog_obj->id,
+    );
+    $ARGS{OrderBy} = [ $cf ];
+    $ARGS{Order}   = [ $ARGS{Order} ];
+}
+
 push @PassArguments, qw/OrderBy Order Page/;
 </%init>
 <& /Elements/Header, Title => loc("Assets") &>

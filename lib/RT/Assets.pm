@@ -7,6 +7,8 @@ use base 'RT::SearchBuilder';
 use Role::Basic "with";
 with "RT::SearchBuilder::Role::Roles";
 
+use Scalar::Util qw/blessed/;
+
 =head1 NAME
 
 RT::Assets - a collection of L<RT::Asset> objects
@@ -149,6 +151,19 @@ sub SimpleSearch {
         }
     }
     return $self;
+}
+
+sub OrderByCols {
+    my $self = shift;
+    my @res  = ();
+    for my $row (@_) {
+        if ( blessed($row->{FIELD}) and $row->{FIELD}->isa("RT::CustomField") ) {
+            push @res, $self->_OrderByCF( $row, $row->{FIELD} );
+        } else {
+            push @res, $row;
+       }
+    }
+    return $self->SUPER::OrderByCols( @res );
 }
 
 =head2 _DoSearch
