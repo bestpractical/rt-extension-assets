@@ -257,9 +257,9 @@ or add C<RT::Extension::Assets> to your existing C<@Plugins> line.
 
 =item Configure portlets for RT's Homepage and User Summary
 
-If you would like the MyAssets portlet to be available on RT at a Glance
-and Dashboards, you will need to copy $HomepageComponents from
-RT_Config.pm to RT_SiteConfig.pm and add MyAssets to the list.
+If you would like the MyAssets or FindAsset portlets to be available on
+RT at a Glance and Dashboards, you will need to copy $HomepageComponents
+from RT_Config.pm to RT_SiteConfig.pm and add them to the list.
 
 
 If you would like the UserAssets portlet to show up on the User
