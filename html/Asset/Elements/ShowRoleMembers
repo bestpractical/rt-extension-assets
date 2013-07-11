@@ -5,7 +5,12 @@
 %     if ($Note) {
  <span class="note"><% $Note %></span>
 %     }
-<br />
+  <div class="details">
+<& /User/Elements/UserInfo,
+       User => $user,
+       FormatConfig => 'UserAssetExtraInfo',
+       ClassPrefix => 'asset-user' &>
+  </div>
 % }
 % my $groups = $Group->GroupMembersObj( Recursively => 0 );
 % $groups->LimitToUserDefinedGroups;
