@@ -1,28 +1,24 @@
+% my $users = $Group->UserMembersObj( Recursively => 0 );
+% while ( my $user = $users->Next ) {
+%     next if $Skip and $Skip->HasMember( $user->PrincipalId );
+<& /Elements/ShowUser, User => $user &>
+%     if ($Note) {
+ <span class="note"><% $Note %></span>
+%     }
+<br />
+% }
+% my $groups = $Group->GroupMembersObj( Recursively => 0 );
+% $groups->LimitToUserDefinedGroups;
+% while (my $g = $groups->Next) {
+%     next if $Skip and $Skip->HasMember( $g->PrincipalId );
+<&|/l, $g->Name &>Group: [_1]</&>
+%     if ($Note) {
+ <span class="note"><% $Note %></span>
+%     }
+<br />
+% }
 <%ARGS>
-$Group          => undef
-$Recursively    => 0
-$CatalogGroup   => undef
+$Group => undef
+$Note  => ''
+$Skip  => undef
 </%ARGS>
-<%INIT>
-my %seen;
-my $render = sub {
-    my $group = shift;
-    my $note  = $m->interp->apply_escapes(shift || '', 'h');
-    my $Users = $group->UserMembersObj( Recursively => $Recursively );
-    while ( my $user = $Users->Next ) {
-        next if $seen{$user->PrincipalId}++;
-        $m->comp("/Elements/ShowUser", User => $user);
-        $m->out(" <span class='note'>$note</span><br>");
-    }
-    my $Groups = $group->GroupMembersObj( Recursively => $Recursively );
-    $Groups->LimitToUserDefinedGroups;
-    while (my $g = $Groups->Next) {
-        next if $seen{$g->PrincipalId}++;
-        $m->out($_) for map { $m->interp->apply_escapes($_, 'h') }
-            loc("Group"), ": ", $g->Name;
-        $m->out(" <span class='note'>$note</span><br>");
-    }
-};
-$render->($Group);
-$render->($CatalogGroup, loc("(via this asset's catalog)")) if $CatalogGroup;
-</%INIT>

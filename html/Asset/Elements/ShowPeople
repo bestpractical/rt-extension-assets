@@ -9,13 +9,12 @@ my $CatalogObj = $AssetObj->CatalogObj;
 <tr>
   <td class="label"><% loc($role) %>:</td>
   <td>
-    <& ShowRoleMembers,
-        Group           => $AssetObj->RoleGroup($role),
-        ( !$AssetObj->Role($role)->{Single}
-            ? (CatalogGroup => $CatalogObj->RoleGroup($role))
-            : () ),
-        &>
+    <& ShowRoleMembers, Group => $AssetObj->RoleGroup($role) &>
+% unless ($AssetObj->Role($role)->{Single}) {
+    <& ShowRoleMembers, Group => $CatalogObj->RoleGroup($role), Skip => $AssetObj->RoleGroup($role), Note => loc("(via this asset's catalog)") &>
+% }
   </td>
+% }
 </tr>
 % }
 <& /Elements/ShowCustomFields, Object => $AssetObj, Grouping => 'People', Table => 0 &>
