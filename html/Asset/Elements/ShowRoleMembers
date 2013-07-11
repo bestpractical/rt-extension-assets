@@ -1,10 +1,16 @@
 % my $users = $Group->UserMembersObj( Recursively => 0 );
 % while ( my $user = $users->Next ) {
 %     next if $Skip and $Skip->HasMember( $user->PrincipalId );
-<& /Elements/ShowUser, User => $user &>
+% if ($Single) {
+<h3><& /Elements/ShowUser, User => $user, Link => 1 &></h3>
+%      next if $user->id == RT->Nobody->id;
+% } else {
+<h3><a href="#"><& /Elements/ShowUser, User => $user, Link => 0 &>
 %     if ($Note) {
  <span class="note"><% $Note %></span>
 %     }
+</a><a class="user-summary" href="<%RT->Config->Get('WebPath')%>/User/Summary.html?id=<% $user->Id %>">User Summary</a></h3>
+% }
   <div class="details">
 <& /User/Elements/UserInfo,
        User => $user,
@@ -16,14 +22,15 @@
 % $groups->LimitToUserDefinedGroups;
 % while (my $g = $groups->Next) {
 %     next if $Skip and $Skip->HasMember( $g->PrincipalId );
-<&|/l, $g->Name &>Group: [_1]</&>
+<h3><a href="#"><&|/l, $g->Name &>Group: [_1]</&></a>
 %     if ($Note) {
  <span class="note"><% $Note %></span>
 %     }
-<br />
+</h3>
 % }
 <%ARGS>
 $Group => undef
 $Note  => ''
 $Skip  => undef
+$Single => 0
 </%ARGS>

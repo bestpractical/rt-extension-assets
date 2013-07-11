@@ -8,11 +8,12 @@ my $CatalogObj = $AssetObj->CatalogObj;
 % for my $role ($AssetObj->Roles) {
 <tr>
   <td class="label"><% loc($role) %>:</td>
-  <td>
+% if ($AssetObj->Role($role)->{Single}) {
+  <td><& ShowRoleMembers, Group => $AssetObj->RoleGroup($role), Single => 1 &></td>
+% } else {
+  <td class="user-accordion">
     <& ShowRoleMembers, Group => $AssetObj->RoleGroup($role) &>
-% unless ($AssetObj->Role($role)->{Single}) {
     <& ShowRoleMembers, Group => $CatalogObj->RoleGroup($role), Skip => $AssetObj->RoleGroup($role), Note => loc("(via this asset's catalog)") &>
-% }
   </td>
 % }
 </tr>

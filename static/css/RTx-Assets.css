@@ -43,12 +43,25 @@
     background-position: center -7px;
 }
 
-/* People */
+/* People display */
+#comp-Asset-Display .asset-people table {
+    width: 100%;
+}
+#comp-Asset-Display .asset-people td.label {
+    vertical-align: top;
+    width: 10em;
+}
+#comp-Asset-Display .asset-people h3 {
+    margin: 0;
+    padding: 0;
+    line-height: 1.3;
+    font-size: 100%;
+}
 
-.asset-people ul.role-members {
+/* People editing */
+.asset-people .edit ul.role-members {
     margin-top:     0;
     padding-left:   0;
-
     list-style: none;
 }
 
