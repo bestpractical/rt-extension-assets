@@ -16,6 +16,7 @@
        User => $user,
        FormatConfig => 'UserAssetExtraInfo',
        ClassPrefix => 'asset-user' &>
+% $m->callback(CallbackName => 'AfterRecord', User => $user, Group => $Group );
   </div>
 % }
 % my $groups = $Group->GroupMembersObj( Recursively => 0 );

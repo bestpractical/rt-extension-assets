@@ -19,4 +19,6 @@ my $CatalogObj = $AssetObj->CatalogObj;
 </tr>
 % }
 <& /Elements/ShowCustomFields, Object => $AssetObj, Grouping => 'People', Table => 0 &>
+
 </table>
+% $m->callback( %ARGS, CallbackName => 'AfterPeople' );
