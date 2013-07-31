@@ -81,7 +81,13 @@ if ($Path =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /\D/
                 $label,
                 title   => loc($label),
                 path    => "/Asset/Modify.html?id=$id;Update=1;DisplayAfter=1;Status="
-                            . $m->interp->apply_escapes($next, 'u')
+                            . $m->interp->apply_escapes($next, 'u'),
+
+                class       => "asset-lifecycle-action",
+                attributes  => {
+                    'data-current-status'   => $status,
+                    'data-next-status'      => $next,
+                },
             );
         }
     }
