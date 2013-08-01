@@ -59,6 +59,14 @@ if ($Update) {
             ARGSRef         => \%ARGS
         );
 
+        $m->callback(
+            CallbackName        => 'AfterUpdate',
+            AssetObj            => $asset,
+            UpdatableAttributes => \@attributes,
+            results             => \@results,
+            ARGSRef             => \%ARGS,
+        );
+
         MaybeRedirectForResults(
             Actions     => \@results,
             Arguments   => { id => $asset->id },
