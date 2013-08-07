@@ -143,6 +143,100 @@ RT->AddJavaScript("RTx-Assets.js");
 
         return $catalog_obj;
     }
+
+    sub ProcessAssetsSearchArguments {
+        my %args = (
+            Catalog => undef,
+            Assets => undef,
+            ARGSRef => undef,
+            @_
+        );
+        my $ARGSRef = $args{'ARGSRef'};
+
+        my @PassArguments;
+
+        if ($ARGSRef->{q}) {
+            $args{'Assets'}->SimpleSearch( Term => $ARGSRef->{q} );
+            push @PassArguments, "q";
+        } elsif ( $ARGSRef->{'SearchAssets'} ){
+            for my $key (keys %$ARGSRef) {
+                my $value = ref $ARGSRef->{$key} ? $ARGSRef->{$key}[0] : $ARGSRef->{$key};
+                next unless defined $value and length $value;
+                my $negative = ($key =~ s/^!// ? 1 : 0);
+                if ($key =~ /^(Name|Description)$/) {
+                    $args{'Assets'}->Limit(
+                        FIELD => $key,
+                        OPERATOR => ($negative ? 'NOT LIKE' : 'LIKE'),
+                        VALUE => $value,
+                        ENTRYAGGREGATOR => "AND",
+                    );
+                } elsif ($key =~ /^(Catalog|Status)$/) {
+                    $args{'Assets'}->Limit(
+                        FIELD => $key,
+                        OPERATOR => ($negative ? '!=' : '='),
+                        VALUE => $value,
+                        ENTRYAGGREGATOR => "AND",
+                    );
+                } elsif ($key =~ /^Role\.(.+)/) {
+                    my $role = $1;
+                    $args{'Assets'}->RoleLimit(
+                        TYPE      => $role,
+                        FIELD     => $_,
+                        OPERATOR  => ($negative ? '!=' : '='),
+                        VALUE     => $value,
+                        SUBCLAUSE => $role,
+                        ENTRYAGGREGATOR => ($negative ? "AND" : "OR"),
+                        CASESENSITIVE   => 0,
+                    ) for qw/EmailAddress Name/;
+                } elsif ($key =~ /^CF\.\{(.+?)\}$/ or $key =~ /^CF\.(.*)/) {
+                    my $cf = RT::Asset->new( $session{CurrentUser} )
+                      ->LoadCustomFieldByIdentifier( $1 );
+                    next unless $cf->id;
+                    $args{'Assets'}->LimitCustomField(
+                        CUSTOMFIELD => $cf->Id,
+                        OPERATOR    => ($negative ? "NOT LIKE" : "LIKE"),
+                        VALUE       => $value,
+                        ENTRYAGGREGATOR => "AND",
+                    );
+                }
+                else {
+                    next;
+                }
+                push @PassArguments, $key;
+            }
+            push @PassArguments, 'SearchAssets';
+        }
+
+        my $Format = RT->Config->Get('AssetSearchFormat') || q[
+            '<b><a href="__WebPath__/Asset/Display.html?id=__id__">__id__</a></b>/TITLE:#',
+            '<b><a href="__WebPath__/Asset/Display.html?id=__id__">__Name__</a></b>/TITLE:Name',
+            Description,
+            Status,
+        ];
+
+        $ARGSRef->{OrderBy} ||= 'id';
+        if ($ARGSRef->{OrderBy} =~ /^CF\.(?:\{(.*)\}|(.*))$/) {
+            my $name = $1 || $2;
+            my $cf = RT::CustomField->new( $session{'CurrentUser'} );
+            $cf->LoadByNameAndCatalog(
+                Name => $name,
+                Catalog => $args{'Catalog'}->id,
+            );
+            $ARGSRef->{OrderBy} = [ $cf ];
+            $ARGSRef->{Order}   = [ $ARGSRef->{Order} ];
+        }
+
+        push @PassArguments, qw/OrderBy Order Page/;
+
+        return (
+            OrderBy         => 'id',
+            Order           => 'ASC',
+            Rows            => 50,
+            (map { $_ => $ARGSRef->{$_} } grep { defined $ARGSRef->{$_} } @PassArguments),
+            PassArguments   => \@PassArguments,
+            Format          => $Format,
+        );
+    }
 }
 
 {
