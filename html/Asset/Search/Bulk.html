@@ -1,0 +1,140 @@
+<& /Elements/Header, Title => loc("Assets") &>
+<& /Elements/Tabs &>
+
+% $m->callback(CallbackName => 'BeforeActionList', ARGSRef => \%ARGS, Assets => $assets, Actions => \@results);
+
+<& /Elements/ListActions, actions => \@results &>
+
+<form method="post" action="<% RT->Config->Get('WebPath') %>/Asset/Search/Bulk.html" enctype="multipart/form-data" name="BulkUpdate" id="BulkUpdate">
+% foreach my $var ( @{$search{'PassArguments'}} )  {
+<input type="hidden" class="hidden" name="<% $var %>" value="<% $ARGS{$var} || '' %>" />
+% }
+<& /Elements/CollectionList,
+    %search,
+    Collection      => $assets,
+    AllowSorting    => 1,
+    DisplayFormat   => $DisplayFormat,
+    &>
+% if (not $assets->Count) {
+<em><&|/l&>No assets matching search criteria found.</&></em>
+% }
+
+<& /Elements/Submit,
+    Name => 'Update',
+    Label => loc('Update'),
+    CheckboxNameRegex => '/^UpdateAsset(All)?$/',
+    CheckAll => 1, ClearAll => 1,
+&>
+
+<&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics" &>
+<table>
+  <tr class="asset-catalog">
+    <td class="label"><label for="UpdateCatalog"><&|/l&>Catalog</&></label></td>
+    <td><& /Asset/Elements/SelectCatalog, Name => 'UpdateCatalog', Default => $catalog_obj->id, UpdateSession => 0, &></td>
+  </tr>
+  <tr class="asset-name">
+    <td class="label"><label for="UpdateName"><&|/l&>Name</&></label></td>
+    <td><input name="UpdateName" value="<% $ARGS{'Name'}||'' %>" size="50"></td>
+  </tr>
+  <tr class="asset-description">
+    <td class="label"><label for="UpdateDescription"><&|/l&>Description</&></label></td>
+    <td><input name="UpdateDescription" value="<% $ARGS{'Description'}||'' %>" size="75"></td>
+  </tr>
+  <tr class="asset-status">
+    <td class="label"><label for="UpdateStatus"><&|/l&>Status</&></label></td>
+    <td><& /Asset/Elements/SelectStatus, Name => 'UpdateStatus', DefaultValue => 1 &></td>
+  </tr>
+</table>
+</&>
+
+<&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
+<table>
+% for my $rname ( $asset->Roles( ACLOnly => 0 ) ) {
+% my $role = $asset->Role( $rname );
+% if ( $role->{'Single'} ) {
+% my $input = "SetRoleMember-$rname";
+<tr>
+<td class="label"><label for="<% $input %>"><% loc($rname) %></label></td>
+<td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" />
+</tr>
+% } else {
+<tr>
+% my $input = "AddRoleMember-$rname";
+<td class="label"><label for="<% $input %>"><% loc("Add [_1]", loc($rname)) %></label></td>
+<td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" />
+</tr>
+
+<tr>
+% $input = "RemoveRoleMember-$rname";
+<td class="label"><label for="<% $input %>"><% loc("Remove [_1]", loc($rname)) %></label></td>
+<td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" />
+</tr>
+% }
+% }
+</table>
+</&>
+
+% my $cfs = $catalog_obj->AssetCustomFields;
+% if ( $cfs->Count ) {
+<&|/Widgets/TitleBox, title => loc('Edit Custom Fields') &>
+<& /Elements/BulkCustomFields, %ARGS, CustomFields => $cfs &>
+</&>
+% }
+
+<&|/Widgets/TitleBox, title => loc('Edit Links'), color => "#336633"&>
+<& /Elements/BulkLinks, Collection => $assets, %ARGS &>
+</&>
+
+<& /Elements/Submit, Label => loc('Update'), Name => 'Update' &>
+</form>
+
+<%INIT>
+my $catalog_obj = LoadDefaultCatalog($ARGS{'Catalog'} || '');
+$ARGS{'Catalog'} = $catalog_obj->Id;
+
+my $assets = RT::Assets->new($session{CurrentUser});
+my %search = ProcessAssetsSearchArguments(
+    Assets => $assets, Catalog => $catalog_obj, ARGSRef => \%ARGS,
+);
+
+my $DisplayFormat = "'__CheckBox.{UpdateAsset}__',". $search{'Format'};
+$DisplayFormat =~ s/\s*,\s*('?__NEWLINE__'?)/,$1,''/gi;
+
+my $asset = RT::Asset->new( $session{'CurrentUser'} );
+
+delete $ARGS{$_} foreach grep { $ARGS{$_} =~ /^$/ } keys %ARGS;
+
+$DECODED_ARGS->{'UpdateAssetAll'} = 1 unless @UpdateAsset;
+
+my @results;
+if ( $Update ) {
+    my @attributes  = $asset->WritableAttributes;
+    @attributes = grep exists $ARGS{ 'Update'. $_ }, @attributes;
+    my %basics = map { $_ => $ARGS{ 'Update'. $_ } } @attributes;
+
+    foreach my $aid ( @UpdateAsset ) {
+        my $asset = LoadAsset($aid);
+
+        my @tmp_res;
+        push @tmp_res, UpdateRecordObject(
+            Object          => $asset,
+            AttributesRef   => \@attributes,
+            ARGSRef         => \%basics,
+        );
+        push @tmp_res, ProcessRoleMembers( $asset => %ARGS );
+        push @tmp_res, ProcessObjectCustomFieldUpdates( Object => $asset, ARGSRef => \%ARGS );
+        push @tmp_res, ProcessRecordLinks( RecordObj => $asset, RecordId => 'Asset', ARGSRef => \%ARGS );
+        push @tmp_res, ProcessRecordBulkCustomFields( RecordObj => $asset, ARGSRef => \%ARGS );
+        push @results, map { loc( "Asset #[_1]: [_2]", $asset->id, $_ ) } @tmp_res;
+    }
+
+    MaybeRedirectForResults(
+        Actions     => \@results,
+        Arguments   => { map { $_ => $ARGS{$_} } grep { defined $ARGS{$_} } @{$search{'PassArguments'}} },
+    );
+}
+</%INIT>
+<%ARGS>
+$Update => 0
+@UpdateAsset => ()
+</%ARGS>

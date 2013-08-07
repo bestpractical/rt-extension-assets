@@ -2,6 +2,14 @@
 $Path
 </%args>
 <%init>
+
+my $query_string = sub {
+    my %args = @_;
+    my $u    = URI->new();
+    $u->query_form(map { $_ => $args{$_} } sort keys %args);
+    return $u->query;
+};
+
 # Top level Assets menu
 my $assets = Menu->child("tools")->add_before(
                "assets", title => loc("Assets"), path => "/Asset/Search/");
@@ -90,6 +98,23 @@ if ($Path =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /\D/
                 },
             );
         }
+    }
+}
+elsif ($Path =~ m{^/Asset/Search/}) {
+    my %search = map { $_ => $DECODED_ARGS->{$_} }
+        grep defined $DECODED_ARGS->{$_} && length $DECODED_ARGS->{$_},
+        grep /^(?:q|SearchAssets|Name|Description|Catalog|Status|Role\..+|CF\..+|Order(?:By)?|Page)$/,
+        keys %$DECODED_ARGS;
+    if ( $Path =~ /Bulk/) {
+        $page->child('search',
+            title => loc('Show Results'),
+            path => '/Asset/Search/?'. $query_string->(%search),
+        );
+    } else {
+        $page->child('bulk',
+            title => loc('Bulk Update'),
+            path => '/Asset/Search/Bulk.html?'. $query_string->(%search),
+        );
     }
 }
 elsif ($Path =~ m{^/Admin/Global/CustomFields/Catalog-Assets\.html$}) {
