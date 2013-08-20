@@ -162,6 +162,8 @@ RT->AddJavaScript("RTx-Assets.js");
             for my $key (keys %$ARGSRef) {
                 my $value = ref $ARGSRef->{$key} ? $ARGSRef->{$key}[0] : $ARGSRef->{$key};
                 next unless defined $value and length $value;
+
+                my $orig_key = $key;
                 my $negative = ($key =~ s/^!// ? 1 : 0);
                 if ($key =~ /^(Name|Description)$/) {
                     $args{'Assets'}->Limit(
@@ -202,7 +204,7 @@ RT->AddJavaScript("RTx-Assets.js");
                 else {
                     next;
                 }
-                push @PassArguments, $key;
+                push @PassArguments, $orig_key;
             }
             push @PassArguments, 'SearchAssets';
         }
