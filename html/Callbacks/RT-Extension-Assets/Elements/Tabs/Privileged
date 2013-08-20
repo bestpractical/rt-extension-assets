@@ -101,8 +101,9 @@ if ($Path =~ m{^/Asset/} and $DECODED_ARGS->{id} and $DECODED_ARGS->{id} !~ /\D/
     }
 }
 elsif ($Path =~ m{^/Asset/Search/}) {
-    my %search = map { $_ => $DECODED_ARGS->{$_} }
-        grep defined $DECODED_ARGS->{$_} && length $DECODED_ARGS->{$_},
+    my %search = map @{$_},
+        grep defined $_->[1] && length $_->[1],
+        map {ref $DECODED_ARGS->{$_} ? [$_, $DECODED_ARGS->{$_}[0]] : [$_, $DECODED_ARGS->{$_}] }
         grep /^(?:q|SearchAssets|!?(Name|Description|Catalog|Status|Role\..+|CF\..+)|Order(?:By)?|Page)$/,
         keys %$DECODED_ARGS;
     if ( $Path =~ /Bulk/) {
