@@ -15,9 +15,7 @@
   </tr>
   <tr class="asset-status">
     <td class="label"><label for="Status"><&|/l&>Status</&></label></td>
-% my $status;
-% $m->callback( CallbackName => 'DefaultStatus', ARGSRef => \%ARGS, AssetObj => $AssetObj, CatalogObj => $CatalogObj, Status => \$status );
-    <td><& /Asset/Elements/SelectStatus, Name => 'Status', AssetObj => $AssetObj, $status ? ( Default => $status ) : () &></td>
+    <td><& /Asset/Elements/SelectStatus, Name => 'Status', AssetObj => $AssetObj, CatalogObj => $CatalogObj &></td>
   </tr>
 % if ( $AssetObj->id ) {
   <& /Elements/EditCustomFields, Object => $AssetObj, Grouping => 'Basics', InTable => 1 &>
