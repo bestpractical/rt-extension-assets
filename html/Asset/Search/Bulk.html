@@ -92,6 +92,8 @@
 </form>
 
 <%INIT>
+$m->callback(ARGSRef => \%ARGS, CallbackName => 'Initial');
+
 my $catalog_obj = LoadDefaultCatalog($ARGS{'Catalog'} || '');
 $ARGS{'Catalog'} = $catalog_obj->Id;
 
