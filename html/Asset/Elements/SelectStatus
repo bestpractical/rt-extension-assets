@@ -10,7 +10,7 @@ if ($AssetObj and $AssetObj->Id) {
         $ARGS{DefaultValue} = 0;
         $ARGS{Default} ||= $DECODED_ARGS->{Status} || $lifecycle->DefaultOnCreate;
     }
-    $ARGS{Statuses} = [ $lifecycle->Name ? $lifecycle->Transitions("") : $lifecycle->Valid ];
+    $ARGS{Statuses} = [ $AssetObj ? $lifecycle->Transitions("") : $lifecycle->Valid ];
 }
 </%init>
 <%args>

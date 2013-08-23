@@ -58,10 +58,11 @@
 <%args>
 $ShowAll => 0
 $Default => undef
+$UpdateSession => 1
 </%args>
 <%init>
 my $catalog_obj = LoadDefaultCatalog($Default || '');
-if ( $catalog_obj->Id ){
+if ( $UpdateSession && $catalog_obj->Id ){
     $session{'DefaultCatalog'} = $catalog_obj->Id;
     $Default = $catalog_obj->Id;
 }

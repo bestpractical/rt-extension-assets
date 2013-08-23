@@ -3,91 +3,19 @@ my $catalog_obj = LoadDefaultCatalog($ARGS{'Catalog'} || '');
 $ARGS{'Catalog'} = $catalog_obj->Id;
 
 my $assets = RT::Assets->new($session{CurrentUser});
+my %search = ProcessAssetsSearchArguments(
+    Assets => $assets, Catalog => $catalog_obj, ARGSRef => \%ARGS,
+);
 
-my @PassArguments;
-
-if ($ARGS{q}) {
-    $assets->SimpleSearch( Term => $ARGS{q} );
-    push @PassArguments, "q";
-} elsif ( $ARGS{'SearchAssets'} ){
-    for my $key (keys %ARGS) {
-        my $value = ref $ARGS{$key} ? $ARGS{$key}[0] : $ARGS{$key};
-        next unless defined $value and length $value;
-        my $negative = ($key =~ s/^!// ? 1 : 0);
-        if ($key =~ /^(Name|Description)$/) {
-            $assets->Limit(
-                FIELD => $key,
-                OPERATOR => ($negative ? 'NOT LIKE' : 'LIKE'),
-                VALUE => $value,
-                ENTRYAGGREGATOR => "AND",
-            );
-        } elsif ($key =~ /^(Catalog|Status)$/) {
-            $assets->Limit(
-                FIELD => $key,
-                OPERATOR => ($negative ? '!=' : '='),
-                VALUE => $value,
-                ENTRYAGGREGATOR => "AND",
-            );
-        } elsif ($key =~ /^Role\.(.+)/) {
-            my $role = $1;
-            $assets->RoleLimit(
-                TYPE      => $role,
-                FIELD     => $_,
-                OPERATOR  => ($negative ? '!=' : '='),
-                VALUE     => $value,
-                SUBCLAUSE => $role,
-                ENTRYAGGREGATOR => ($negative ? "AND" : "OR"),
-                CASESENSITIVE   => 0,
-            ) for qw/EmailAddress Name/;
-        } elsif ($key =~ /^CF\.\{(.+?)\}$/ or $key =~ /^CF\.(.*)/) {
-            my $cf = RT::Asset->new( $session{CurrentUser} )
-              ->LoadCustomFieldByIdentifier( $1 );
-            next unless $cf->id;
-            $assets->LimitCustomField(
-                CUSTOMFIELD => $cf->Id,
-                OPERATOR    => ($negative ? "NOT LIKE" : "LIKE"),
-                VALUE       => $value,
-                ENTRYAGGREGATOR => "AND",
-            );
-        }
-        push @PassArguments, $key;
-    }
-}
-
-my $Format = RT->Config->Get('AssetSearchFormat') || q[
-    '<b><a href="__WebPath__/Asset/Display.html?id=__id__">__id__</a></b>/TITLE:#',
-    '<b><a href="__WebPath__/Asset/Display.html?id=__id__">__Name__</a></b>/TITLE:Name',
-    Description,
-    Status,
-];
-
-$ARGS{OrderBy} ||= 'id';
-if ($ARGS{OrderBy} =~ /^CF\.(?:\{(.*)\}|(.*))$/) {
-    my $name = $1 || $2;
-    my $cf = RT::CustomField->new( $session{'CurrentUser'} );
-    $cf->LoadByNameAndCatalog(
-        Name => $name,
-        Catalog => $catalog_obj->id,
-    );
-    $ARGS{OrderBy} = [ $cf ];
-    $ARGS{Order}   = [ $ARGS{Order} ];
-}
-
-push @PassArguments, qw/OrderBy Order Page/;
 </%init>
 <& /Elements/Header, Title => loc("Assets") &>
 <& /Elements/Tabs &>
 
 % if ( $ARGS{'SearchAssets'} or $ARGS{q} ){
 <& /Elements/CollectionList,
-    OrderBy         => 'id',
-    Order           => 'ASC',
-    Rows            => 50,
-    (map {+($_ => $ARGS{$_})} grep {defined $ARGS{$_}} @PassArguments),
+    %search,
     Collection      => $assets,
-    Format          => $Format,
     AllowSorting    => 1,
-    PassArguments   => \@PassArguments,
     &>
 %   if (not $assets->Count) {
 <em><&|/l&>No assets matching search criteria found.</&></em>
