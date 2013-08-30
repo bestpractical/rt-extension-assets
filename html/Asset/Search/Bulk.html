@@ -55,19 +55,19 @@
 % my $input = "SetRoleMember-$rname";
 <tr>
 <td class="label"><label for="<% $input %>"><% loc($rname) %></label></td>
-<td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" />
+<td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" /></td>
 </tr>
 % } else {
 <tr>
 % my $input = "AddRoleMember-$rname";
 <td class="label"><label for="<% $input %>"><% loc("Add [_1]", loc($rname)) %></label></td>
-<td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" />
+<td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" /></td>
 </tr>
 
 <tr>
 % $input = "RemoveRoleMember-$rname";
 <td class="label"><label for="<% $input %>"><% loc("Remove [_1]", loc($rname)) %></label></td>
-<td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" />
+<td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" /></td>
 </tr>
 % }
 % }
