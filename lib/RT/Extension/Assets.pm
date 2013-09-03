@@ -96,10 +96,21 @@ RT->AddJavaScript("RTx-Assets.js");
                 );
                 push @results, $msg;
             }
-            elsif ($arg =~ /^RemoveRoleMember-(.+)$/) {
-                my ($ok, $msg) = $object->DeleteRoleMember(
-                    Type        => $1,
-                    PrincipalId => $ARGS{$arg},
+            elsif ($arg =~ /^(Add|Remove)RoleMember-(.+)$/) {
+                my $role = $2;
+                my $method = $1 eq 'Add'? 'AddRoleMember' : 'DeleteRoleMember';
+
+                my $is = 'User';
+                if ( ($ARGS{"$arg-Type"}||'') =~ /^(User|Group)$/ ) {
+                    $is = $1;
+                }
+
+                my ($ok, $msg) = $object->$method(
+                    Type        => $role,
+                    ($ARGS{$arg} =~ /\D/
+                        ? ($is => $ARGS{$arg})
+                        : (PrincipalId => $ARGS{$arg})
+                    ),
                 );
                 push @results, $msg;
             }
