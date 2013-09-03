@@ -3,8 +3,8 @@ $Object
 </%args>
 <div class="add-user">
 <h3>Add a person</h3>
-<& SelectRoleType, Object => $Object, Name => "AddRoleMember-User-Type" &>
-<input type="text" name="AddRoleMember-User"
+<& SelectRoleType, Object => $Object, Name => "AddUserRoleMember-Role" &>
+<input type="text" name="AddUserRoleMember"
        data-autocomplete="Users"
        data-autocomplete-return="Name"
        placeholder="<% loc("Find a user...") %>">
@@ -12,8 +12,8 @@ $Object
 
 <div class="add-group">
 <h3>Add a group</h3>
-<& SelectRoleType, Object => $Object, Name => "AddRoleMember-Group-Type" &>
-<input type="text" name="AddRoleMember-Group"
+<& SelectRoleType, Object => $Object, Name => "AddGroupRoleMember-Role" &>
+<input type="text" name="AddGroupRoleMember"
        data-autocomplete="Groups"
        data-autocomplete-return="Name"
        placeholder="<% loc("Find a group...") %>">

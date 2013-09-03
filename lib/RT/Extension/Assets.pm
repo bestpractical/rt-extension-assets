@@ -76,11 +76,11 @@ RT->AddJavaScript("RTx-Assets.js");
         my @results;
 
         for my $arg (keys %ARGS) {
-            if ($arg =~ /^AddRoleMember-(User|Group)$/) {
-                next unless $ARGS{$arg} and $ARGS{"$arg-Type"};
+            if ($arg =~ /^Add(User|Group)RoleMember$/) {
+                next unless $ARGS{$arg} and $ARGS{"$arg-Role"};
 
                 my ($ok, $msg) = $object->AddRoleMember(
-                    Type => $ARGS{"$arg-Type"},
+                    Type => $ARGS{"$arg-Role"},
                     $1   => $ARGS{$arg},
                 );
                 push @results, $msg;
