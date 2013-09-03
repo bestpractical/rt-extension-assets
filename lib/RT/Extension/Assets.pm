@@ -114,6 +114,20 @@ RT->AddJavaScript("RTx-Assets.js");
                 );
                 push @results, $msg;
             }
+            elsif ($arg =~ /^RemoveAllRoleMembers-(.+)$/) {
+                my $role = $1;
+                my $group = $object->RoleGroup($role);
+                next unless $group->id;
+
+                my $gms = $group->MembersObj;
+                while ( my $gm = $gms->Next ) {
+                    my ($ok, $msg) = $object->DeleteRoleMember(
+                        Type        => $role,
+                        PrincipalId => $gm->MemberId,
+                    );
+                    push @results, $msg;
+                }
+            }
         }
         return @results;
     }
