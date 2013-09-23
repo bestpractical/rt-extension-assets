@@ -337,9 +337,7 @@ May need root permissions
 
 Add this line:
 
-    Set(@Plugins, qw(RT::Extension::Assets));
-
-or add C<RT::Extension::Assets> to your existing C<@Plugins> line.
+    Plugin( "RT::Extension::Assets" );
 
 =item make initdb
 

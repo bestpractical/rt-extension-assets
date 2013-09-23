@@ -10,9 +10,7 @@ INSTALLATION
     Edit your /opt/rt4/etc/RT_SiteConfig.pm
         Add this line:
 
-            Set(@Plugins, qw(RT::Extension::Assets));
-
-        or add "RT::Extension::Assets" to your existing @Plugins line.
+            Plugin( "RT::Extension::Assets" );
 
     make initdb
         Only run this the first time you install this module.
