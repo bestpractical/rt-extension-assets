@@ -333,6 +333,14 @@ RT->AddJavaScript("RTx-Assets.js");
 
 May need root permissions
 
+=item Edit your /opt/rt4/etc/RT_SiteConfig.pm
+
+Add this line:
+
+    Set(@Plugins, qw(RT::Extension::Assets));
+
+or add C<RT::Extension::Assets> to your existing C<@Plugins> line.
+
 =item make initdb
 
 Only run this the first time you install this module.
@@ -342,14 +350,6 @@ in your database.
 
 If you are upgrading this module, check for upgrading instructions
 in case changes need to be made to your database.
-
-=item Edit your /opt/rt4/etc/RT_SiteConfig.pm
-
-Add this line:
-
-    Set(@Plugins, qw(RT::Extension::Assets));
-
-or add C<RT::Extension::Assets> to your existing C<@Plugins> line.
 
 =item Configure portlets for RT's Homepage and User Summary
 

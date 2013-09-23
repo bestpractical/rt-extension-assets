@@ -7,6 +7,13 @@ INSTALLATION
     make install
         May need root permissions
 
+    Edit your /opt/rt4/etc/RT_SiteConfig.pm
+        Add this line:
+
+            Set(@Plugins, qw(RT::Extension::Assets));
+
+        or add "RT::Extension::Assets" to your existing @Plugins line.
+
     make initdb
         Only run this the first time you install this module.
 
@@ -15,13 +22,6 @@ INSTALLATION
 
         If you are upgrading this module, check for upgrading instructions
         in case changes need to be made to your database.
-
-    Edit your /opt/rt4/etc/RT_SiteConfig.pm
-        Add this line:
-
-            Set(@Plugins, qw(RT::Extension::Assets));
-
-        or add "RT::Extension::Assets" to your existing @Plugins line.
 
     Configure portlets for RT's Homepage and User Summary
         If you would like the MyAssets or FindAsset portlets to be available
