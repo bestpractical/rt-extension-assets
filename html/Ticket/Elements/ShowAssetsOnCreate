@@ -98,7 +98,8 @@ $m->callback(
 </%init>
 <&| /Widgets/TitleBox,
     title => loc('Assets'),
-    class => 'ticket-assets'
+    class => 'ticket-assets',
+    title_class => "inverse",
     &>
 
 % $m->callback( CallbackName => "Start", Queue => $QueueObj, Assets => $assets );

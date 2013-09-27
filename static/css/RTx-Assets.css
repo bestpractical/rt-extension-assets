@@ -24,25 +24,6 @@
 .asset-links    .titlebox .titlebox-title .left { background-color: #316531; }
 .ticket-assets  .titlebox .titlebox-title .left { background-color: #316531; }
 
-.asset-basics   .titlebox-title .left, .asset-basics    .titlebox-title .left a,
-.asset-info-cfs .titlebox-title .left, .asset-info-cfs  .titlebox-title .left a,
-.asset-people   .titlebox-title .left, .asset-people    .titlebox-title .left a,
-.asset-dates    .titlebox-title .left, .asset-dates     .titlebox-title .left a,
-.asset-links    .titlebox-title .left, .asset-links     .titlebox-title .left a,
-.ticket-assets  .titlebox-title .left, .ticket-assets   .titlebox-title .left a {
-    color: white;
-}
-
-.aileron .asset-basics      .titlebox-title .widget a,
-.aileron .asset-info-cfs    .titlebox-title .widget a,
-.aileron .asset-people      .titlebox-title .widget a,
-.aileron .asset-dates       .titlebox-title .widget a,
-.aileron .asset-links       .titlebox-title .widget a,
-.aileron .ticket-assets     .titlebox-title .widget a {
-    /* lighter color for the toggle arrow sprite, just like aileron/ticket.css */
-    background-position: center -7px;
-}
-
 /* People display */
 #comp-Asset-Display .asset-people table {
     width: 100%;

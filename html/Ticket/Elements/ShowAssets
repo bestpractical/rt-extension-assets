@@ -106,7 +106,8 @@ $m->callback(
 </%init>
 <&| /Widgets/TitleBox,
     title => loc('Assets'),
-    class => 'ticket-assets'
+    class => 'ticket-assets',
+    title_class => "inverse",
     &>
 
 <form action="<% RT->Config->Get("WebPath") %>/Ticket/Display.html" method="POST" enctype="multipart/form-data">

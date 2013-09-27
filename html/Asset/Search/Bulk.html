@@ -73,7 +73,7 @@
     CheckAll => 1, ClearAll => 1,
 &>
 
-<&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics" &>
+<&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics", title_class => "inverse" &>
 <table>
   <tr class="asset-catalog">
     <td class="label"><label for="UpdateCatalog"><&|/l&>Catalog</&></label></td>
@@ -94,7 +94,7 @@
 </table>
 </&>
 
-<&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
+<&| /Widgets/TitleBox, title => loc("People"), class => "asset-people", title_class => "inverse" &>
 <table>
 % for my $rname ( $asset->Roles( ACLOnly => 0 ) ) {
 % my $role = $asset->Role( $rname );

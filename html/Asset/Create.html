@@ -63,11 +63,11 @@
 <div id="Asset-Create-basics">
 <a name="basics"></a>
 
-  <&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics" &>
+  <&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics", title_class => "inverse" &>
     <& Elements/EditBasics, %ARGS, AssetObj => $asset, CatalogObj => $catalog &>
   </&>
 
-  <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
+  <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people", title_class => "inverse" &>
     <& Elements/EditPeople, %ARGS, AssetObj => $asset &>
   </&>
 
@@ -75,7 +75,7 @@
 
 <div id="Asset-Create-details">
 <a name="details"></a>
-  <&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links" &>
+  <&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links", title_class => "inverse" &>
     <& /Elements/AddLinks,
         Object          => $asset,
         CustomFields    => $catalog->AssetCustomFields &>
@@ -83,6 +83,7 @@
 
   <& /Elements/EditCustomFieldCustomGroupings,
         Object => $asset,
+        TitleBoxARGS => { title_class => "inverse" },
         CustomFieldGenerator => sub { $catalog->AssetCustomFields } &>
 </div>
 

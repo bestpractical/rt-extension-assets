@@ -66,7 +66,7 @@ for my $section (@sections) {
 }
 </%init>
 % for my $section (@sections) {
-<&| /Widgets/TitleBox, title => loc($section), title_href => $link{$section}, class => "asset-\L$section" &>
+<&| /Widgets/TitleBox, title => loc($section), title_href => $link{$section}, title_class => "inverse", class => "asset-\L$section" &>
     <& "Show$section", AssetObj => $AssetObj &>
 </&>
 % }
@@ -74,4 +74,5 @@ for my $section (@sections) {
 <& /Elements/ShowCustomFieldCustomGroupings,
      Object => $AssetObj,
      title_href => RT->Config->Get("WebPath") . "/Asset/ModifyCFs.html",
+     TitleBoxARGS => { title_class => "inverse" },
  &>

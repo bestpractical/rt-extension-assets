@@ -55,7 +55,7 @@
 <form method="post" enctype="multipart/form-data" id="ModifyAssetPeople" action="ModifyPeople.html">
   <input type="hidden" name="id" value="<% $asset->id %>">
 
-  <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people" &>
+  <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people", title_class => "inverse" &>
     <table width="100%" class="edit">
       <tr>
         <td width="30%"><& /Elements/Assets/EditPeople, %ARGS, Object => $asset &></td>
