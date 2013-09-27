@@ -139,8 +139,7 @@
 </form>
 
 <%INIT>
-my @results;
-$m->callback(ARGSRef => \%ARGS, Results => \@results, CallbackName => 'Initial');
+$m->callback(ARGSRef => \%ARGS, CallbackName => 'Initial');
 
 my $catalog_obj = LoadDefaultCatalog($ARGS{'Catalog'} || '');
 $ARGS{'Catalog'} = $catalog_obj->Id;
@@ -159,7 +158,8 @@ delete $ARGS{$_} foreach grep { $ARGS{$_} =~ /^$/ } keys %ARGS;
 
 $DECODED_ARGS->{'UpdateAssetAll'} = 1 unless @UpdateAsset;
 
-if ( $ARGS{Update} ) {
+my @results;
+if ( $Update ) {
     my @attributes  = $asset->WritableAttributes;
     @attributes = grep exists $ARGS{ 'Update'. $_ }, @attributes;
     my %basics = map { $_ => $ARGS{ 'Update'. $_ } } @attributes;
@@ -187,5 +187,6 @@ if ( $ARGS{Update} ) {
 }
 </%INIT>
 <%ARGS>
+$Update => 0
 @UpdateAsset => ()
 </%ARGS>
