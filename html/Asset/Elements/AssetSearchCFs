@@ -45,7 +45,7 @@
 %# those contributions and any derivatives thereof.
 %#
 %# END BPS TAGGED BLOCK }}}
-<&| /Widgets/TitleBox, title => $Grouping ? loc($Grouping) : loc('Custom Fields'), hide_empty => 1 &>
+<&| /Widgets/TitleBox, title => $Grouping ? loc($Grouping) : loc('Custom Fields'), hide_empty => 1, class=>'asset-search-grouping asset-search-cfs'  &>
 % my $CFs = RT::CustomFields->new( $session{CurrentUser} );
 % $CFs->LimitToCatalog( $CatalogObj->Id );
 % $CFs->LimitToGrouping( "RT::Asset" => $Grouping );

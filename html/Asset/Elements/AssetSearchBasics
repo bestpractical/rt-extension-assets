@@ -45,7 +45,7 @@
 %# those contributions and any derivatives thereof.
 %#
 %# END BPS TAGGED BLOCK }}}
-<&| /Widgets/TitleBox, title => 'Basics' &>
+<&| /Widgets/TitleBox, title => 'Basics', class=>'asset-search-grouping asset-search-basics' &>
 <table>
 <tr class="asset-catalog"><td class="label"><label for="Catalog"><&|/l&>Catalog</&></label></td>
     <td class="value" colspan="3">
