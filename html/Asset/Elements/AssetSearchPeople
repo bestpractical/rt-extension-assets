@@ -54,7 +54,7 @@
       <input type="text" id="Role.<% $role %>" name="Role.<% $role %>"
              data-autocomplete="Users" value="<% $ARGS{"Role.$role"} || '' %>" />
   </td>
-  <td class="label"><label for="!Role.<% $role %>"><&|/l&>but not</&></td>
+  <td class="label"><label for="!Role.<% $role %>"><&|/l&>not</&></td>
   <td class="value">
       <input type="text" id="!Role.<% $role %>" name="!Role.<% $role %>"
              data-autocomplete="Users" value="<% $ARGS{"!Role.$role"} || '' %>" />
@@ -71,7 +71,7 @@
 <tr>
   <td class="label"><label for="<% $name %>"><% $cf->Name %></label></td>
   <td class="value"><& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => $name, Default => $value &></td>
-  <td class="label"><label for="!<% $name %>"><&|/l&>but not</&></label></td>
+  <td class="label"><label for="!<% $name %>"><&|/l&>not</&></label></td>
   <td class="value"><& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => "!$name", Default => $negval &></td>
 </tr>
 % }

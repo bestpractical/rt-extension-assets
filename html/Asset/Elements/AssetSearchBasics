@@ -59,11 +59,11 @@
 </td></tr>
 <tr class="asset-name"><td class="label"><label for="Name"><&|/l&>Name</&></label></td>
     <td class="value"><input type="text" id="Name" name="Name" value="<% $ARGS{Name} || ''%>" /></td>
-    <td class="label"><label for="!Name"><&|/l&>but not</&></td>
+    <td class="label"><label for="!Name"><&|/l&>not</&></td>
     <td class="value"><input type="text" id="!Name" name="!Name" value="<% $ARGS{"!Name"} || ''%>" /></td></tr>
 <tr class="asset-description"><td class="label"><label for="Description"><&|/l&>Description</&></label></td>
     <td class="value"><input type="text" id="Description" name="Description" value="<% $ARGS{Description} || ''%>" /></td>
-    <td class="label"><label for="!Description"><&|/l&>but not</&></td>
+    <td class="label"><label for="!Description"><&|/l&>not</&></td>
     <td class="value"><input type="text" id="!Description" name="!Description" value="<% $ARGS{"!Description"} || ''%>" /></td></tr>
 % my $CFs = RT::CustomFields->new( $session{CurrentUser} );
 % $CFs->LimitToCatalog( $CatalogObj->Id );
@@ -75,7 +75,7 @@
 <tr>
   <td class="label"><label for="<% $name %>"><% $cf->Name %></label></td>
   <td class="value"><& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => $name, Default => $value &></td>
-  <td class="label"><label for="!<% $name %>"><&|/l&>but not</&></label></td>
+  <td class="label"><label for="!<% $name %>"><&|/l&>not</&></label></td>
   <td class="value"><& /Elements/SelectCustomFieldValue, CustomField => $cf, Name => "!$name", Default => $negval &></td>
 </tr>
 % }
