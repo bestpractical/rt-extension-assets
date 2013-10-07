@@ -15,6 +15,10 @@
     text-align: right;
 }
 
+.collection-as-table td {
+    white-space:nowrap;
+}
+
 /* Colors */
 
 .asset-basics   .titlebox .titlebox-title .left,
