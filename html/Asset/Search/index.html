@@ -74,7 +74,7 @@ my %search = ProcessAssetsSearchArguments(
 <& /Asset/Elements/AssetSearchPeople, %ARGS, CatalogObj => $catalog_obj &>
 <& /Elements/Submit, Label => loc('Search'), Name => 'SearchAssets' &>
 
-% foreach my $group ( RT::CustomField->CustomGroupings( "RT::Asset" ), '' ) {
+% foreach my $group ( 'Dates', 'Links', RT::CustomField->CustomGroupings( "RT::Asset" ), '' ) {
     <& /Asset/Elements/AssetSearchCFs, %ARGS, Grouping => $group,
        CatalogObj => $catalog_obj &>
 % }
