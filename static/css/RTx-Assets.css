@@ -73,6 +73,9 @@
 }
 
 /* Asset summary */
+.ticket-assets form {
+    display: inherit;
+}
 
 .ticket-assets .related-tickets {
     margin-top: 1em;
