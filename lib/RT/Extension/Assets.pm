@@ -360,6 +360,7 @@ RT->AddJavaScript("RTx-Assets.js");
           if defined $catalog;
 
         $self->LimitToLookupType( RT::Asset->CustomFieldLookupType );
+        $self->ApplySortOrder;
 
         unless ($self->ContextObject) {
             my $obj = RT::Catalog->new( $self->CurrentUser );
