@@ -54,8 +54,12 @@ my %search = ProcessAssetsSearchArguments(
     Assets => $assets, Catalog => $catalog_obj, ARGSRef => \%ARGS,
 );
 
+my $title = ( $ARGS{'SearchAssets'} or $ARGS{q} ) ?
+      loc("Found [quant,_1,asset]",$assets->Count)
+    : loc("Assets");
+
 </%init>
-<& /Elements/Header, Title => loc("Assets") &>
+<& /Elements/Header, Title => $title &>
 <& /Elements/Tabs &>
 
 % if ( $ARGS{'SearchAssets'} or $ARGS{q} ){
