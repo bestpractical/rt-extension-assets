@@ -76,11 +76,17 @@ $global_cfs->child("assets", title => loc("Assets"), path => "/Admin/Global/Cust
 my $config = Menu()->child("admin");
 if ($config) {
     my $assets   = $config->child("tools")->add_before("assets", title => loc("Assets"), path => "/Admin/Assets/");
-    my $catalogs = $assets->child("catalogs", title => loc("Catalogs"), path => "/Admin/Assets/Catalogs/");
+    my $catalogs = $assets->child("catalogs",
+        title => loc("Catalogs"),
+        description => loc("Modify asset catalogs"),
+        path => "/Admin/Assets/Catalogs/");
     $catalogs->child("select", title => loc("Select"), path => $catalogs->path);
     $catalogs->child("create", title => loc("Create"), path => "Create.html");
 
-    my $cfs = $assets->child("cfs", title => loc("Custom Fields"), path => "/Admin/CustomFields/?Type=" . RT::Asset->CustomFieldLookupType);
+    my $cfs = $assets->child("cfs",
+        title => loc("Custom Fields"),
+        description => loc("Modify asset custom fields"),
+        path => "/Admin/CustomFields/?Type=" . RT::Asset->CustomFieldLookupType);
     $cfs->child("select", title => loc("Select"), path => $cfs->path);
     $cfs->child("create", title => loc("Create"), path => "/Admin/CustomFields/Modify.html?Create=1&LookupType=" . RT::Asset->CustomFieldLookupType);
 }
