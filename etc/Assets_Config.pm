@@ -72,7 +72,7 @@ last-selected catalog thereafter.
 
 =cut
 
-Set($DefaultCatalog, 'General assets');
+# Set($DefaultCatalog, 'General assets');
 
 =item C<$AssetSearchFields>
 
