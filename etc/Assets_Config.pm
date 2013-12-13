@@ -43,7 +43,9 @@ Set(%Lifecycles,
             stolen    => [qw(allocated)],
             deleted   => [qw(allocated)],
         },
-
+        rights => {
+            '* -> *'        => 'ModifyAsset',
+        },
         actions => {
             '* -> allocated' => { label => "Allocate" },
             '* -> in-use'    => { label => "Now in-use" },
