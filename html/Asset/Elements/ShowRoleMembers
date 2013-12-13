@@ -56,7 +56,11 @@
 %     if ($Note) {
  <span class="note"><% $Note %></span>
 %     }
-</a><a class="user-summary" href="<%RT->Config->Get('WebPath')%>/User/Summary.html?id=<% $user->Id %>">User Summary</a></h3>
+</a>
+% if ( $session{'CurrentUser'}->Privileged ){
+<a class="user-summary" href="<%RT->Config->Get('WebPath')%>/User/Summary.html?id=<% $user->Id %>">User Summary</a>
+% }
+</h3>
 % }
   <div class="details">
 <& /User/Elements/UserInfo,
