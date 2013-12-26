@@ -49,12 +49,12 @@ to RT's pages. MyAssets and FindAsset portlets are available for placement on
 RT at a Glance or in dashboards and a UserAssets portlet is available for the
 user summary pages.
 
-These portlets are fairly self-explanitory and you can add them by finding
+These portlets are fairly self-explanatory and you can add them by finding
 C<$HomepageComponents> and C<@UserSummaryPortlets> respectively in
 F<RT_Config.pm>, copying to F<RT_SiteConfig.pm>, and adding the portlets you
 want. There are also examples in the tutorial sample configuration file. Note
 that C<$HomepageComponents> makes the portlets available, but doesn't put them
-on RT at a Glance. To add them, just click the Edit link on the upper righthand
+on RT at a Glance. To add them, just click the Edit link on the upper right-hand
 corner of the homepage. C<@UserSummaryPortlets> does automatically add the
 "Assigned Assets" portlet to the User Summary page. It will appear based on the
 position in the configuration, so just place it in the list where you want it
