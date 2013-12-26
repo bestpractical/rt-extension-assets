@@ -41,8 +41,8 @@ extensions, first add C<RT::Extension::Assets> to your C<@Plugins> line.
 
 There are a few configuration options you might set before starting. Assets 
 offers a C<$DefaultCatalog> feature that works similar to RT's 
-L<DefaultQueue|http://bestpractical.com/docs/rt/latest/RT_Config.html#DefaultQue
-ue>, but you can probably skip it for now since you don't have any catalogs yet.
+L<DefaultQueue|http://bestpractical.com/docs/rt/latest/RT_Config.html#DefaultQueue>,
+but you can probably skip it for now since you don't have any catalogs yet.
 
 More interesting are some optional portlets you can activate to add asset data 
 to RT's pages. MyAssets and FindAsset portlets are available for placement on 
