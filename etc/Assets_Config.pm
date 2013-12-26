@@ -43,7 +43,9 @@ Set(%Lifecycles,
             stolen    => [qw(allocated)],
             deleted   => [qw(allocated)],
         },
-
+        rights => {
+            '* -> *'        => 'ModifyAsset',
+        },
         actions => {
             '* -> allocated' => { label => "Allocate" },
             '* -> in-use'    => { label => "Now in-use" },
@@ -72,7 +74,7 @@ last-selected catalog thereafter.
 
 =cut
 
-Set($DefaultCatalog, 'General assets');
+# Set($DefaultCatalog, 'General assets');
 
 =item C<$AssetSearchFields>
 

@@ -65,7 +65,7 @@ if ($Path =~ m{^/SelfService/Asset/} and $DECODED_ARGS->{id}) {
 
     if (Menu->child("new")) {
         my $actions = $page->child("actions", title => loc("Actions"));
-        $actions->child("create-linked-ticket", title => loc("Create linked ticket"), path => "/SelfService/Asset/CreateLinkedTicket.html?id=$id");
+        $actions->child("create-linked-ticket", title => loc("Create linked ticket"), path => "/SelfService/Asset/CreateLinkedTicket.html?Asset=$id");
     }
 }
 </%init>
