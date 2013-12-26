@@ -182,9 +182,8 @@ F<RT_SiteConfig.pm>:
 
     Set(%CustomFieldGroupings,
         'RT::Asset' => {
-            'Asset Details' => ['Serial Number', 'Manufacturer', 'Type',
-                'Tracking Number'],
-            'Dates'                 => ['Support Expiration', 'Issue Date'],
+            'Asset Details' => ['Serial Number', 'Manufacturer', 'Type', 'Tracking Number'],
+            'Dates'         => ['Support Expiration', 'Issue Date'],
         },
     );
 
