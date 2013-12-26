@@ -325,4 +325,4 @@ help you track assets. There are many more features you'll find as you explore
 the assets interface, like stacking multiple assets on a single ticket, bulk 
 update features similar to tickets, and the search interface. Have fun!
 
-1;
+=cut
