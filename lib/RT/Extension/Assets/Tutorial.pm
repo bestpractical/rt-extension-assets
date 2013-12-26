@@ -17,7 +17,7 @@ get a feel for all of the administrative controls. If you want to get a jump
 start, the files to set up this basic configuration are provided in the
 L<RT::Extension::Assets> distribution in the F<etc> directory. For
 configuration, look in F<etc/Tutorial_Configuration.txt>. You can copy all or
-part and paste it in your F<RT_SiteConfig.pm>.
+part of it and paste it into your F<RT_SiteConfig.pm>.
 
 To load the test catalog, custom fields, and users, follow the
 installation instructions in L<RT::Extension::Assets/INSTALLATION>, then
@@ -30,7 +30,7 @@ This will change the default catalog name, create some users, and give those
 users asset permissions. Only asset rights are granted, so you need to grant
 additional rights if you want to experiment with creating tickets and linking
 assets. The initial user passwords are 'password'. You should only run this on
-a test RT instance as it is not intended to be used for configuring a
+a test RT instance, as it is not intended to be used for configuring a
 production system.
 
 =head1 Getting Started
