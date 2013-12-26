@@ -417,6 +417,8 @@ RT_SiteConfig.pm and add UserAssets to the list.
 
 =back
 
+=encoding utf8
+
 =head1 CONFIGURATION
 
 =head2 C<$DefaultCatalog>

@@ -285,10 +285,3 @@ LICENSE AND COPYRIGHT
 
       The GNU General Public License, Version 2, June 1991
 
-POD ERRORS
-    Hey! The above document had some coding errors, which are explained
-    below:
-
-    Around line 451:
-        Non-ASCII character seen before =encoding in '→'. Assuming UTF-8
-
