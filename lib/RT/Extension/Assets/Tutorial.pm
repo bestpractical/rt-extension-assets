@@ -19,9 +19,9 @@ L<RT::Extension::Assets> distribution in the F<etc> directory. For
 configuration, look in F<etc/Tutorial_Configuration.txt>. You can copy all or
 part and paste it in your F<RT_SiteConfig.pm>.
 
-To load the test catalog, custom fields, and users, add
-C<RT::Extension::Assets> to your C<@Plugins> line after installing, then run
-the following from your RT directory:
+To load the test catalog, custom fields, and users, follow the
+installation instructions in L<RT::Extension::Assets/INSTALLATION>, then
+run the following from your RT directory:
 
     sbin/rt-setup-database --action insert --datafile \
       local/plugins/RT-Extension-Assets/etc/tutorialdata
