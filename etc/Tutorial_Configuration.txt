@@ -1,0 +1,24 @@
+# Configuration for the assets tutorial.
+# Copy and paste into your RT_SiteConfig.pm to test.
+
+Set(
+    $HomepageComponents,
+    [
+        qw(QuickCreate Quicksearch MyAdminQueues MySupportQueues MyReminders RefreshHomepage Dashboards SavedSearches FindUser MyAssets FindAsset) # loc_qw
+    ]
+);
+
+# Move UserAssets to the location you want on the User Summary page
+
+Set(@UserSummaryPortlets, (qw/ExtraInfo CreateTicket UserAssets ActiveTickets InactiveTickets/));
+
+# See the CustomFieldGroupings docs in RT_Config.pm for more info.
+# http://bestpractical.com/docs/rt/latest/RT_Config.html
+
+Set(%CustomFieldGroupings,
+    'RT::Asset' => {
+        'Asset Details' => ['Serial Number', 'Manufacturer', 'Type',
+            'Tracking Number'],
+        'Dates'         => ['Support Expiration', 'Issue Date'],
+    },
+);
