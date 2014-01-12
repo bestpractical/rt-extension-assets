@@ -45,7 +45,7 @@
 %# those contributions and any derivatives thereof.
 %#
 %# END BPS TAGGED BLOCK }}}
-<&| /Widgets/TitleBox, title => 'People' &>
+<&| /Widgets/TitleBox, class => "asset-search-people", title => 'People' &>
 <table>
 % for my $role (RT::Asset->Roles) {
 <tr class="asset-role-<% CSSClass($role) %>">

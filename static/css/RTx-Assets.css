@@ -181,6 +181,8 @@
 	    padding: inherit;
 	}
 
+    .asset-bulk-people tr,
+    .asset-search-people tr,
     .asset-bulk-basics tr,
 	.asset-search-basics tr {
 	    width: 49%;
@@ -188,6 +190,8 @@
 	    white-space: nowrap;
 	}
 
+    .asset-bulk-people tr>td,
+    .asset-search-people tr>td,
     .asset-bulk-basics tr>td,
 	.asset-search-basics tr>td {
 	    display:inline-block;

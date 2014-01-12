@@ -94,7 +94,7 @@
 </table>
 </&>
 
-<&| /Widgets/TitleBox, title => loc("People"), class => "asset-people", title_class => "inverse" &>
+<&| /Widgets/TitleBox, title => loc("People"), class => "asset-people asset-bulk-people", title_class => "inverse" &>
 <table>
 % for my $rname ( $asset->Roles( ACLOnly => 0 ) ) {
 % my $role = $asset->Role( $rname );
