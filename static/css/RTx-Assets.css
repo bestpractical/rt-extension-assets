@@ -124,7 +124,7 @@
 	.edit-custom-fields tr,
     #ModifyAsset .asset-basics tr {
 	    display: inline-block;
-	    width: 50%;
+	    width: 49%;
 
 	}
 	.edit-custom-fields tr td.cflabel,
