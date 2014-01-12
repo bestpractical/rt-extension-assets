@@ -164,8 +164,9 @@
     padding-left: 1em;
 }
 
-/* On a wide screen, use two columns for search criteria */
+/* On a wide screen, use two columns for search/bulk criteria */
 @media (min-width:1150px){
+    .asset-bulk-grouping.asset-bulk-cfs,
 	.asset-search-grouping.asset-search-cfs {
 
 	    display: inline-block;
@@ -173,18 +174,21 @@
 	    padding-right: 1em;
 	    vertical-align: top;
 	}
+    .titlebox.asset-bulk-grouping.asset-bulk-cfs,
 	.titlebox.asset-search-grouping.asset-search-cfs {
 	    display: block;
 	    width: auto;
 	    padding: inherit;
 	}
 
-
+    .asset-bulk-basics tr,
 	.asset-search-basics tr {
 	    width: 49%;
 	    display:inline-block;
 	    white-space: nowrap;
 	}
+
+    .asset-bulk-basics tr>td,
 	.asset-search-basics tr>td {
 	    display:inline-block;
 	    width:10em;

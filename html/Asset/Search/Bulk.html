@@ -73,7 +73,7 @@
     CheckAll => 1, ClearAll => 1,
 &>
 
-<&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics", title_class => "inverse" &>
+<&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics asset-bulk-basics", title_class => "inverse" &>
 <table>
   <tr class="asset-catalog">
     <td class="label"><label for="UpdateCatalog"><&|/l&>Catalog</&></label></td>
@@ -125,7 +125,7 @@
 %   my $cfs = $catalog_obj->AssetCustomFields;
 %   $cfs->LimitToGrouping( 'RT::Asset' => $group);
 %   if ( $cfs->Count ) {
-<&| /Widgets/TitleBox, title => 'Edit ' . ($group? loc($group) : loc('Custom Fields')) &>
+<&| /Widgets/TitleBox, class=>'asset-bulk-grouping asset-bulk-cfs', title => 'Edit ' . ($group? loc($group) : loc('Custom Fields')) &>
 <& /Elements/BulkCustomFields, CustomFields => $cfs, &>
 </&>
 %   }
