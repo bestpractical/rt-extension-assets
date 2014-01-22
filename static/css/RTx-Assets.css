@@ -16,40 +16,45 @@
 }
 
 .collection-as-table td {
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
 /* Colors */
 
 .asset-basics   .titlebox .titlebox-title .left,
-.asset-info-cfs .titlebox .titlebox-title .left { background-color: #b32; }
-.asset-people   .titlebox .titlebox-title .left { background-color: #48c; }
-.asset-dates    .titlebox .titlebox-title .left { background-color: #633063; }
-.asset-links    .titlebox .titlebox-title .left { background-color: #316531; }
-.ticket-assets  .titlebox .titlebox-title .left { background-color: #316531; }
+.asset-info-cfs .titlebox .titlebox-title .left { background-color: #b32    }
+.asset-people   .titlebox .titlebox-title .left { background-color: #48c    }
+.asset-dates    .titlebox .titlebox-title .left { background-color: #633063 }
+.asset-links    .titlebox .titlebox-title .left { background-color: #316531 }
+.ticket-assets  .titlebox .titlebox-title .left { background-color: #316531 }
 
 /* People display */
+
 #comp-Asset-Display .asset-people table {
     width: 100%;
 }
+
 #comp-Asset-Display .asset-people td.label {
     vertical-align: top;
     width: 8em;
 }
+
 #comp-Asset-Display .asset-people h3 {
     margin: 0;
     padding: 0;
     line-height: 1.3;
     font-size: 100%;
 }
+
 #comp-Asset-Display .asset-people .details {
     padding: 0;
 }
 
 /* People editing */
+
 .asset-people .edit ul.role-members {
-    margin-top:     0;
-    padding-left:   0;
+    margin-top: 0;
+    padding-left: 0;
     list-style: none;
 }
 
@@ -77,6 +82,7 @@
 }
 
 /* Asset summary */
+
 .ticket-assets form {
     display: inherit;
 }
@@ -89,6 +95,7 @@
     font-weight: bold;
     color: black;
 }
+
 .asset-metadata>div {
     vertical-align: top;
     min-width: 30%;
@@ -98,71 +105,73 @@
 }
 
 .asset-metadata {
-    padding-top: 2em; /* nav overflows this :< */
+    padding-top: 2em; /* nav overflows this :( */;
 }
 
-@media(max-width: 800px) {
-	.asset-metadata>div {
-	    min-width: 45%;
-	    width: 45%;
-	}
+@media (max-width: 800px) {
+    .asset-metadata>div {
+        min-width: 45%;
+        width: 45%;
+    }
 }
 
 /* on a little screen, let's just use a single column */
-@media(max-width: 600px) {
-	.asset-metadata {
-	    padding-top: 6em; /* nav overflows this :< */
-	}
-	.asset-metadata>div {
-	    min-width: 100%;
-	    width: 100%;
-	}
+@media (max-width: 600px) {
+    .asset-metadata {
+        padding-top: 6em;
+        /* nav overflows this: < */;
+    }
 
-	#Asset-Create-basics>table,
-	#Asset-Create-basics>table>tbody>tr ,
-	#Asset-Create-basics>table>tbody>tr>td  {
-	    display: block;
-	}
+    .asset-metadata>div {
+        min-width: 100%;
+        width: 100%;
+    }
 
+    #Asset-Create-basics>table,
+    #Asset-Create-basics>table>tbody>tr,
+    #Asset-Create-basics>table>tbody>tr>td {
+        display: block;
+    }
 }
 
 /* On a reasonable-width screen, make better use of whitespace */
-@media(min-width: 601px) {
-	.edit-custom-fields tr,
+@media (min-width: 601px) {
+    .edit-custom-fields tr,
     #ModifyAsset .asset-basics tr {
-	    display: inline-block;
-	    width: 49%;
+        display: inline-block;
+        width: 49%;
+    }
 
-	}
-	.edit-custom-fields tr td.cflabel,
+    .edit-custom-fields tr td.cflabel,
     #ModifyAsset .asset-basics tr td.label,
     #ModifyAsset .asset-basics tr td.cflabel {
-	    width: 13em;
-	}
+        width: 13em;
+    }
 
+    /* Asset creation */
+    #Asset-Create-basics>table {
+        width: 100%;
+        align: left;
+    }
 
-	/* Asset creation */
+    #Asset-Create-basics>table>tbody>tr>td {
+        padding-right: 2em;
+    }
 
-	#Asset-Create-basics>table  {
-	    width: 100%;
-	    align: left;
-	}
-	#Asset-Create-basics>table>tbody>tr>td {
-	    padding-right: 2em;
-	}
-	#Asset-Create-basics>table>tbody>tr{
-	        vertical-align: top;
-	}
+    #Asset-Create-basics>table>tbody>tr {
+        vertical-align: top;
+    }
 }
 
 /* basic cleanups for the search UI's elements */
-
 .asset-search-grouping input.datepicker {
     width: 7em;
 }
- .asset-search-grouping td *{
+
+.asset-search-grouping td * {
     max-width: 11em;
- }
+}
+
 .asset-search-grouping td.label.not {
     min-width: 3em;
     width: auto;
@@ -170,43 +179,44 @@
 }
 
 /* On a wide screen, use two columns for search/bulk criteria */
-@media (min-width:1150px){
+@media (min-width:1150px) {
     .asset-bulk-grouping.asset-bulk-cfs,
-	.asset-search-grouping.asset-search-cfs {
+    .asset-search-grouping.asset-search-cfs {
+        display: inline-block;
+        width: 45%;
+        padding-right: 1em;
+        vertical-align: top;
+    }
 
-	    display: inline-block;
-	    width: 45%;
-	    padding-right: 1em;
-	    vertical-align: top;
-	}
     .titlebox.asset-bulk-grouping.asset-bulk-cfs,
-	.titlebox.asset-search-grouping.asset-search-cfs {
-	    display: block;
-	    width: auto;
-	    padding: inherit;
-	}
+    .titlebox.asset-search-grouping.asset-search-cfs {
+        display: block;
+        width: auto;
+        padding: inherit;
+    }
 
     .asset-bulk-people tr,
     .asset-search-people tr,
     .asset-bulk-basics tr,
-	.asset-search-basics tr {
-	    width: 49%;
-	    display:inline-block;
-	    white-space: nowrap;
-	}
+    .asset-search-basics tr {
+        width: 49%;
+        display: inline-block;
+        white-space: nowrap;
+    }
 
     .asset-bulk-people tr>td,
     .asset-search-people tr>td,
     .asset-bulk-basics tr>td,
-	.asset-search-basics tr>td {
-	    display:inline-block;
-	    width:10em;
-	}
-
+    .asset-search-basics tr>td {
+        display: inline-block;
+        width: 10em;
+    }
 }
 
-@media (max-width:1440px){
-    /* on a not-wide-enough screen, don't position "User Summary" link as "absolute" in case of overlapping */
+@media (max-width:1440px) {
+
+    /* on a not-wide-enough screen, don't position "User Summary" link as
+     * "absolute" in case of overlapping */
     #comp-Asset-Display .asset-people a.user-summary {
         position: relative;
         white-space: nowrap;
