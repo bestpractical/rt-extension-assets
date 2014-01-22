@@ -101,6 +101,13 @@
     padding-top: 2em; /* nav overflows this :< */
 }
 
+@media(max-width: 800px) {
+	.asset-metadata>div {
+	    min-width: 45%;
+	    width: 45%;
+	}
+}
+
 /* on a little screen, let's just use a single column */
 @media(max-width: 600px) {
 	.asset-metadata {
@@ -146,8 +153,6 @@
 	#Asset-Create-basics>table>tbody>tr{
 	        vertical-align: top;
 	}
-
-
 }
 
 /* basic cleanups for the search UI's elements */
