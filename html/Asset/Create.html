@@ -55,14 +55,16 @@
 <& /Elements/Tabs &>
 
 <& /Elements/ListActions, actions => \@results &>
-
 <form method="post" enctype="multipart/form-data" id="CreateAsset" action="Create.html">
   <input type="hidden" name="id" value="new">
   <input type="hidden" name="Catalog" value="<% $catalog->id %>">
 
-<div id="Asset-Create-basics">
 <a name="basics"></a>
-
+<div id="Asset-Create-basics" class="asset-metadata">
+    <table>
+        <tbody>
+        <tr>
+            <td>
   <&| /Widgets/TitleBox, title => loc("Basics"), class => "asset-basics", title_class => "inverse" &>
     <& Elements/EditBasics, %ARGS, AssetObj => $asset, CatalogObj => $catalog &>
   </&>
@@ -70,16 +72,21 @@
   <&| /Widgets/TitleBox, title => loc("People"), class => "asset-people", title_class => "inverse" &>
     <& Elements/EditPeople, %ARGS, AssetObj => $asset &>
   </&>
-
-</div>
-
-<div id="Asset-Create-details">
-<a name="details"></a>
+  </td><td>
   <&| /Widgets/TitleBox, title => loc("Links"), class => "asset-links", title_class => "inverse" &>
     <& /Elements/AddLinks,
         Object          => $asset,
         CustomFields    => $catalog->AssetCustomFields &>
   </&>
+  </td>
+
+  </tr>
+  </tbody>
+  </table>
+</div>
+
+<div id="Asset-Create-details">
+<a name="details"></a>
 
   <& /Elements/EditCustomFieldCustomGroupings,
         Object => $asset,

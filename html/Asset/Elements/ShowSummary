@@ -65,6 +65,7 @@ for my $section (@sections) {
         . $AssetObj->id;
 }
 </%init>
+<div class="asset-metadata">
 % for my $section (@sections) {
 <&| /Widgets/TitleBox, title => loc($section), title_href => $link{$section}, title_class => "inverse", class => "asset-\L$section" &>
     <& "Show$section", AssetObj => $AssetObj &>
@@ -76,3 +77,4 @@ for my $section (@sections) {
      title_href => RT->Config->Get("WebPath") . "/Asset/ModifyCFs.html",
      TitleBoxARGS => { title_class => "inverse" },
  &>
+</div>
