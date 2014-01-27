@@ -12,3 +12,4 @@ pod2htm*.tmp
 /MYMETA.*
 /xt/tmp/
 /xt/lib/RT/Extension/Assets/Test.pm
+SIGNATURE
