@@ -50,7 +50,7 @@ use strict;
 use warnings;
 package RT::Extension::Assets;
 
-our $VERSION = '0.90';
+our $VERSION = '1.0rc1';
 
 # Loaded so they're available and rights are injected.
 use RT::Catalog;
