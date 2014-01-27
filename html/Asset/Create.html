@@ -55,6 +55,8 @@
 <& /Elements/Tabs &>
 
 <& /Elements/ListActions, actions => \@results &>
+
+<span class="catalog <% CSSClass($AssetObj->CatalogObj->Name) %>">
 <form method="post" enctype="multipart/form-data" id="CreateAsset" action="Create.html">
   <input type="hidden" name="id" value="new">
   <input type="hidden" name="Catalog" value="<% $catalog->id %>">
@@ -96,6 +98,7 @@
 
   <& /Elements/Submit, Label => loc('Create asset') &>
 </form>
+</span>
 
 <%args>
 $id => ""

@@ -50,6 +50,7 @@
 
 <& /Elements/ListActions, actions => \@results &>
 
+<span class="catalog <% CSSClass($AssetObj->CatalogObj->Name) %>">
 <form method="post" enctype="multipart/form-data" id="ModifyAssetCFs" action="ModifyCFs.html">
   <input type="hidden" name="id" value="<% $asset->id %>">
   <input type="hidden" name="Grouping" value="<% $Grouping %>">
@@ -60,6 +61,7 @@
 
   <& /Elements/Submit, Label => loc('Save asset'), Name => "Update" &>
 </form>
+</span>
 
 <%args>
 $id         => undef
