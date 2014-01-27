@@ -52,6 +52,7 @@
 
 <& /Elements/ListActions &>
 
+<span class="catalog <% CSSClass($AssetObj->CatalogObj->Name) %>">
 <& Elements/ShowSummary, AssetObj => $asset &>
 
 % $m->callback(CallbackName => 'AfterShowSummary', ARGSRef => \%ARGS, Asset => $asset);
@@ -63,6 +64,7 @@
     &>
 
 % $m->callback(CallbackName => 'AfterShowHistory', ARGSRef => \%ARGS, Asset => $asset);
+</span>
 
 <%args>
 $id => undef

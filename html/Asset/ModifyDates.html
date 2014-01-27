@@ -50,6 +50,7 @@
 
 <& /Elements/ListActions, actions => \@results &>
 
+<span class="catalog <% CSSClass($AssetObj->CatalogObj->Name) %>">
 <form method="post" enctype="multipart/form-data" id="ModifyAssetDates" action="ModifyDates.html">
   <input type="hidden" name="id" value="<% $asset->id %>">
 
@@ -59,6 +60,7 @@
 
   <& /Elements/Submit, Label => loc('Save asset'), Name => "Update" &>
 </form>
+</span>
 
 <%init>
 my $asset = LoadAsset($id);

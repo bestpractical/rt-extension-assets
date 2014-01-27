@@ -48,11 +48,13 @@
 <& /Elements/Header, Title => loc("History of Asset #[_1]: [_2]", $asset->id, $asset->Name) &>
 <& /Elements/Tabs &>
 
+<span class="catalog <% CSSClass($AssetObj->CatalogObj->Name) %>">
 <& /Elements/ShowHistory,
     Object => $asset,
     ShowDisplayModes => 0,
     DisplayPath => 'History.html',
     &>
+</span>
 
 <%args>
 $id => undef
