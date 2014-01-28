@@ -156,9 +156,15 @@ sub SimpleSearch {
     # and currently fails in odd ways.  Such a mapping obviously assumes
     # that names are unique within the catalog, but ids are also
     # allowable as well.
+    my $catalog;
+    if (ref $args{Catalog}) {
+        $catalog = $args{Catalog};
+    } else {
+        $catalog = RT::Catalog->new( $self->CurrentUser );
+        $catalog->Load( $args{Catalog} );
+    }
+
     my %cfs;
-    my $catalog = RT::Catalog->new( $self->CurrentUser );
-    $catalog->Load( $args{Catalog} );
     my $cfs = $catalog->AssetCustomFields;
     while (my $customfield = $cfs->Next) {
         $cfs{$customfield->id} = $cfs{$customfield->Name}
