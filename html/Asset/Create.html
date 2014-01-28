@@ -56,7 +56,7 @@
 
 <& /Elements/ListActions, actions => \@results &>
 
-<span class="catalog <% CSSClass($AssetObj->CatalogObj->Name) %>">
+<span class="catalog <% CSSClass($catalog->Name) %>">
 <form method="post" enctype="multipart/form-data" id="CreateAsset" action="Create.html">
   <input type="hidden" name="id" value="new">
   <input type="hidden" name="Catalog" value="<% $catalog->id %>">

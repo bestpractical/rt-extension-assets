@@ -52,7 +52,7 @@
 
 <& /Elements/ListActions &>
 
-<span class="catalog <% CSSClass($AssetObj->CatalogObj->Name) %>">
+<span class="catalog <% CSSClass($asset->CatalogObj->Name) %>">
 <& Elements/ShowSummary, AssetObj => $asset &>
 
 % $m->callback(CallbackName => 'AfterShowSummary', ARGSRef => \%ARGS, Asset => $asset);
