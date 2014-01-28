@@ -195,7 +195,7 @@ sub SimpleSearch {
                 VALUE           => $args{Term},
                 ENTRYAGGREGATOR => 'OR',
                 SUBCLAUSE       => 'autocomplete',
-            );
+            ) unless $args{Term} =~ /\D/ and $name eq 'id';
         }
     }
     return $self;
