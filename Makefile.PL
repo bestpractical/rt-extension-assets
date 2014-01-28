@@ -11,7 +11,7 @@ no_index package => "RT::Transaction";
 no_index package => "RT::CustomField";
 no_index package => "RT::CustomFields";
 
-requires_rt("4.0.0");
+requires_rt("4.2.1");
 test_requires "Test::Warn";
 
 my ($loaded) = ($INC{'RT.pm'} =~ /^(.*)[\\\/]/);
