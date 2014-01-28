@@ -249,6 +249,10 @@ sub Create {
         );
     }
 
+    my $roles = {};
+    my @errors = $self->_ResolveRoles( $roles, %args );
+    return (0, @errors) if @errors;
+
     RT->DatabaseHandle->BeginTransaction();
 
     my ( $id, $msg ) = $self->SUPER::Create(
@@ -271,8 +275,6 @@ sub Create {
     }
 
     # Figure out users for roles
-    my $roles = {};
-    push @non_fatal_errors, $self->_ResolveRoles( $roles, %args );
     push @non_fatal_errors, $self->_AddRolesOnCreate( $roles, map { $_ => sub {1} } $self->Roles );
 
     # Add CFs
