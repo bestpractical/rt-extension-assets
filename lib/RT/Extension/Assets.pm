@@ -204,7 +204,7 @@ RT->AddJavaScript("RTx-Assets.js");
         my @PassArguments;
 
         if ($ARGSRef->{q}) {
-            $args{'Assets'}->SimpleSearch( Term => $ARGSRef->{q} );
+            $args{'Assets'}->SimpleSearch( Term => $ARGSRef->{q}, Catalog => $args{Catalog} );
             push @PassArguments, "q";
         } elsif ( $ARGSRef->{'SearchAssets'} ){
             for my $key (keys %$ARGSRef) {
