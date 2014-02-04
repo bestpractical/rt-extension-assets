@@ -626,9 +626,11 @@ Global asset CFs may be intermixed with per-catalog CFs with ordering.
 
 =head2 Importing existing data
 
-Another extension, L<RT::Extension::Assets::Import::CSV> provides tools to import
-new and update existing assets from a CSV dump.  Its configuration lets you
-map the fields in the CSV to the asset fields you've already created in RT.
+Another extension, L<RT::Extension::Assets::Import::CSV> provides tools
+to import new and update existing assets from a CSV dump.  Its
+configuration lets you map the fields in the CSV to the asset fields
+you've already created in RT.  L<RT::Extension::Assets::AppleGSX> also
+provides tools for looking up data associated with an Apple product.
 
 =head1 METHODS ADDED TO OTHER CLASSES
 
