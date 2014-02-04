@@ -424,7 +424,7 @@ RT_SiteConfig.pm and add UserAssets to the list.
 =head2 C<$DefaultCatalog>
 
 Use this to define the default catalog name that will be used when first
-searching for assets; thereafter, it will defaultto the last-searched
+searching for assets; thereafter, it will default to the last-searched
 catalog. You may use either the catalog's name or its ID. This only
 affects the catalog selection on the asset search interface.
 
@@ -448,7 +448,7 @@ searching.
 
 =head2 Managing catalogs
 
-Catalogs are managed by RT adminstrators, or anyone with the L</AdminCatalog>
+Catalogs are managed by RT administrators, or anyone with the L</AdminCatalog>
 right.  You can find the list of catalogs, create new catalogs, and manage
 existing ones under the Tools → Configuration → Assets → Catalogs menu.
 

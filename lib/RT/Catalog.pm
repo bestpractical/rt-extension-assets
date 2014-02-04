@@ -304,12 +304,12 @@ returns undef.
 =head2 HeldBy
 
 Returns an L<RT::Group> object for this catalog's I<HeldBy> role group.  The object
-may be unloaded if permissions aren't satisified.
+may be unloaded if permissions aren't satisfied.
 
 =head2 Contacts
 
 Returns an L<RT::Group> object for this catalog's I<Contact> role
-group.  The object may be unloaded if permissions aren't satisified.
+group.  The object may be unloaded if permissions aren't satisfied.
 
 =cut
 
