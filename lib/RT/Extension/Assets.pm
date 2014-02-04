@@ -2,7 +2,7 @@
 #
 # COPYRIGHT:
 #
-# This software is Copyright (c) 1996-2013 Best Practical Solutions, LLC
+# This software is Copyright (c) 1996-2014 Best Practical Solutions, LLC
 #                                          <sales@bestpractical.com>
 #
 # (Except where explicitly superseded by other copyright notices)
@@ -674,20 +674,15 @@ OR'd with other L</LimitToCatalog> and C<LimitToGlobal> calls.
 
 Note that this will cause the collection to only return asset CFs.
 
-=head1 AUTHOR
-
-Thomas Sibley <trs@bestpractical.com>
-
 =head1 BUGS
 
-All bugs should be reported via
-L<http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-Assets>
-or bug-RT-Extension-Assets@rt.cpan.org.
-
+Please report bugs to assets-bugs@bestpractical.com; if you're not sure
+if what you've discovered is a bug, please discuss it on
+rt-users@lists.bestpractical.com before reporting it.
 
 =head1 LICENSE AND COPYRIGHT
 
-This software is Copyright (c) 2013 by Best Practical Solutions
+This software is Copyright (c) 2014 by Best Practical Solutions
 
 This is free software, licensed under:
 
