@@ -2,10 +2,20 @@ NAME
     RT-Extension-Assets - Asset management for RT
 
 INSTALLATION
+    Assets requires version 4.2.1 or higher of RT.
+
     perl Makefile.PL
     make
     make install
-        May need root permissions
+        This step may require root permissions.
+
+    Patch your RT
+        Assets requires a small patch to work on versions of RT prior to
+        4.2.3. To patch RT, run:
+
+            patch -d /opt/rt4 -p1 < patches/rt-4.2.1-4.2.2.patch
+
+        RT version 4.2.3 and above already contain this patch.
 
     Edit your /opt/rt4/etc/RT_SiteConfig.pm
         Add this line:
@@ -39,7 +49,7 @@ INSTALLATION
 CONFIGURATION
   $DefaultCatalog
     Use this to define the default catalog name that will be used when first
-    searching for assets; thereafter, it will defaultto the last-searched
+    searching for assets; thereafter, it will default to the last-searched
     catalog. You may use either the catalog's name or its ID. This only
     affects the catalog selection on the asset search interface.
 
@@ -63,7 +73,7 @@ USAGE
     other qualities for categorizing, sorting, and searching.
 
   Managing catalogs
-    Catalogs are managed by RT adminstrators, or anyone with the
+    Catalogs are managed by RT administrators, or anyone with the
     "AdminCatalog" right. You can find the list of catalogs, create new
     catalogs, and manage existing ones under the Tools → Configuration →
     Assets → Catalogs menu.
@@ -233,7 +243,8 @@ USAGE
     Another extension, RT::Extension::Assets::Import::CSV provides tools to
     import new and update existing assets from a CSV dump. Its configuration
     lets you map the fields in the CSV to the asset fields you've already
-    created in RT.
+    created in RT. RT::Extension::Assets::AppleGSX also provides tools for
+    looking up data associated with an Apple product.
 
 METHODS ADDED TO OTHER CLASSES
   RT::CustomField
@@ -270,16 +281,13 @@ METHODS ADDED TO OTHER CLASSES
 
     Note that this will cause the collection to only return asset CFs.
 
-AUTHOR
-    Thomas Sibley <trs@bestpractical.com>
-
 BUGS
-    All bugs should be reported via
-    <http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-Assets>
-    or bug-RT-Extension-Assets@rt.cpan.org.
+    Please report bugs to assets-bugs@bestpractical.com; if you're not sure
+    if what you've discovered is a bug, please discuss it on
+    rt-users@lists.bestpractical.com before reporting it.
 
 LICENSE AND COPYRIGHT
-    This software is Copyright (c) 2013 by Best Practical Solutions
+    This software is Copyright (c) 2014 by Best Practical Solutions
 
     This is free software, licensed under:
 

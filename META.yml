@@ -1,7 +1,7 @@
 ---
 abstract: 'RT Extension-Assets Extension'
 author:
-  - 'Thomas Sibley <trs@bestpractical.com>'
+  - 'Best Practical Solutions'
 build_requires:
   ExtUtils::MakeMaker: 6.59
   Test::Warn: 0
