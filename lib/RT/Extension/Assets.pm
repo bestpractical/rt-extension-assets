@@ -372,6 +372,8 @@ RT->AddJavaScript("RTx-Assets.js");
 
 =head1 INSTALLATION
 
+Assets requires version 4.2.1 or higher of RT.
+
 =over
 
 =item perl Makefile.PL
@@ -380,7 +382,16 @@ RT->AddJavaScript("RTx-Assets.js");
 
 =item make install
 
-May need root permissions
+This step may require root permissions.
+
+=item Patch your RT
+
+Assets requires a small patch to work on versions of RT prior to 4.2.3.
+To patch RT, run:
+
+    patch -d /opt/rt4 -p1 < patches/rt-4.2.1-4.2.2.patch
+
+RT version 4.2.3 and above already contain this patch.
 
 =item Edit your /opt/rt4/etc/RT_SiteConfig.pm
 

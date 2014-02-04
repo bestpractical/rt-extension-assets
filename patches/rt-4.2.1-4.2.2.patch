@@ -1,0 +1,55 @@
+From 07dab422cf5081ce970cf3cfcbfd461926d02349 Mon Sep 17 00:00:00 2001
+From: Alex Vandiver <alexmv@bestpractical.com>
+Date: Tue, 28 Jan 2014 18:35:52 -0500
+Subject: [PATCH 1/2] $user->PrincipalObj is _undef_ if the LoadByEmail failed
+
+This prevents runtime errors when assigning unknown users as
+single-member roles
+---
+ lib/RT/Record/Role/Roles.pm | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/RT/Record/Role/Roles.pm b/lib/RT/Record/Role/Roles.pm
+index aad2673..5c78f51 100644
+--- a/lib/RT/Record/Role/Roles.pm
++++ b/lib/RT/Record/Role/Roles.pm
+@@ -524,9 +524,9 @@ sub _ResolveRoles {
+                 $user->LoadByEmail( $value ) unless $user->id;
+                 $roles->{$role} = $user->PrincipalObj;
+             }
+-            unless ($roles->{$role}->id) {
++            unless ($roles->{$role} and $roles->{$role}->id) {
+                 push @errors, $self->loc("Invalid value for [_1]",loc($role));
+-                $roles->{$role} = RT->Nobody->PrincipalObj unless $roles->{$role}->id;
++                $roles->{$role} = RT->Nobody->PrincipalObj;
+             }
+             # For consistency, we always return an arrayref
+             $roles->{$role} = [ $roles->{$role} ];
+-- 
+1.8.5.2
+
+From a4070069ae2d21302e0dd1ec9c54e29c7ebdc97f Mon Sep 17 00:00:00 2001
+From: Alex Vandiver <alexmv@bestpractical.com>
+Date: Tue, 28 Jan 2014 18:36:19 -0500
+Subject: [PATCH 2/2] loc() is only in scope by way of $self->
+
+---
+ lib/RT/Record/Role/Roles.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/RT/Record/Role/Roles.pm b/lib/RT/Record/Role/Roles.pm
+index 5c78f51..a6172b4 100644
+--- a/lib/RT/Record/Role/Roles.pm
++++ b/lib/RT/Record/Role/Roles.pm
+@@ -525,7 +525,7 @@ sub _ResolveRoles {
+                 $roles->{$role} = $user->PrincipalObj;
+             }
+             unless ($roles->{$role} and $roles->{$role}->id) {
+-                push @errors, $self->loc("Invalid value for [_1]",loc($role));
++                push @errors, $self->loc("Invalid value for [_1]",$self->loc($role));
+                 $roles->{$role} = RT->Nobody->PrincipalObj;
+             }
+             # For consistency, we always return an arrayref
+-- 
+1.8.5.2
+
