@@ -45,7 +45,7 @@
 %# those contributions and any derivatives thereof.
 %#
 %# END BPS TAGGED BLOCK }}}
-<& /Elements/Header, Title => loc("Modify [_3] for asset #[_1]: [_2]", $asset->id, $asset->Name, $Grouping) &>
+<& /Elements/Header, Title => loc("Modify [_3] for asset #[_1]: [_2]", $asset->id, $asset->Name, $Grouping || loc("Custom Fields") ) &>
 <& /Elements/Tabs &>
 
 <& /Elements/ListActions, actions => \@results &>
@@ -55,7 +55,7 @@
   <input type="hidden" name="id" value="<% $asset->id %>">
   <input type="hidden" name="Grouping" value="<% $Grouping %>">
 
-  <&| /Widgets/TitleBox, title => loc($Grouping), class => CSSClass("asset-info-cfs-\L$Grouping") &>
+  <&| /Widgets/TitleBox, title => $Grouping ? loc($Grouping) : loc("Custom Fields"), class => "asset-info-cfs ".($Grouping ? CSSClass("asset-info-cfs-\L$Grouping") : ""), title_class => "inverse" &>
     <& /Elements/EditCustomFields, Object => $asset, Grouping => $Grouping &>
   </&>
 
@@ -66,12 +66,9 @@
 <%args>
 $id         => undef
 $Update     => 0
-$Grouping   => undef
+$Grouping   => ''
 </%args>
 <%init>
-Abort(loc("No grouping specified"))
-    unless $Grouping;
-
 my $asset = LoadAsset($id);
 my @results;
 
@@ -79,7 +76,7 @@ my $CFs = $asset->CustomFields;
 $CFs->LimitToGrouping($asset => $Grouping);
 
 Abort(loc("No custom fields found for grouping '[_1]'", $Grouping))
-    unless $CFs->Count;
+    if $Grouping and not $CFs->Count;
 
 if ($Update) {
     my ($cf_ok, @cf_errors) = $m->comp(
