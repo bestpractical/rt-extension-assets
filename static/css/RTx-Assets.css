@@ -158,7 +158,7 @@
     .asset-info-cfs .edit-custom-fields tr td.cflabel,
     #ModifyAsset .asset-basics tr td.label,
     #ModifyAsset .asset-basics tr td.cflabel {
-        width: 13em;
+        width: 8em;
     }
 
     /* Asset creation */
