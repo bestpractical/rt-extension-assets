@@ -187,6 +187,7 @@ if ($ShowRelatedTickets) {
 % }
 </div>
 
+% if ($Ticket->CurrentUserHasRight("ModifyTicket")) {
   <div class="add-asset">
     <label>
       <&|/l&>Add an asset to this ticket</&>
@@ -194,6 +195,7 @@ if ($ShowRelatedTickets) {
     </label>
     <input type="submit" value="+">
   </div>
+% }
 
 % $m->callback( CallbackName => "End", Ticket => $Ticket, Assets => $assets );
 
