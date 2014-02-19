@@ -141,6 +141,10 @@
         display: inline-block;
         width: 49%;
     }
+    .asset-info-cfs .edit-custom-fields tr:only-child,
+    #ModifyAsset .asset-basics tr:only-child {
+        width: inherit;
+    }
 
     .asset-info-cfs .edit-custom-fields tr td.cflabel,
     #ModifyAsset .asset-basics tr td.label,
