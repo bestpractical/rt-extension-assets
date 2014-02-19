@@ -181,6 +181,7 @@ sub HREF {
     my $self = shift;
     if ($self->IsLocal and $self->Object) {
         return RT->Config->Get('WebURL')
+             . ( $self->CurrentUser->Privileged ? "" : "SelfService/" )
              . "Asset/Display.html?id="
              . $self->Object->Id;
     } else {

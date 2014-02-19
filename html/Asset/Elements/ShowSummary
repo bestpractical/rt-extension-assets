@@ -56,6 +56,9 @@ my @sections = (
     "Links",    #loc
 );
 
+my $can_edit = $session{CurrentUser}->Privileged
+    && $AssetObj->CurrentUserHasRight("ModifyAsset");
+
 my %link;
 for my $section (@sections) {
     my $page = $section eq 'Basics' ? "Modify.html" : "Modify$section.html";
@@ -67,14 +70,14 @@ for my $section (@sections) {
 </%init>
 <div class="asset-metadata">
 % for my $section (@sections) {
-<&| /Widgets/TitleBox, title => loc($section), title_href => $link{$section}, title_class => "inverse", class => "asset-\L$section" &>
+<&| /Widgets/TitleBox, title => loc($section), title_href => $can_edit ? $link{$section} : "", title_class => "inverse", class => "asset-\L$section" &>
     <& "Show$section", AssetObj => $AssetObj &>
 </&>
 % }
 
 <& /Elements/ShowCustomFieldCustomGroupings,
      Object => $AssetObj,
-     title_href => RT->Config->Get("WebPath") . "/Asset/ModifyCFs.html",
+     title_href => $can_edit ? RT->Config->Get("WebPath") . "/Asset/ModifyCFs.html" : "",
      TitleBoxARGS => { title_class => "inverse" },
  &>
 </div>

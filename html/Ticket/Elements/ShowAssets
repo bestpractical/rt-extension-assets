@@ -116,8 +116,9 @@ $m->callback(
 % $m->callback( CallbackName => "Start", Ticket => $Ticket, Assets => $assets );
 
 <div id="assets-accordion" class="rt-accordion">
+% my $display_path = $session{'CurrentUser'}->Privileged ? 'Asset' : 'SelfService/Asset';
 % while (my $asset = $assets->Next) {
-  <h3><a href="<% RT->Config->Get('WebPath') %>/Asset/Display.html?id=<% $asset->id %>"><&|/l, $asset->id, $asset->Name &>#[_1]: [_2]</&></a>
+  <h3><a href="<% RT->Config->Get('WebPath') %>/<% $display_path %>/Display.html?id=<% $asset->id %>"><&|/l, $asset->id, $asset->Name &>#[_1]: [_2]</&></a>
 <%perl>
 if ($Ticket->CurrentUserHasRight("ModifyTicket")) {
     my $targets = $asset->Links("Target")->Clone;
@@ -186,6 +187,7 @@ if ($ShowRelatedTickets) {
 % }
 </div>
 
+% if ($Ticket->CurrentUserHasRight("ModifyTicket")) {
   <div class="add-asset">
     <label>
       <&|/l&>Add an asset to this ticket</&>
@@ -193,6 +195,7 @@ if ($ShowRelatedTickets) {
     </label>
     <input type="submit" value="+">
   </div>
+% }
 
 % $m->callback( CallbackName => "End", Ticket => $Ticket, Assets => $assets );
 
