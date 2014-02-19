@@ -136,13 +136,13 @@
 
 /* On a reasonable-width screen, make better use of whitespace */
 @media (min-width: 601px) {
-    .edit-custom-fields tr,
+    .asset-info-cfs .edit-custom-fields tr,
     #ModifyAsset .asset-basics tr {
         display: inline-block;
         width: 49%;
     }
 
-    .edit-custom-fields tr td.cflabel,
+    .asset-info-cfs .edit-custom-fields tr td.cflabel,
     #ModifyAsset .asset-basics tr td.label,
     #ModifyAsset .asset-basics tr td.cflabel {
         width: 13em;
