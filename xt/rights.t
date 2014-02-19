@@ -7,6 +7,12 @@ use RT::Extension::Assets::Test tests => undef;
 my $user = RT::Test->load_or_create_user( Name => 'testuser' );
 ok $user->id, "Created user";
 
+my $ticket = RT::Test->create_ticket(
+    Queue   => 1,
+    Subject => 'a test ticket',
+);
+ok $ticket->id, "Created ticket";
+
 my $catalog_one = create_catalog( Name => "One" );
 ok $catalog_one && $catalog_one->id, "Created catalog one";
 
@@ -64,7 +70,6 @@ diag "ModifyAsset";
     ok !$txnid, "Update failed: $txnmsg";
     is $asset->Name, "Thinkpad T420s", "Name didn't change";
 
-    # It doesn't matter that ticket #1 doesn't exist for ACLs to refuse us
     my ($ok, $msg) = $asset->AddLink( Type => 'RefersTo', Target => 't:1' );
     ok !$ok, "No rights to AddLink: $msg";
 
