@@ -17,7 +17,7 @@ for my $object ($asset, $catalog, RT->System) {
         ok $principal && $principal->id, "Found PrincipalObj for role group"
             or next;
 
-        if ($RT::ACE::OBJECT_TYPES{ref $object}) {
+        if ($object->DOES("RT::Record::Role::Rights")) {
             my ($ok, $msg) = $principal->GrantRight(
                 Object  => $object,
                 Right   => "ShowAsset",
