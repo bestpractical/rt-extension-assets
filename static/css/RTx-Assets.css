@@ -140,6 +140,11 @@
         width: 100%;
     }
 
+    .asset-info-cfs .edit-custom-fields tr td,
+    #ModifyAsset .asset-basics tr td {
+        display: inline-block;
+    }
+
     .asset-info-cfs .edit-custom-fields tr,
     #ModifyAsset .asset-basics tr {
         display: inline-block;
