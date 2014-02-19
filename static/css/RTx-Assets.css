@@ -136,6 +136,10 @@
 
 /* On a reasonable-width screen, make better use of whitespace */
 @media (min-width: 601px) {
+    .asset-info-cfs .edit-custom-fields {
+        width: 100%;
+    }
+
     .asset-info-cfs .edit-custom-fields tr,
     #ModifyAsset .asset-basics tr {
         display: inline-block;
