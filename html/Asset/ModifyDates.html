@@ -66,6 +66,8 @@
 my $asset = LoadAsset($id);
 my @results;
 
+$m->callback( Asset => $asset, ARGSRef => \%ARGS, Update => \$Update, results => \@results );
+
 if ($Update) {
     my $CFs = $asset->CustomFields;
     $CFs->LimitToGrouping($asset => "Dates");

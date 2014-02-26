@@ -78,6 +78,8 @@ $CFs->LimitToGrouping($asset => $Grouping);
 Abort(loc("No custom fields found for grouping '[_1]'", $Grouping))
     if $Grouping and not $CFs->Count;
 
+$m->callback( Asset => $asset, ARGSRef => \%ARGS, Update => \$Update, results => \@results );
+
 if ($Update) {
     my ($cf_ok, @cf_errors) = $m->comp(
         '/Elements/ValidateCustomFields',
