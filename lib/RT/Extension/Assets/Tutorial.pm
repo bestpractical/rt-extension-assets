@@ -359,8 +359,8 @@ the work.
 =begin HTML
 
 <p><img
-src="http://static.bestpractical.com/images/assets/asset-ticket-create.png"
-alt="Create Ticket for Asset Work" /></p>
+src="http://static.bestpractical.com/images/assets/asset-ticket-create-selfservice.png"
+alt="Self Service Ticket for Asset Work" /></p>
 
 =end HTML
 
