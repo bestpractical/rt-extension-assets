@@ -229,6 +229,13 @@ RT->AddJavaScript("RTx-Assets.js");
         my @PassArguments;
 
         if ($ARGSRef->{q}) {
+            if ($ARGSRef->{q} =~ /^\d+$/) {
+                my $asset = RT::Asset->new( $session{CurrentUser} );
+                $asset->Load( $ARGSRef->{q} );
+                RT::Interface::Web::Redirect(
+                    RT->Config->Get('WebURL')."Asset/Display.html?id=".$ARGSRef->{q}
+                ) if $asset->id;
+            }
             $args{'Assets'}->SimpleSearch( Term => $ARGSRef->{q}, Catalog => $args{Catalog} );
             push @PassArguments, "q";
         } elsif ( $ARGSRef->{'SearchAssets'} ){
