@@ -53,7 +53,7 @@ Set(%Lifecycles,
             '* -> stolen'    => { label => "Report stolen" },
         },
     },
-);
+) unless $Lifecycles{assets};
 
 =item C<@AssetQueues>
 
@@ -64,7 +64,7 @@ the ticket, even when the ticket has no related assets yet.
 
 =cut
 
-Set(@AssetQueues, ());
+# Set(@AssetQueues, ());
 
 =item C<$DefaultCatalog>
 
@@ -90,7 +90,7 @@ Set($AssetSearchFields, {
     id          => '=',
     Name        => 'LIKE',
     Description => 'LIKE',
-});
+}) unless $AssetSearchFields;
 
 =item C<$AssetSearchFormat>
 
@@ -106,7 +106,7 @@ Set($AssetSearchFormat, q[
     HeldBy,
     Contacts,
     '__ActiveTickets__ __InactiveTickets__/TITLE:Related tickets',
-]);
+]) unless $AssetSearchFormat;
 
 =item C<$AssetSummaryFormat>
 
@@ -124,7 +124,7 @@ Set($AssetSummaryFormat, q[
     HeldBy,
     Contacts,
     '__ActiveTickets__ __InactiveTickets__/TITLE:Related tickets',
-]);
+]) unless $AssetSummaryFormat;
 
 =item C<$AssetSummaryRelatedTicketsFormat>
 
@@ -140,7 +140,7 @@ Set($AssetSummaryRelatedTicketsFormat, q[
     '<a href="__WebPath__/Ticket/Display.html?id=__id__">__Subject__</a>',
     QueueName,
     Status,
-]);
+]) unless $AssetSummaryRelatedTicketsFormat;
 
 =item C<%AdminSearchResultFormat>
 
@@ -155,7 +155,7 @@ Set(%AdminSearchResultFormat,
         q{'<a href="__WebPath__/Admin/Assets/Catalogs/Modify.html?id=__id__">__id__</a>/TITLE:#'}
         .q{,'<a href="__WebPath__/Admin/Assets/Catalogs/Modify.html?id=__id__">__Name__</a>/TITLE:Name'}
         .q{,__Description__,__Lifecycle__,__Disabled__},
-);
+) unless $AdminSearchResultFormat{Catalogs};
 
 =item C<$AssetBasicCustomFieldsOnCreate>
 
@@ -167,10 +167,6 @@ Set( $AssetBasicCustomFieldsOnCreate, [ 'foo', 'bar' ] );
 
 =cut
 
-Set($AssetBasicCustomFieldsOnCreate, undef );
-
-=back
-
-=cut
+# Set($AssetBasicCustomFieldsOnCreate, undef );
 
 1;
