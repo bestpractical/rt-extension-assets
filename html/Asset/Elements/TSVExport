@@ -75,6 +75,7 @@ my $col_entry = sub {
         header => Encode::encode_utf8(loc($col->{title} || $col->{attribute})),
         map    => $m->comp(
             "/Elements/ColumnMap",
+            Class => "RT__Asset",
             Name  => $col->{attribute},
             Attr  => 'value'
         ),
