@@ -72,6 +72,7 @@ my $title = ( $ARGS{'SearchAssets'} or $ARGS{q} ) ?
 <em><&|/l&>No assets matching search criteria found.</&></em>
 %   }
 % }
+<span class="catalog <% CSSClass( $catalog_obj->Name ) %>">
 <form action="<% RT->Config->Get('WebPath') %>/Asset/Search/index.html" id="AssetSearch">
 <&| /Widgets/TitleBox, title => "Search Assets" &>
 <& /Asset/Elements/AssetSearchBasics, %ARGS, CatalogObj => $catalog_obj &>
@@ -104,3 +105,4 @@ jQuery(function() {
 });
 </script>
 </form>
+</span>
