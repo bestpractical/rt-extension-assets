@@ -54,7 +54,7 @@ ProcessAssetsSearchArguments(
     Assets => $assets, Catalog => $catalog_obj, ARGSRef => \%ARGS,
 );
 
-my $Format = q|Name, Description, Status, Catalog, |;
+my $Format = q|id, Name, Description, Status, Catalog, |;
 
 $Format .= "$_, " for RT::Asset->Roles;
 
