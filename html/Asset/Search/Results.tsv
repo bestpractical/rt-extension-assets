@@ -62,6 +62,8 @@ my $CFs = RT::CustomFields->new( $session{CurrentUser} );
 $CFs->LimitToCatalog( $catalog_obj->Id );
 $Format .= "'__CF.{$_}__/TITLE:$_', " for map {$_ = $_->Name; s/['\\]/\\$1/g; $_} @{$CFs->ItemsArrayRef};
 
+$m->callback(CallbackName => "ModifyFormat", Format => \$Format );
+
 my $comp = "/Asset/Elements/TSVExport";
 $comp = "/Elements/TSVExport" if $m->comp_exists("/Elements/TSVExport");
 
