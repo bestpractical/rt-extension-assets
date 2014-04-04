@@ -15,7 +15,7 @@
     text-align: right;
 }
 
-.collection-as-table td {
+body#comp-Asset-Search .collection-as-table td {
     white-space: nowrap;
 }
 
