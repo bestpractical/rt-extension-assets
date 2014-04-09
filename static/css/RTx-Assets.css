@@ -35,8 +35,7 @@
 }
 
 #comp-Asset-Display .asset-people td.label {
-    vertical-align: top;
-    width: 8em;
+    text-align: left;
 }
 
 #comp-Asset-Display .asset-people h3 {

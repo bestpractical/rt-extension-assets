@@ -48,7 +48,8 @@
 % my $users = $Group->UserMembersObj( Recursively => 0 );
 % while ( my $user = $users->Next ) {
 %     next if $Skip and $Skip->HasMember( $user->PrincipalId );
-% if ($Single) {
+% if (not $Title) {
+% } elsif ($Single) {
 <h3><& /Elements/ShowUser, User => $user, Link => 1 &></h3>
 %      next if $user->id == RT->Nobody->id;
 % } else {
@@ -85,4 +86,5 @@ $Group => undef
 $Note  => ''
 $Skip  => undef
 $Single => 0
+$Title => 1
 </%ARGS>
