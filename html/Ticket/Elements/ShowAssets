@@ -151,7 +151,7 @@ if ($Ticket->CurrentUserHasRight("ModifyTicket")) {
         Format      => $Format,
         TrustFormat => 1,
         &>
-
+% $m->callback( CallbackName => "BeforeTickets", Ticket => $Ticket, Asset => $asset );
 <%perl>
 if ($ShowRelatedTickets) {
     my %search = (
