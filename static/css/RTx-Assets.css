@@ -220,13 +220,3 @@
         width: 10em;
     }
 }
-
-@media (max-width:1440px) {
-
-    /* on a not-wide-enough screen, don't position "User Summary" link as
-     * "absolute" in case of overlapping */
-    #comp-Asset-Display .asset-people a.user-summary {
-        position: relative;
-        white-space: nowrap;
-    }
-}
