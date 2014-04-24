@@ -74,7 +74,7 @@ my $title = ( $ARGS{'SearchAssets'} or $ARGS{q} ) ?
 % }
 <span class="catalog <% CSSClass( $catalog_obj->Name ) %>">
 <form action="<% RT->Config->Get('WebPath') %>/Asset/Search/index.html" id="AssetSearch">
-<&| /Widgets/TitleBox, title => "Search Assets" &>
+<&| /Widgets/TitleBox, title => loc("Search Assets") &>
 <& /Asset/Elements/AssetSearchBasics, %ARGS, CatalogObj => $catalog_obj &>
 <& /Asset/Elements/AssetSearchPeople, %ARGS, CatalogObj => $catalog_obj &>
 <& /Elements/Submit, Label => loc('Search'), Name => 'SearchAssets' &>

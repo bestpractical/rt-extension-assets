@@ -26,9 +26,18 @@ lifecycles by their type:
 Set(%Lifecycles,
     assets => {
         type     => "asset",
-        initial  => [ 'new' ],
-        active   => [ 'allocated', 'in-use' ],
-        inactive => [ 'recycled', 'stolen', 'deleted' ],
+        initial  => [ 
+            'new' # loc
+        ],
+        active   => [ 
+            'allocated', # loc
+            'in-use' # loc
+        ],
+        inactive => [ 
+            'recycled', # loc
+            'stolen', # loc
+            'deleted' # loc
+        ],
 
         defaults => {
             on_create => 'new',
@@ -47,10 +56,18 @@ Set(%Lifecycles,
             '* -> *'        => 'ModifyAsset',
         },
         actions => {
-            '* -> allocated' => { label => "Allocate" },
-            '* -> in-use'    => { label => "Now in-use" },
-            '* -> recycled'  => { label => "Recycle" },
-            '* -> stolen'    => { label => "Report stolen" },
+            '* -> allocated' => { 
+                label => "Allocate" # loc
+            },
+            '* -> in-use'    => { 
+                label => "Now in-use" # loc
+            },
+            '* -> recycled'  => { 
+                label => "Recycle" # loc
+            },
+            '* -> stolen'    => { 
+                label => "Report stolen" # loc
+            },
         },
     },
 ) unless $Lifecycles{assets};
@@ -98,6 +115,7 @@ The format that results of the asset search are displayed with.
 
 =cut
 
+# loc('Related tickets')
 Set($AssetSearchFormat, q[
     '<a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a>/TITLE:Name',
     Description,

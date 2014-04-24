@@ -125,7 +125,7 @@
 %   my $cfs = $catalog_obj->AssetCustomFields;
 %   $cfs->LimitToGrouping( 'RT::Asset' => $group);
 %   if ( $cfs->Count ) {
-<&| /Widgets/TitleBox, class=>'asset-bulk-grouping asset-bulk-cfs', title => 'Edit ' . ($group? loc($group) : loc('Custom Fields')) &>
+<&| /Widgets/TitleBox, class=>'asset-bulk-grouping asset-bulk-cfs', title => loc('Edit [_1]', ($group? loc($group) : loc('Custom Fields')) ) &>
 <& /Elements/BulkCustomFields, CustomFields => $cfs, &>
 </&>
 %   }

@@ -59,7 +59,7 @@
 %     }
 </a>
 % if ( $session{'CurrentUser'}->Privileged ){
-<a class="user-summary" href="<%RT->Config->Get('WebPath')%>/User/Summary.html?id=<% $user->Id %>">User Summary</a>
+<a class="user-summary" href="<%RT->Config->Get('WebPath')%>/User/Summary.html?id=<% $user->Id %>"><&|/l&>User Summary</&></a>
 % }
 </h3>
 % }

@@ -83,6 +83,9 @@ RT::CustomField->RegisterBuiltInGroupings(
     'RT::Asset' => [qw( Basics Dates People Links )]
 );
 
+# loc('Owner')
+# loc('HeldBy')
+# loc('Contact')
 for my $role ('Owner', 'HeldBy', 'Contact') {
     state $i = 1;
     RT::Asset->RegisterRole(
