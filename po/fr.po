@@ -1,0 +1,672 @@
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2014-04-24 15:51+0200\n"
+"Last-Translator: Emmanuel Lacour <elacour@home-dn.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: html/Ticket/Elements/ShowAssets:121 html/Ticket/Elements/ShowAssetsOnCreate:109
+#. ($asset->id, $asset->Name)
+msgid "#%1: %2"
+msgstr "n°%1: %2"
+
+#: html/Asset/Elements/EditDates:55 html/Asset/Elements/EditDates:64 html/Asset/Elements/ShowDates:55 html/Asset/Elements/ShowDates:64
+#. ($m->interp->apply_escapes($AssetObj->CreatedAsString, 'h'),          $m->scomp('/Elements/ShowUser', User => $AssetObj->CreatorObj))
+#. ($m->interp->apply_escapes($AssetObj->LastUpdatedAsString, 'h'),          $m->scomp('/Elements/ShowUser', User => $AssetObj->LastUpdatedByObj))
+msgid "%1 by %2"
+msgstr "%1 par %2"
+
+#: lib/RT/Extension/Assets.pm:76
+msgid "%1 changed from %2 to %3"
+msgstr "%1 changé de %2 à %3"
+
+#: lib/RT/Catalog.pm:216
+#. ($args{'Lifecycle'})
+msgid "%1 is not a valid lifecycle"
+msgstr "%1 n'est pas un cycle de vie valide"
+
+#: html/Ticket/Elements/ShowAssets:169
+#. ($ShowRelatedTickets)
+msgid "%1 most recently updated related tickets"
+msgstr "%1 tickets liés récemment mis à jour"
+
+#: html/Elements/Assets/EditPeople:59
+msgid "(Check box to delete)"
+msgstr "(Cocher pour supprimer)"
+
+#: html/Asset/Elements/ShowPeople:67
+msgid "(via this asset's catalog)"
+msgstr "(via le catalogue de ce bien)"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:128 html/Callbacks/RT-Extension-Assets/Elements/Tabs/SelfService:67
+msgid "Actions"
+msgstr "Actions"
+
+#: html/Elements/RT__Asset/ColumnMap:97
+msgid "Active tickets"
+msgstr "Tickets actifs"
+
+#: html/Asset/Search/Bulk.html:110
+#. (loc($rname))
+msgid "Add %1"
+msgstr "Ajouter %1"
+
+#: html/Elements/Assets/AddPeople:61
+msgid "Add a group"
+msgstr "Ajouter un groupe"
+
+#: html/Elements/Assets/AddPeople:52
+msgid "Add a person"
+msgstr "Ajouter une personne"
+
+#: html/Ticket/Elements/ShowAssets:193
+msgid "Add an asset to this ticket"
+msgstr "Ajouter un bien à ce ticket"
+
+#: html/Admin/Assets/Catalogs/index.html:48
+msgid "Admin Catalogs"
+msgstr "Gestion des catalogues"
+
+#: html/Admin/Assets/Catalogs/index.html:107
+msgid "All Catalogs"
+msgstr "Tous les catalogues"
+
+#: html/Admin/Assets/Catalogs/index.html:95
+msgid "All catalogs matching search criteria"
+msgstr "Tous les catalogues correspondant aux critères de recherche"
+
+#: etc/Assets_Config.pm:60
+msgid "Allocate"
+msgstr "Réserver"
+
+#: html/Ticket/Elements/ShowAssets:194
+msgid "Asset #"
+msgstr "Bien n°"
+
+#: lib/RT/URI/asset.pm:205
+#. ($object->id)
+msgid "Asset #%1"
+msgstr "Bien n°%1"
+
+#: lib/RT/Asset.pm:320
+#. ($self->id, $args{'Name'})
+msgid "Asset #%1 created: %2"
+msgstr "Bien n°%1 créé: %2"
+
+#: html/Asset/Display.html:48 html/Asset/Search/Bulk.html:180 html/SelfService/Asset/Display.html:48 lib/RT/URI/asset.pm:203
+#. ($asset->id, $_)
+#. ($asset->id, $asset->Name)
+#. ($object->id, $object->Name)
+msgid "Asset #%1: %2"
+msgstr "Bien n°%1: %2"
+
+#: html/Admin/Assets/index.html:48
+msgid "Asset Administration"
+msgstr "Gestion des biens"
+
+#: lib/RT/Asset.pm:309
+#. ($txn_msg)
+msgid "Asset Create txn failed: %1"
+msgstr "Échec de création de la transaction: %1"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:201
+msgid "Asset Custom Fields"
+msgstr "Champs personalisés des biens"
+
+#: lib/RT/Asset.pm:267
+#. ($msg)
+msgid "Asset create failed: %1"
+msgstr "Échec de création du bien: %1"
+
+#: html/Asset/Search/Bulk.html:48 html/Asset/Search/index.html:59 html/Asset/index.html:52 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:62 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:66 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:72 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:78 html/Callbacks/RT-Extension-Assets/Elements/Tabs/SelfService:54 html/Ticket/Elements/ShowAssets:108 html/Ticket/Elements/ShowAssetsOnCreate:100
+msgid "Assets"
+msgstr "Biens"
+
+#: lib/RT/Asset.pm:363
+msgid "Assets may not be deleted"
+msgstr "Les biens ne peuvent être supprimés"
+
+#: html/User/Elements/Portlets/UserAssets:49
+msgid "Assigned Assets"
+msgstr "Biens affectés"
+
+#: html/Admin/Assets/Catalogs/Create.html:55 html/Admin/Assets/Catalogs/Modify.html:55 html/Asset/Create.html:180 html/Asset/Create.html:70 html/Asset/Elements/AssetSearchBasics:48 html/Asset/Elements/ShowSummary:53 html/Asset/Modify.html:58 html/Asset/Search/Bulk.html:76 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:112 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:198
+msgid "Basics"
+msgstr "Éléments de base"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:169
+msgid "Bulk Update"
+msgstr "MAJ en masse"
+
+#: html/Asset/Elements/AssetSearchBasics:50 html/Asset/Elements/EditBasics:51 html/Asset/Elements/ShowBasics:50 html/Asset/Search/Bulk.html:79 html/Elements/RT__Asset/ColumnMap:88
+msgid "Catalog"
+msgstr "Catalogue"
+
+#: lib/RT/Catalog.pm:251
+#. ($self->id, $args{'Name'})
+msgid "Catalog #%1 created: %2"
+msgstr "Catalogue n°%1 créé: %2"
+
+#: html/Admin/Assets/Catalogs/CustomFields.html:48
+#. ($Catalog->Name)
+msgid "Catalog %1: Edit Custom Fields"
+msgstr "Catalogue %1: modifier les champs personnalisés"
+
+#: html/Admin/Assets/Catalogs/Modify.html:48
+#. ($catalog->Name)
+msgid "Catalog %1: Modify basics"
+msgstr "Catalogue %1: modifier les éléments de base"
+
+#: html/Admin/Assets/Catalogs/GroupRights.html:48
+#. ($Catalog->Name)
+msgid "Catalog %1: Modify group rights"
+msgstr "Catalogue %1: modifier les droits de groupe"
+
+#: html/Admin/Assets/Catalogs/Roles.html:48
+#. ($catalog->Name)
+msgid "Catalog %1: Modify roles"
+msgstr "Catalogue %1: modifier les rôles"
+
+#: html/Admin/Assets/Catalogs/UserRights.html:48
+#. ($Catalog->Name)
+msgid "Catalog %1: Modify user rights"
+msgstr "Catalogue %1: modifier les droits utilisateurs"
+
+#: lib/RT/Catalog.pm:245
+#. ($txn_msg)
+msgid "Catalog Create txn failed: %1"
+msgstr "Échec de création de la transaction: %1"
+
+#: lib/RT/Catalog.pm:226
+#. ($msg)
+msgid "Catalog create failed: %1"
+msgstr "Échec de création du catalogue: %1"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:188 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:80
+msgid "Catalogs"
+msgstr "Catalogues"
+
+#: lib/RT/Catalog.pm:283
+msgid "Catalogs may not be deleted"
+msgstr "Les catalogues ne peuvent pas être supprimés"
+
+#: lib/RT/Asset.pm:88
+msgid "Contact"
+msgstr "Contact"
+
+#: lib/RT/Asset.pm:300
+#. ($cfmsg)
+msgid "Couldn't add custom field value on create: %1"
+msgstr "Impossible d'ajouter le champs personnalisé: %1"
+
+#: lib/RT/Asset.pm:277
+msgid "Couldn't create role groups for asset"
+msgstr "Impossible de créer le rôle pour ce bien"
+
+#: lib/RT/Catalog.pm:233
+msgid "Couldn't create role groups for catalog"
+msgstr "Impossible de créer le rôle pour ce catalogue"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:191 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:63 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:84 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:91
+msgid "Create"
+msgstr "Créer"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:179
+msgid "Create New"
+msgstr "Créer un nouveau"
+
+#: html/Asset/Create.html:48
+#. ($catalog->Name)
+msgid "Create a new asset in catalog %1"
+msgstr "Créer un nouveau bien dans le catalogue %1"
+
+#: html/Asset/Elements/CreateInCatalog:51
+#. ($m->scomp("/Asset/Elements/SelectCatalog"),)
+msgid "Create a new asset in the catalog %1."
+msgstr "Créer un nouveau bien dans le catalogue %1."
+
+#: html/Asset/Elements/CreateLinkedTicket:61
+#. ($m->scomp("/Elements/SelectNewTicketQueue"),    @description)
+msgid "Create a new ticket in the %1 queue about asset #%2: %3."
+msgstr "Créer un nouveau ticket dans la file %1 lié au bien n°%2: %3."
+
+#: html/Asset/Create.html:99
+msgid "Create asset"
+msgstr "Créer un bien"
+
+#: lib/RT/Catalog.pm:83
+msgid "Create assets"
+msgstr "Créer des biens"
+
+#: html/Admin/Assets/Catalogs/Create.html:48 html/Admin/Assets/Catalogs/Create.html:59
+msgid "Create catalog"
+msgstr "Créer un catalogue"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:129 html/Callbacks/RT-Extension-Assets/Elements/Tabs/SelfService:68
+msgid "Create linked ticket"
+msgstr "Créer un ticket lié"
+
+#: html/Asset/CreateLinkedTicket.html:56 html/SelfService/Asset/CreateLinkedTicket.html:55
+#. ($asset->id, $asset->Name)
+msgid "Create linked ticket for asset #%1: %2"
+msgstr "Créer un ticket lié au bien n°%1: %2"
+
+#: html/Asset/CreateInCatalog.html:49
+msgid "Create new asset"
+msgstr "Créer un nouveau bien"
+
+#: lib/RT/Catalog.pm:80
+msgid "Create, modify, and disable catalogs"
+msgstr "Créer, modifier et désactiver des catalogues"
+
+#: html/Asset/Elements/EditDates:50 html/Asset/Elements/ShowDates:50
+msgid "Created"
+msgstr "Créé le"
+
+#: html/Asset/Elements/AssetSearchCFs:48 html/Asset/Modify.html:62 html/Asset/ModifyCFs.html:58 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:87
+msgid "Custom Fields"
+msgstr "Champs personnalisés"
+
+#: html/Asset/Elements/ShowSummary:55 html/Asset/ModifyDates.html:57 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:115
+msgid "Dates"
+msgstr "Dates"
+
+#: html/Admin/Assets/Catalogs/Elements/EditBasics:54 html/Asset/Elements/AssetSearchBasics:64 html/Asset/Elements/EditBasics:60 html/Asset/Elements/ShowBasics:58 html/Asset/Search/Bulk.html:87
+msgid "Description"
+msgstr "Description"
+
+#: html/Asset/Create.html:181
+msgid "Details"
+msgstr "Détails"
+
+#: html/Elements/RT__Catalog/ColumnMap:67
+msgid "Disabled"
+msgstr "Inactif"
+
+#: html/Admin/Assets/Catalogs/Elements/EditBasics:69
+msgid "Disabled?"
+msgstr "Inactif?"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:110 html/Callbacks/RT-Extension-Assets/Elements/Tabs/SelfService:63
+msgid "Display"
+msgstr "Afficher"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:174
+msgid "Download CSV"
+msgstr ""
+
+#: html/Asset/Search/Bulk.html:128
+#. (($group? loc($group) : loc('Custom Fields')))
+msgid "Edit %1"
+msgstr "Modifier %1"
+
+#: html/Admin/Global/CustomFields/Catalog-Assets.html:52
+msgid "Edit Custom Fields for Assets in all Catalogs"
+msgstr "Modifier les champs personnalisés des biens dans tous les catalogues"
+
+#: html/Asset/Search/Bulk.html:134
+msgid "Edit Links"
+msgstr "Modifier les liens"
+
+#: html/Elements/RT__Catalog/ColumnMap:67
+msgid "Enabled"
+msgstr "Activé"
+
+#: html/Admin/Assets/Catalogs/index.html:108
+msgid "Enabled Catalogs"
+msgstr "Catalogues actifs"
+
+#: html/Admin/Assets/Catalogs/index.html:96
+msgid "Enabled catalogs matching search criteria"
+msgstr "Catalogues actifs correspondants aux critères de recherche"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/AddLinks/ExtraLinkInstructions:49
+msgid "Enter links to assets as \"asset:###\", where ### represents the asset ID."
+msgstr "Saisir des liens vers des biens \"asset:###\", où ### est le numéro de bien."
+
+#: html/Elements/Assets/AddPeople:66
+msgid "Find a group..."
+msgstr "Rechercher un groupe..."
+
+#: html/Elements/Assets/AddPeople:57
+msgid "Find a user..."
+msgstr "Rechercher un utilisateur..."
+
+#: html/Elements/FindAsset:48
+msgid "Find an asset"
+msgstr "Rechercher un bien"
+
+#: html/Asset/Search/index.html:58
+#. ($assets->Count)
+msgid "Found %quant(%1,asset,assets)"
+msgstr "%quant(%1,bien trouvé)"
+
+#: html/Asset/Elements/CreateInCatalog:52 html/Asset/Elements/CreateLinkedTicket:77
+msgid "Go"
+msgstr "Envoyer"
+
+#: html/Elements/Assets/EditRoleMembers:74
+msgid "Group"
+msgstr "Groupe"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:203
+msgid "Group Rights"
+msgstr "Droits de groupe"
+
+#: html/Asset/Elements/ShowRoleMembers.orig:78 html/Asset/Elements/ShowRoleMembers:78
+#. ($g->Name)
+msgid "Group: %1"
+msgstr "Groupe: %1"
+
+#: lib/RT/Asset.pm:87
+msgid "HeldBy"
+msgstr "Propriétaire"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:111 html/Callbacks/RT-Extension-Assets/Elements/Tabs/SelfService:64
+msgid "History"
+msgstr "Historique"
+
+#: html/Asset/History.html:48 html/SelfService/Asset/History.html:48
+#. ($asset->id, $asset->Name)
+msgid "History of Asset #%1: %2"
+msgstr "Historique du bien n°%1: %2"
+
+#: html/Elements/RT__Asset/ColumnMap:107
+msgid "Inactive tickets"
+msgstr "Tickets inactifs"
+
+#: html/Admin/Assets/Catalogs/index.html:84
+msgid "Include disabled catalogs in listing."
+msgstr "Inclure les catalogues désactivés dans la liste."
+
+#: lib/RT/Asset.pm:219
+msgid "Invalid Catalog"
+msgstr "Catalogue invalide"
+
+#: lib/RT/Asset.pm:230
+msgid "Invalid Name (names may not be all digits)"
+msgstr "Nom invalide (les noms ne peuvent pas être constitués que de chiffres)"
+
+#: lib/RT/Catalog.pm:211
+msgid "Invalid Name (names must be unique and may not be all digits)"
+msgstr "Nom invalide (les noms doivent être uniques et ne pas être constitués que de chiffres)"
+
+#: html/Asset/Elements/EditDates:59 html/Asset/Elements/ShowDates:59
+msgid "Last Updated"
+msgstr "Dernière mise à jour"
+
+#: html/Admin/Assets/Catalogs/Elements/EditBasics:58
+msgid "Lifecycle"
+msgstr "Cycle de vie"
+
+#: html/Asset/Create.html:78 html/Asset/Elements/ShowSummary:56 html/Asset/ModifyLinks.html:57 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:113
+msgid "Links"
+msgstr "Liens"
+
+#: html/Asset/ModifyCFs.html:48
+#. ($asset->id, $asset->Name, $Grouping || loc("Custom Fields"))
+msgid "Modify %3 for asset #%1: %2"
+msgstr "Modifier %3 pour le bien n°%1: %2"
+
+#: html/Asset/Modify.html:48
+#. ($asset->id, $asset->Name)
+msgid "Modify asset #%1: %2"
+msgstr "Modifier le bien n°%1: %2"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:81
+msgid "Modify asset catalogs"
+msgstr "Modifier les catalogues de biens"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:88
+msgid "Modify asset custom fields"
+msgstr "Modifier les champs personnalisés de biens"
+
+#: lib/RT/Catalog.pm:84
+msgid "Modify assets"
+msgstr "Modifier des biens"
+
+#: lib/RT/Catalog.pm:87
+msgid "Modify custom field values"
+msgstr "Modifier les valeurs de champs personnalisés"
+
+#: html/Asset/ModifyDates.html:48
+#. ($asset->id, $asset->Name)
+msgid "Modify dates for asset #%1: %2"
+msgstr "Modifier les dates pour le bien n°%1: %2"
+
+#: html/Asset/ModifyLinks.html:48
+#. ($asset->id, $asset->Name)
+msgid "Modify links for asset #%1: %2"
+msgstr "Modifier les liens pour le bien n°%1: %2"
+
+#: html/Asset/ModifyPeople.html:48
+#. ($asset->id, $asset->Name)
+msgid "Modify people related to asset #%1: %2"
+msgstr "Modifier les personnes liées au bien n°%1: %2"
+
+#: html/Elements/MyAssets:48 html/SelfService/Asset/index.html:48 html/SelfService/Asset/index.html:49
+msgid "My Assets"
+msgstr "Mes biens"
+
+#: html/Admin/Assets/Catalogs/Elements/EditBasics:50 html/Asset/Elements/AssetSearchBasics:60 html/Asset/Elements/EditBasics:56 html/Asset/Elements/ShowBasics:54 html/Asset/Search/Bulk.html:83
+msgid "Name"
+msgstr "Nom"
+
+#: lib/RT/Asset.pm:251
+#. ($self->loc($args{'Status'}))
+msgid "New assets cannot have status '%1'."
+msgstr "Un nouveau bien ne peut avoir le statut '%1'."
+
+#: lib/RT/Extension/Assets.pm:107
+msgid "No asset ID specified."
+msgstr "Aucun numéro de bien spécifié."
+
+#: html/Asset/Search/Bulk.html:66 html/Asset/Search/index.html:72
+msgid "No assets matching search criteria found."
+msgstr "Aucun bien correspondant à la recherche."
+
+#: lib/RT/Extension/Assets.pm:91
+msgid "No catalog specified."
+msgstr "Aucun catalogue spécifié."
+
+#: html/Admin/Assets/Catalogs/index.html:54
+msgid "No catalogs matching search criteria found."
+msgstr "Aucun catalogue correspondant aux critères de recherches."
+
+#: html/Asset/ModifyCFs.html:78
+#. ($Grouping)
+msgid "No custom fields found for grouping '%1'"
+msgstr "Pas de champs personnalisés trouvés pour le regroupement '%1'"
+
+#: lib/RT/Extension/Assets.pm:306
+msgid "No name provided"
+msgstr "Aucun nom fourni"
+
+#: lib/RT/Asset.pm:479 lib/RT/Asset.pm:494
+msgid "No permission to modify this asset"
+msgstr "Permission refusée pour modifier ce bien"
+
+#: lib/RT/Catalog.pm:334 lib/RT/Catalog.pm:349
+msgid "No permission to modify this catalog"
+msgstr "Permission refusée pour modifier ce catalogue"
+
+#: lib/RT/Extension/Assets.pm:343
+msgid "Not found"
+msgstr "Non trouvé"
+
+#: etc/Assets_Config.pm:63
+msgid "Now in-use"
+msgstr "Affecter"
+
+#: lib/RT/Asset.pm:86
+msgid "Owner"
+msgstr "Intervenant"
+
+#: html/Asset/Create.html:74 html/Asset/Elements/AssetSearchPeople:48 html/Asset/Elements/ShowSummary:54 html/Asset/ModifyPeople.html:59 html/Asset/Search/Bulk.html:97 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:114
+msgid "People"
+msgstr "Personnes"
+
+#: lib/RT/Asset.pm:227 lib/RT/Asset.pm:433 lib/RT/Asset.pm:590 lib/RT/Catalog.pm:208 lib/RT/Catalog.pm:442
+msgid "Permission Denied"
+msgstr "Permission refusée"
+
+#: etc/Assets_Config.pm:66
+msgid "Recycle"
+msgstr "Recycler"
+
+#: etc/Assets_Config.pm:118
+msgid "Related tickets"
+msgstr "Tickets liés"
+
+#: html/Asset/Search/Bulk.html:116
+#. (loc($rname))
+msgid "Remove %1"
+msgstr "Supprimer %1"
+
+#: etc/Assets_Config.pm:69
+msgid "Report stolen"
+msgstr "Indiquer un vol"
+
+#: html/Admin/Assets/Catalogs/Roles.html:55 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:199
+msgid "Roles"
+msgstr "Rôles"
+
+#: html/Admin/Assets/Catalogs/Modify.html:59 html/Admin/Assets/Catalogs/Roles.html:64 html/Asset/ModifyPeople.html:71
+msgid "Save"
+msgstr "Sauver"
+
+#: html/Admin/Assets/Catalogs/GroupRights.html:55 html/Admin/Assets/Catalogs/UserRights.html:55
+msgid "Save Changes"
+msgstr "Sauver les changements"
+
+#: html/Asset/Modify.html:66 html/Asset/ModifyCFs.html:62 html/Asset/ModifyDates.html:61 html/Asset/ModifyLinks.html:61
+msgid "Save asset"
+msgstr "Sauver le bien"
+
+#: html/Admin/Assets/Catalogs/index.html:85 html/Asset/Search/index.html:80 html/Asset/Search/index.html:86 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:64 html/Elements/FindAsset:51
+msgid "Search"
+msgstr "Rechercher"
+
+#: html/Asset/Search/index.html:77 html/Elements/Assets/Search:49
+msgid "Search Assets"
+msgstr "Rechercher des biens"
+
+#: lib/RT/Catalog.pm:82
+msgid "See assets"
+msgstr "Voir les biens"
+
+#: lib/RT/Catalog.pm:79
+msgid "See catalogs"
+msgstr "Voir les catalogues"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:190 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:83 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:90
+msgid "Select"
+msgstr "Choisir"
+
+#: html/Admin/Assets/Catalogs/index.html:52
+msgid "Select a catalog"
+msgstr "Sélectionner un catalogue"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:164
+msgid "Show Results"
+msgstr "Afficher le résultat"
+
+#: html/Asset/Elements/AssetSearchBasics:55 html/Asset/Elements/EditBasics:64 html/Asset/Elements/ShowBasics:62 html/Asset/Search/Bulk.html:91
+msgid "Status"
+msgstr "Statut"
+
+#: lib/RT/Asset.pm:244
+#. ($self->loc($args{'Status'}))
+msgid "Status '%1' isn't a valid status for assets."
+msgstr "Le statut '%1' n'est pas valide pour un bien."
+
+#: html/Asset/Elements/CreateInCatalog:52
+msgid "This will take you to a partially prefilled asset creation form."
+msgstr "Affichera un formulaire de création de bien pré-rempli."
+
+#: html/Asset/Elements/CreateLinkedTicket:77
+msgid "This will take you to a partially prefilled ticket creation form."
+msgstr "Affichera un formulaire de création de ticket pré-rempli."
+
+#: lib/RT/Extension/Assets.pm:112
+#. ($id)
+msgid "Unable to find asset #%1"
+msgstr "Impossible de trouver le bien n°%1"
+
+#: lib/RT/Extension/Assets.pm:96
+#. ($id)
+msgid "Unable to find catalog %1"
+msgstr "Impossible de trouver le catalogue %1"
+
+#: html/Asset/Create.html:112
+#. ($Catalog)
+msgid "Unable to find catalog '%1'"
+msgstr "Impossible de trouver le catalogue '%1'"
+
+#: html/Asset/Search/Bulk.html:138 html/Asset/Search/Bulk.html:71
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: html/Asset/Elements/CreateLinkedTicket:72
+#. (loc($role), $addr)
+msgid "Use asset %1 as ticket Requestor: %2"
+msgstr "Utiliser le bien %1 comme demandeur de ticket: %2"
+
+#: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:204
+msgid "User Rights"
+msgstr "Droits utilisateurs"
+
+#: html/Asset/Elements/ShowRoleMembers:62
+msgid "User Summary"
+msgstr "Détail"
+
+#: lib/RT/Catalog.pm:86
+msgid "View custom field values"
+msgstr "Voir les valeurs de champs personnalisés"
+
+#: html/Asset/Create.html:116
+#. ($catalog->Name || $catalog->id)
+msgid "You don't have permission to create assets in catalog %1."
+msgstr "Vous n'avez pas la permission pour créer des biens dans le catalogue %1."
+
+#: lib/RT/Extension/Assets.pm:115
+msgid "You don't have permission to view this asset."
+msgstr "Vous n'avez pas la permission pour voir ce bien."
+
+#: lib/RT/Extension/Assets.pm:99
+msgid "You don't have permission to view this catalog."
+msgstr "Vous n'avez pas la permission pour voir ce catalogue."
+
+#: lib/RT/Extension/Assets.pm:80
+msgid "[a hidden catalog]"
+msgstr "[un catalogue non-visible]"
+
+#: etc/Assets_Config.pm:33
+msgid "allocated"
+msgstr "réservé"
+
+#: etc/Assets_Config.pm:39
+msgid "deleted"
+msgstr "supprimé"
+
+#: etc/Assets_Config.pm:34
+msgid "in-use"
+msgstr "affecté"
+
+#: etc/Assets_Config.pm:30
+msgid "new"
+msgstr "nouveau"
+
+#: html/Asset/Elements/AssetSearchBasics:62 html/Asset/Elements/AssetSearchBasics:66 html/Asset/Elements/AssetSearchBasics:78 html/Asset/Elements/AssetSearchCFs:61 html/Asset/Elements/AssetSearchPeople:57 html/Asset/Elements/AssetSearchPeople:74
+msgid "not"
+msgstr "pas"
+
+#: etc/Assets_Config.pm:37
+msgid "recycled"
+msgstr "recyclé"
+
+#: etc/Assets_Config.pm:38
+msgid "stolen"
+msgstr "volé"
+
