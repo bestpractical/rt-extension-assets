@@ -49,7 +49,7 @@
 % for my $role ( $AssetObj->Roles ) {
 <tr class="asset-people-<% CSSClass($role) %>">
 <td class="label">
-<&|/l&><% $role %></&>:
+<% loc($role) %>:
 </td>
 <td class="value" colspan="5">
 <& /Elements/EmailInput, Name => $role, Size => undef, Default => $ARGS{$role}, Autocomplete => 1 &>
