@@ -113,6 +113,7 @@ META.yml
 patches/rt-4.2.1-4.2.2.patch
 po/assets.pot
 po/en.po
+po/fr.po
 README
 static/css/RTx-Assets.css
 static/js/RTx-Assets.js

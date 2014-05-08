@@ -1,5 +1,9 @@
 Revision history for RT-Extension-Assets
 
+1.01rc2 2014-05-08
+ - New French translation
+ - Localization fixes
+
 1.01rc1 2014-05-08
  - Squelch warnings when Assets configuration options are set in
    RT_SiteConfig.pm
