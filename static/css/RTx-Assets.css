@@ -35,8 +35,7 @@ body#comp-Asset-Search .collection-as-table td {
 }
 
 #comp-Asset-Display .asset-people td.label {
-    vertical-align: top;
-    width: 8em;
+    text-align: left;
 }
 
 #comp-Asset-Display .asset-people h3 {
@@ -219,15 +218,5 @@ body#comp-Asset-Search .collection-as-table td {
     .asset-search-basics tr>td {
         display: inline-block;
         width: 10em;
-    }
-}
-
-@media (max-width:1440px) {
-
-    /* on a not-wide-enough screen, don't position "User Summary" link as
-     * "absolute" in case of overlapping */
-    #comp-Asset-Display .asset-people a.user-summary {
-        position: relative;
-        white-space: nowrap;
     }
 }

@@ -53,17 +53,20 @@ my $CatalogObj = $AssetObj->CatalogObj;
 </%init>
 <table>
 % for my $role ($AssetObj->Roles) {
-<tr>
-  <td class="label"><% loc($role) %>:</td>
+<tr><td class="label"><% loc($role) %>:
 % if ($AssetObj->Role($role)->{Single}) {
-  <td><& ShowRoleMembers, Group => $AssetObj->RoleGroup($role), Single => 1 &></td>
+%      my $user = $AssetObj->RoleGroup($role)->UserMembersObj(Recursively => 0)->Next;
+<& /Elements/ShowUser, User => $user, Link => 1 &></td></tr>
+%      next if $user->id == RT->Nobody->id;
+<tr><td>
+<& ShowRoleMembers, Group => $AssetObj->RoleGroup($role), Title => 0 &>
+</div></td></tr>
 % } else {
-  <td class="user-accordion">
+</td></tr><tr><td class="user-accordion">
     <& ShowRoleMembers, Group => $AssetObj->RoleGroup($role) &>
     <& ShowRoleMembers, Group => $CatalogObj->RoleGroup($role), Skip => $AssetObj->RoleGroup($role), Note => loc("(via this asset's catalog)") &>
-  </td>
+  </td></tr>
 % }
-</tr>
 % }
 <& /Elements/ShowCustomFields, Object => $AssetObj, Grouping => 'People', Table => 0 &>
 
