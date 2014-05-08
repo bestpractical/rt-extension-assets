@@ -114,8 +114,6 @@ sub AddRecord {
     $self->SUPER::AddRecord($asset, @_);
 }
 
-=cut
-
 =head2 NewItem
 
 Returns a new empty RT::Asset item

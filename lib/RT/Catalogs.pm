@@ -95,8 +95,6 @@ sub AddRecord {
     $self->SUPER::AddRecord($catalog, @_);
 }
 
-=cut
-
 =head2 NewItem
 
 Returns a new empty RT::Catalog item
