@@ -170,6 +170,10 @@ elsif ($Path =~ m{^/Asset/Search/}) {
             path => '/Asset/Search/Bulk.html?'. $query_string->(%search),
         );
     }
+    $page->child('csv',
+        title => loc('Download CSV'),
+        path  => '/Asset/Search/Results.tsv?' . $query_string->(%search),
+    );
 }
 elsif ($Path =~ m{^/Admin/Global/CustomFields/Catalog-Assets\.html$}) {
     $page->child("create", title => loc("Create New"), path => "/Admin/CustomFields/Modify.html?Create=1;LookupType=" . RT::Asset->CustomFieldLookupType);
