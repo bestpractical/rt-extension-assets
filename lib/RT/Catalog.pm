@@ -76,15 +76,15 @@ RT::Catalog - A logical set of assets
 sub LifecycleType { "asset" }
 
 # Setup rights
-__PACKAGE__->AddRight( General => ShowCatalog  => 'See catalogs' ); # loc_pair
-__PACKAGE__->AddRight( Admin   => AdminCatalog => 'Create, modify, and disable catalogs' ); #loc_pair
+__PACKAGE__->AddRight( General => ShowCatalog  => 'See catalogs' ); #loc
+__PACKAGE__->AddRight( Admin   => AdminCatalog => 'Create, modify, and disable catalogs' ); #loc
 
-__PACKAGE__->AddRight( General => ShowAsset    => 'See assets' ); #loc_pair
-__PACKAGE__->AddRight( Staff   => CreateAsset  => 'Create assets' ); #loc_pair
-__PACKAGE__->AddRight( Staff   => ModifyAsset  => 'Modify assets' ); #loc_pair
+__PACKAGE__->AddRight( General => ShowAsset    => 'See assets' ); #loc
+__PACKAGE__->AddRight( Staff   => CreateAsset  => 'Create assets' ); #loc
+__PACKAGE__->AddRight( Staff   => ModifyAsset  => 'Modify assets' ); #loc
 
-__PACKAGE__->AddRight( General => SeeCustomField      => 'View custom field values' ); # loc_pair
-__PACKAGE__->AddRight( Staff   => ModifyCustomField   => 'Modify custom field values' ); # loc_pair
+__PACKAGE__->AddRight( General => SeeCustomField      => 'View custom field values' ); # loc
+__PACKAGE__->AddRight( Staff   => ModifyCustomField   => 'Modify custom field values' ); # loc
 
 RT::ACE->RegisterCacheHandler(sub {
     my %args = (
