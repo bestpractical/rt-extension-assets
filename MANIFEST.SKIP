@@ -65,6 +65,7 @@
 # Dist droppings
 ^MYMETA\.
 \.tar\.gz$
+\.tar\.gz.asc$
 
 # ctags files
 ^\.tags

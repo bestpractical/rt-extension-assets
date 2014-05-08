@@ -2,6 +2,7 @@ Changes
 doc/images/asset-cfs.png
 doc/images/asset-date-details.png
 doc/images/asset-search.png
+doc/images/asset-ticket-create-selfservice.png
 doc/images/asset-ticket-create.png
 doc/images/catalog-rights.png
 doc/images/edit-catalog.png
@@ -48,6 +49,7 @@ html/Asset/Elements/ShowLinks
 html/Asset/Elements/ShowPeople
 html/Asset/Elements/ShowRoleMembers
 html/Asset/Elements/ShowSummary
+html/Asset/Elements/TSVExport
 html/Asset/Helpers/CreateInCatalog
 html/Asset/Helpers/CreateLinkedTicket
 html/Asset/History.html
@@ -59,6 +61,7 @@ html/Asset/ModifyLinks.html
 html/Asset/ModifyPeople.html
 html/Asset/Search/Bulk.html
 html/Asset/Search/index.html
+html/Asset/Search/Results.tsv
 html/Callbacks/RT-Extension-Assets/Elements/AddLinks/ExtraLinkInstructions
 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged
 html/Callbacks/RT-Extension-Assets/Elements/Tabs/SelfService

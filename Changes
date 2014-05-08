@@ -1,5 +1,12 @@
 Revision history for RT-Extension-Assets
 
+1.01rc1 2014-05-08
+ - Squelch warnings when Assets configuration options are set in
+   RT_SiteConfig.pm
+ - Add a CSV export option
+ - Better formatting of people on Assets display pages
+ - Adjust CSS to no longer cause core RT tables to be overly-wide
+
 1.00 2014-02-27
  - First official release
 
