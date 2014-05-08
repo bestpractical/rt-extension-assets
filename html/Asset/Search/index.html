@@ -55,7 +55,7 @@ my %search = ProcessAssetsSearchArguments(
 );
 
 my $title = ( $ARGS{'SearchAssets'} or $ARGS{q} ) ?
-      loc("Found [quant,_1,asset]",$assets->Count)
+      loc("Found [quant,_1,asset,assets]",$assets->Count)
     : loc("Assets");
 
 </%init>
