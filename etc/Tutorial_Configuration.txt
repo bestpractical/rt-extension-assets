@@ -4,7 +4,7 @@
 Set(
     $HomepageComponents,
     [
-        qw(QuickCreate Quicksearch MyAdminQueues MySupportQueues MyReminders RefreshHomepage Dashboards SavedSearches FindUser MyAssets FindAsset) # loc_qw
+        qw(QuickCreate Quicksearch MyAdminQueues MySupportQueues MyReminders RefreshHomepage Dashboards SavedSearches FindUser MyAssets FindAsset)
     ]
 );
 
