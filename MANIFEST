@@ -122,6 +122,7 @@ xt/collection.t
 xt/compile.t
 xt/lib/RT/Extension/Assets/Test.pm.in
 xt/links.t
+xt/pod.t
 xt/rights.t
 xt/roles.t
 xt/web.t
