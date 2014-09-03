@@ -111,7 +111,10 @@ Set($AssetSearchFields, {
 
 =item C<$AssetSearchFormat>
 
-The format that results of the asset search are displayed with.
+The format that results of the asset search are displayed with.  This is
+either a string, which will be used for all catalogs, or a hash
+reference, keyed by catalog's name/id.  If a hashref and neither name or
+id is found therein, falls back to the key ''.
 
 =cut
 

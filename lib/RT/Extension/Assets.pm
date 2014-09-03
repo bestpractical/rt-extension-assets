@@ -257,7 +257,11 @@ RT->AddJavaScript("RTx-Assets.js");
             push @PassArguments, 'SearchAssets';
         }
 
-        my $Format = RT->Config->Get('AssetSearchFormat') || q[
+        my $Format = RT->Config->Get('AssetSearchFormat');
+        $Format = $Format->{$args{'Catalog'}->id}
+            || $Format->{$args{'Catalog'}->Name}
+            || $Format->{''} if ref $Format;
+        $Format ||= q[
             '<b><a href="__WebPath__/Asset/Display.html?id=__id__">__id__</a></b>/TITLE:#',
             '<b><a href="__WebPath__/Asset/Display.html?id=__id__">__Name__</a></b>/TITLE:Name',
             Description,
