@@ -17,11 +17,6 @@ INSTALLATION
 
         RT version 4.2.3 and above already contain this patch.
 
-    Edit your /opt/rt4/etc/RT_SiteConfig.pm
-        Add this line:
-
-            Plugin( "RT::Extension::Assets" );
-
     make initdb
         Only run this the first time you install this module.
 
@@ -30,6 +25,11 @@ INSTALLATION
 
         If you are upgrading this module, check for upgrading instructions
         in case changes need to be made to your database.
+
+    Edit your /opt/rt4/etc/RT_SiteConfig.pm
+        Add this line:
+
+            Plugin( "RT::Extension::Assets" );
 
     Configure portlets for RT's Homepage and User Summary
         If you would like the MyAssets or FindAsset portlets to be available
@@ -47,11 +47,8 @@ INSTALLATION
     Restart your webserver
 
 CONFIGURATION
-  $DefaultCatalog
-    Use this to define the default catalog name that will be used when first
-    searching for assets; thereafter, it will default to the last-searched
-    catalog. You may use either the catalog's name or its ID. This only
-    affects the catalog selection on the asset search interface.
+    See Assets_Config.pm for documentation on the available configuration
+    parameters.
 
 USAGE
     Assets start as a small set of fundamental record data upon which you

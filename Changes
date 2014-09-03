@@ -1,5 +1,16 @@
 Revision history for RT-Extension-Assets
 
+1.01_1 2014-09-03
+ - Ensure that global (applied across all catalogs) custom fields are
+   also shown during asset search
+ - Avoid errors when a singular role group (e.g. Owner) is disabled.
+ - AssetSearchFormat may now be a hashref, for catalog-specific formats
+ - Allow the standard RT extension install ordering of "make initdb"
+   prior to adding to @Plugins
+
+1.01 2014-05-16
+ - No changes since 1.01rc2
+
 1.01rc2 2014-05-08
  - New French translation
  - Localization fixes
