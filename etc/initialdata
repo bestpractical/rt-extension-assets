@@ -1,7 +1,14 @@
 use strict;
 use warnings;
 
-require RT::Asset;
+# Temporarily enable the plugin so the asset lifecycle exists
+unless (grep {$_ eq "RT::Extension::Assets"} RT->Config->Get('Plugins')) {
+    RT->Config->Set('Plugins', (RT->Config->Get('Plugins'), "RT::Extension::Assets"));
+    RT->InitPluginPaths;
+    RT->Config->LoadConfig( File => "Assets_Config.pm" );
+    RT::Lifecycle->new->FillCache;
+    require RT::Extension::Assets;
+}
 
 our (@Final);
 
