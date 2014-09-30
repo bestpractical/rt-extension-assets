@@ -67,6 +67,7 @@
     <td class="value"><input type="text" id="!Description" name="!Description" value="<% $ARGS{"!Description"} || ''%>" /></td></tr>
 % my $CFs = RT::CustomFields->new( $session{CurrentUser} );
 % $CFs->LimitToCatalog( $CatalogObj->Id );
+% $CFs->LimitToObjectId(0); # LimitToGlobal but no LookupType restriction
 % $CFs->LimitToGrouping( "RT::Asset" => "Basics" );
 % while (my $cf = $CFs->Next) {
 % my $name = "CF.{" . $cf->Name . "}";
