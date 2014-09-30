@@ -242,12 +242,22 @@ RT->AddJavaScript("RTx-Assets.js");
                     my $cf = RT::Asset->new( $session{CurrentUser} )
                       ->LoadCustomFieldByIdentifier( $1 );
                     next unless $cf->id;
-                    $args{'Assets'}->LimitCustomField(
-                        CUSTOMFIELD => $cf->Id,
-                        OPERATOR    => ($negative ? "NOT LIKE" : "LIKE"),
-                        VALUE       => $value,
-                        ENTRYAGGREGATOR => "AND",
-                    );
+                    if ( $value eq 'NULL' ) {
+                        $args{'Assets'}->LimitCustomField(
+                            CUSTOMFIELD => $cf->Id,
+                            OPERATOR    => ($negative ? "IS NOT" : "IS"),
+                            VALUE       => 'NULL',
+                            QUOTEVALUE  => 0,
+                            ENTRYAGGREGATOR => "AND",
+                        );
+                    } else {
+                        $args{'Assets'}->LimitCustomField(
+                            CUSTOMFIELD => $cf->Id,
+                            OPERATOR    => ($negative ? "NOT LIKE" : "LIKE"),
+                            VALUE       => $value,
+                            ENTRYAGGREGATOR => "AND",
+                        );
+                    }
                 }
                 else {
                     next;
