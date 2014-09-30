@@ -48,7 +48,7 @@
 <&| /Widgets/TitleBox, title => $Grouping ? loc($Grouping) : loc('Custom Fields'), hide_empty => 1, class=>'asset-search-grouping asset-search-cfs'  &>
 % my $CFs = RT::CustomFields->new( $session{CurrentUser} );
 % $CFs->LimitToCatalog( $CatalogObj->Id );
-% $CFs->LimitToGlobal();
+% $CFs->LimitToObjectId(0); # LimitToGlobal but no LookupType restriction
 % $CFs->LimitToGrouping( "RT::Asset" => $Grouping );
 % if ( $CFs->Count > 0 ){
 <table>
