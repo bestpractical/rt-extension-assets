@@ -561,8 +561,13 @@ sub LoadCustomFieldByIdentifier {
 
     my $cf = RT::CustomField->new( $self->CurrentUser );
     $cf->SetContextObject( $self );
-    $cf->LoadByNameAndCatalog( Name => $field, Catalog => $self->Catalog );
-    $cf->LoadByNameAndCatalog( Name => $field, Catalog => 0 ) unless $cf->id;
+    $cf->LoadByName(
+        Name            => $field,
+        LookupType      => $self->CustomFieldLookupType,
+        ObjectId        => $self->Catalog,
+        IncludeGlobal   => 1,
+        IncludeDisabled => 0,
+    );
     return $cf;
 }
 
