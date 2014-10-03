@@ -274,7 +274,8 @@ METHODS ADDED TO OTHER CLASSES
    LimitToCatalog
     Takes a numeric RT::Catalog ID. Limits the RT::CustomFields collection
     to only those fields applied directly to the specified catalog. This
-    limit is OR'd with other "LimitToCatalog" and "LimitToGlobal" calls.
+    limit is OR'd with other "LimitToCatalog" and "LimitToObjectId" in
+    RT::CustomFields calls.
 
     Note that this will cause the collection to only return asset CFs.
 

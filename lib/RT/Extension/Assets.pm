@@ -693,7 +693,8 @@ matching the same criteria are found.  Enabled CFs are preferentially loaded.
 
 Takes a numeric L<RT::Catalog> ID.  Limits the L<RT::CustomFields> collection
 to only those fields applied directly to the specified catalog.  This limit is
-OR'd with other L</LimitToCatalog> and C<LimitToGlobal> calls.
+OR'd with other L</LimitToCatalog> and L<RT::CustomFields/LimitToObjectId>
+calls.
 
 Note that this will cause the collection to only return asset CFs.
 
