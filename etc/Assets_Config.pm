@@ -116,6 +116,15 @@ either a string, which will be used for all catalogs, or a hash
 reference, keyed by catalog's name/id.  If a hashref and neither name or
 id is found therein, falls back to the key ''.
 
+If you wish to use the multiple catalog format, your configuration would look
+something like:
+
+    Set($AssetSearchFormat, {
+        'General assets' => q[Format String for the General Assets Catalog],
+        8                => q[Format String for Catalog 8],
+        ''               => q[Format String for any catalogs not listed explicitly],
+    });
+
 =cut
 
 # loc('Related tickets')
