@@ -100,7 +100,7 @@
 % my $role = $asset->Role( $rname );
 % if ( $role->{'Single'} ) {
 % my $input = "SetRoleMember-$rname";
-<tr>
+<tr class="full-width">
 <td class="label"><label for="<% $input %>"><% loc($rname) %></label></td>
 <td><input type="text" value="<% $ARGS{ $input } || '' %>" name="<% $input %>" id="<% $input %>" data-autocomplete="Users" data-autocomplete-return="Name" /></td>
 </tr>

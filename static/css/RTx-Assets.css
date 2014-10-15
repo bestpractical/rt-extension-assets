@@ -203,6 +203,13 @@ body#comp-Asset-Search .collection-as-table td {
         padding: inherit;
     }
 
+    .asset-bulk-people tr.full-width,
+    .asset-search-people tr.ful-width,
+    .asset-bulk-basics tr.full-width,
+    .asset-search-basics tr.full-width {
+        width: 100%;
+    }
+
     .asset-bulk-people tr,
     .asset-search-people tr,
     .asset-bulk-basics tr,
