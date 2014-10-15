@@ -285,7 +285,7 @@ msgid "Display"
 msgstr ""
 
 #: html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged:174
-msgid "Download CSV"
+msgid "Download Spreadsheet"
 msgstr ""
 
 #: html/Asset/Search/Bulk.html:128

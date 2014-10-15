@@ -171,7 +171,7 @@ elsif ($Path =~ m{^/Asset/Search/}) {
         );
     }
     $page->child('csv',
-        title => loc('Download CSV'),
+        title => loc('Download Spreadsheet'),
         path  => '/Asset/Search/Results.tsv?' . $query_string->(%search),
     );
 }
