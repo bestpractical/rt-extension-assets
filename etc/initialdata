@@ -10,6 +10,8 @@ unless (grep {$_ eq "RT::Extension::Assets"} RT->Config->Get('Plugins')) {
     require RT::Extension::Assets;
 }
 
+require RT::Asset;
+
 our (@Final);
 
 # Create global role groups
