@@ -124,32 +124,57 @@ RT->AddJavaScript("RTx-Assets.js");
         my @results;
 
         for my $arg (keys %ARGS) {
-            if ($arg =~ /^AddRoleMember-(User|Group)$/) {
-                next unless $ARGS{$arg} and $ARGS{"$arg-Type"};
+            if ($arg =~ /^Add(User|Group)RoleMember$/) {
+                next unless $ARGS{$arg} and $ARGS{"$arg-Role"};
 
                 my ($ok, $msg) = $object->AddRoleMember(
-                    Type => $ARGS{"$arg-Type"},
+                    Type => $ARGS{"$arg-Role"},
                     $1   => $ARGS{$arg},
                 );
                 push @results, $msg;
             }
             elsif ($arg =~ /^SetRoleMember-(.+)$/) {
-                my $type = $1;
-                my $group = $object->RoleGroup($type);
+                my $role = $1;
+                my $group = $object->RoleGroup($role);
                 next unless $group->id and $group->SingleMemberRoleGroup;
                 next if $ARGS{$arg} eq $group->UserMembersObj->First->Name;
                 my ($ok, $msg) = $object->AddRoleMember(
-                    Type => $type,
+                    Type => $role,
                     User => $ARGS{$arg} || 'Nobody',
                 );
                 push @results, $msg;
             }
-            elsif ($arg =~ /^RemoveRoleMember-(.+)$/) {
-                my ($ok, $msg) = $object->DeleteRoleMember(
-                    Type        => $1,
-                    PrincipalId => $ARGS{$arg},
+            elsif ($arg =~ /^(Add|Remove)RoleMember-(.+)$/) {
+                my $role = $2;
+                my $method = $1 eq 'Add'? 'AddRoleMember' : 'DeleteRoleMember';
+
+                my $is = 'User';
+                if ( ($ARGS{"$arg-Type"}||'') =~ /^(User|Group)$/ ) {
+                    $is = $1;
+                }
+
+                my ($ok, $msg) = $object->$method(
+                    Type        => $role,
+                    ($ARGS{$arg} =~ /\D/
+                        ? ($is => $ARGS{$arg})
+                        : (PrincipalId => $ARGS{$arg})
+                    ),
                 );
                 push @results, $msg;
+            }
+            elsif ($arg =~ /^RemoveAllRoleMembers-(.+)$/) {
+                my $role = $1;
+                my $group = $object->RoleGroup($role);
+                next unless $group->id;
+
+                my $gms = $group->MembersObj;
+                while ( my $gm = $gms->Next ) {
+                    my ($ok, $msg) = $object->DeleteRoleMember(
+                        Type        => $role,
+                        PrincipalId => $gm->MemberId,
+                    );
+                    push @results, $msg;
+                }
             }
         }
         return @results;
