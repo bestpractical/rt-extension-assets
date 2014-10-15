@@ -1,5 +1,18 @@
 Revision history for RT-Extension-Assets
 
+1.02rc1 2014-10-15
+ - Special-case and support 'NULL' in custom field searches
+ - Stop showing global ticket CFs in Asset search; properly show global
+   asset CFs
+ - Include global asset CFs in spreadsheet download
+ - Include an example of catalog-specific search result formats
+ - Fix bulk update of asset roles
+ - Test fixes
+ - Improve two-column layout of role bulk update
+ - Support adding multiple space-separated assets to a ticket at once
+ - Rename "Download TSV" to the more correct and generic "Download
+   Spreadsheet"
+
 1.01_1 2014-09-03
  - Ensure that global (applied across all catalogs) custom fields are
    also shown during asset search
