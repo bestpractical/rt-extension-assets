@@ -21,7 +21,9 @@ jQuery(function() {
     jQuery(".ticket-assets form").submit(function(){
         var input = jQuery("[name*=RefersTo]", this);
         if (input.val())
-            input.val("asset:" + input.val());
+            input.val(input.val().match(/\S+/g)
+                                 .map(function(x){return "asset:"+x})
+                                 .join(" "));
     });
     jQuery("#page-actions-create-linked-ticket").click(function(ev){
         ev.preventDefault();
