@@ -210,7 +210,7 @@ sub OrderByCols {
     my @res  = ();
     for my $row (@_) {
         if ( blessed($row->{FIELD}) and $row->{FIELD}->isa("RT::CustomField") ) {
-            push @res, $self->_OrderByCF( $row, $row->{FIELD} );
+            push @res, $self->_OrderByCF( $row, $row->{FIELD}->id, $row->{FIELD} );
         } else {
             push @res, $row;
        }
