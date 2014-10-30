@@ -208,12 +208,28 @@ sub SimpleSearch {
 sub OrderByCols {
     my $self = shift;
     my @res  = ();
+
+    my $class = $self->_RoleGroupClass;
+
     for my $row (@_) {
         if ( blessed($row->{FIELD}) and $row->{FIELD}->isa("RT::CustomField") ) {
             push @res, $self->_OrderByCF( $row, $row->{FIELD}->id, $row->{FIELD} );
+        } elsif ($row->{FIELD} =~ /^(\w+)(?:\.(\w+))?$/) {
+            my ($role, $subkey) = ($1, $2);
+            if ($class->HasRole($role)) {
+                $self->{_order_by_role}{ $role }
+                        ||= ( $self->_WatcherJoin( Name => $role, Class => $class) )[2];
+                push @res, {
+                    %$row,
+                    ALIAS => $self->{_order_by_role}{ $role },
+                    FIELD => $subkey || 'EmailAddress',
+                };
+            } else {
+                push @res, $row;
+            }
         } else {
             push @res, $row;
-       }
+        }
     }
     return $self->SUPER::OrderByCols( @res );
 }
