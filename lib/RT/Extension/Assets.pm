@@ -245,7 +245,13 @@ RT->AddJavaScript("RTx-Assets.js");
                         VALUE => $value,
                         ENTRYAGGREGATOR => "AND",
                     );
-                } elsif ($key =~ /^(Catalog|Status)$/) {
+                } elsif ($key eq 'Catalog') {
+                    $args{'Assets'}->LimitCatalog(
+                        OPERATOR => ($negative ? '!=' : '='),
+                        VALUE => $value,
+                        ENTRYAGGREGATOR => "AND",
+                    );
+                } elsif ($key eq 'Status') {
                     $args{'Assets'}->Limit(
                         FIELD => $key,
                         OPERATOR => ($negative ? '!=' : '='),
@@ -304,16 +310,6 @@ RT->AddJavaScript("RTx-Assets.js");
         ];
 
         $ARGSRef->{OrderBy} ||= 'id';
-        if ($ARGSRef->{OrderBy} =~ /^CF\.(?:\{(.*)\}|(.*))$/) {
-            my $name = $1 || $2;
-            my $cf = RT::CustomField->new( $session{'CurrentUser'} );
-            $cf->LoadByNameAndCatalog(
-                Name => $name,
-                Catalog => $args{'Catalog'}->id,
-            );
-            $ARGSRef->{OrderBy} = [ $cf ];
-            $ARGSRef->{Order}   = [ $ARGSRef->{Order} ];
-        }
 
         push @PassArguments, qw/OrderBy Order Page/;
 

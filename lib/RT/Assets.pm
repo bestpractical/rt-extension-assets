@@ -77,6 +77,26 @@ sub LimitToActiveStatus {
         for RT::Catalog->LifecycleObj->Valid('initial', 'active');
 }
 
+=head2 LimitCatalog
+
+Limit Catalog
+
+=cut
+
+sub LimitCatalog {
+    my $self = shift;
+    my %args = (
+        FIELD    => 'Catalog',
+        OPERATOR => '=',
+        @_
+    );
+
+    if ( $args{OPERATOR} eq '=' ) {
+        $self->{Catalog} = $args{VALUE};
+    }
+    $self->SUPER::Limit(%args);
+}
+
 =head2 Limit
 
 Defaults CASESENSITIVE to 0
@@ -169,7 +189,7 @@ sub SimpleSearch {
             = $customfield;
     }
 
-    $self->Limit( FIELD => 'Catalog', VALUE => $catalog->id );
+    $self->LimitCatalog( VALUE => $catalog->id );
 
     while (my ($name, $op) = each %{$args{Fields}}) {
         $op = 'STARTSWITH'
@@ -212,8 +232,16 @@ sub OrderByCols {
     my $class = $self->_RoleGroupClass;
 
     for my $row (@_) {
-        if ( blessed($row->{FIELD}) and $row->{FIELD}->isa("RT::CustomField") ) {
-            push @res, $self->_OrderByCF( $row, $row->{FIELD}->id, $row->{FIELD} );
+        if ($row->{FIELD} =~ /^CF\.(?:\{(.*)\}|(.*))$/) {
+            my $name = $1 || $2;
+            my $cf = RT::CustomField->new( $self->CurrentUser );
+            $cf->LoadByNameAndCatalog(
+                Name => $name,
+                Catalog => $self->{'Catalog'},
+            );
+            if ( $cf->id ) {
+                push @res, $self->_OrderByCF( $row, $cf->id, $cf );
+            }
         } elsif ($row->{FIELD} =~ /^(\w+)(?:\.(\w+))?$/) {
             my ($role, $subkey) = ($1, $2);
             if ($class->HasRole($role)) {
