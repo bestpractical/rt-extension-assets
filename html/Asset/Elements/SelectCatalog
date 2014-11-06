@@ -48,7 +48,7 @@
 <& /Elements/SelectObject,
     Name           => "Catalog",
     ShowAll        => $ShowAll,
-    ShowNullOption => 0,
+    ShowNullOption => $ShowNullOption,
     CheckRight     => "CreateAsset",
     %ARGS,
     ObjectType     => "Catalog",
@@ -61,8 +61,12 @@ $Default => undef
 $UpdateSession => 1
 </%args>
 <%init>
+my $ShowNullOption = 0;
 my $catalog_obj = LoadDefaultCatalog($Default || '');
-if ( $UpdateSession && $catalog_obj->Id ){
+
+if ( $ARGS{Name} && ($ARGS{Name} eq 'UpdateCatalog') ) {
+  $ShowNullOption = 1;
+} elsif ( $UpdateSession && $catalog_obj->Id ){
     $session{'DefaultCatalog'} = $catalog_obj->Id;
     $Default = $catalog_obj->Id;
 }

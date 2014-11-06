@@ -157,7 +157,7 @@ elsif ($Path =~ m{^/Asset/Search/}) {
     my %search = map @{$_},
         grep defined $_->[1] && length $_->[1],
         map {ref $DECODED_ARGS->{$_} ? [$_, $DECODED_ARGS->{$_}[0]] : [$_, $DECODED_ARGS->{$_}] }
-        grep /^(?:q|SearchAssets|!?(Name|Description|Catalog|Status|Role\..+|CF\..+)|Order(?:By)?|Page)$/,
+        grep /^(?:q|SearchAssets|!?(Name|Description|Catalog|Status|Role\..+|CF\..+)|Order(?:By)?|Page|AllRoles|PrincipalId)$/,
         keys %$DECODED_ARGS;
     if ( $Path =~ /Bulk/) {
         $page->child('search',

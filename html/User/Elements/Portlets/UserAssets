@@ -45,8 +45,21 @@
 %# those contributions and any derivatives thereof.
 %#
 %# END BPS TAGGED BLOCK }}}
+<%init>
+my $format = RT->Config->Get('WebPath') . '/Asset/Search/index.html?AllRoles=1&PrincipalId=%d&SearchAssets=Search';
+my $search = sprintf $format, $User->PrincipalId;
+
+my $titleright_args = {};
+$m->callback( CallbackName => 'TitleRight', %ARGS, TitleRightArgs => $titleright_args );
+</%init>
 %# Roles => [''] triggers the magical RoleLimit behavior that matches any role
-<& /User/Elements/AssetList, User => $User, Roles => [''], Title => loc('Assigned Assets') &>
+<& /User/Elements/AssetList,
+    User       => $User,
+    Roles      => [''],
+    Title      => loc('Assigned Assets'),
+    title_href => $search,
+    titleright => $titleright_args,
+&>
 <%ARGS>
 $User
 </%ARGS>

@@ -62,7 +62,7 @@ my $Format = q[
 ];
 $m->callback( CallbackName => 'ModifyFormat', %ARGS, Format => \$Format );
 </%init>
-<&| /Widgets/TitleBox, title => $Title, class => "user asset-list" &>
+<&| /Widgets/TitleBox, title => $Title, title_href => $title_href, class => "user asset-list", %$titleright &>
     <& /Elements/CollectionList,
         Collection      => $assets,
         OrderBy         => 'id',
@@ -75,4 +75,6 @@ $m->callback( CallbackName => 'ModifyFormat', %ARGS, Format => \$Format );
 $User
 $Title
 @Roles
+$title_href => ''
+$titleright => {}
 </%args>

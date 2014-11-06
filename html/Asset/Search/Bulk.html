@@ -77,7 +77,7 @@
 <table>
   <tr class="asset-catalog">
     <td class="label"><label for="UpdateCatalog"><&|/l&>Catalog</&></label></td>
-    <td><& /Asset/Elements/SelectCatalog, Name => 'UpdateCatalog', Default => $catalog_obj->id, UpdateSession => 0, &></td>
+    <td><& /Asset/Elements/SelectCatalog, Name => 'UpdateCatalog', Default => ( $ARGS{'Catalog'} && $catalog_obj->id ), UpdateSession => 0, &></td>
   </tr>
   <tr class="asset-name">
     <td class="label"><label for="UpdateName"><&|/l&>Name</&></label></td>
@@ -149,7 +149,9 @@ my @results;
 $m->callback(ARGSRef => \%ARGS, Results => \@results, CallbackName => 'Initial');
 
 my $catalog_obj = LoadDefaultCatalog($ARGS{'Catalog'} || '');
-$ARGS{'Catalog'} = $catalog_obj->Id;
+if ( ! $ARGS{AllRoles} ) {
+    $ARGS{'Catalog'} = $catalog_obj->Id;
+}
 
 my $assets = RT::Assets->new($session{CurrentUser});
 my %search = ProcessAssetsSearchArguments(

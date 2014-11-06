@@ -258,6 +258,13 @@ RT->AddJavaScript("RTx-Assets.js");
                         VALUE => $value,
                         ENTRYAGGREGATOR => "AND",
                     );
+                } elsif ($key eq 'AllRoles') {
+                    $args{'Assets'}->RoleLimit(
+                        TYPE      => '',
+                        VALUE     => $ARGSRef->{PrincipalId},
+                        SUBCLAUSE => "Role",
+                    );
+                    push @PassArguments, 'PrincipalId';
                 } elsif ($key =~ /^Role\.(.+)/) {
                     my $role = $1;
                     $args{'Assets'}->RoleLimit(
@@ -299,8 +306,8 @@ RT->AddJavaScript("RTx-Assets.js");
         }
 
         my $Format = RT->Config->Get('AssetSearchFormat');
-        $Format = $Format->{$args{'Catalog'}->id}
-            || $Format->{$args{'Catalog'}->Name}
+        $Format = $Format->{$args{'Catalog'} && $args{'Catalog'}->id}
+            || $Format->{$args{'Catalog'} && $args{'Catalog'}->Name}
             || $Format->{''} if ref $Format;
         $Format ||= q[
             '<b><a href="__WebPath__/Asset/Display.html?id=__id__">__id__</a></b>/TITLE:#',
