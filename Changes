@@ -1,5 +1,10 @@
 Revision history for RT-Extension-Assets
 
+1.02rc2 2014-11-26
+ - Fix sorting of custom fields and role groups
+ - Jump directly to asset display page is a numberic value is searched
+   for
+
 1.02rc1 2014-10-15
  - Special-case and support 'NULL' in custom field searches
  - Stop showing global ticket CFs in Asset search; properly show global
