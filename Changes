@@ -1,5 +1,8 @@
 Revision history for RT-Extension-Assets
 
+1.02 2014-12-08
+ - No changes since 1.02rc2
+
 1.02rc2 2014-11-26
  - Fix sorting of custom fields and role groups
  - Jump directly to asset display page is a numberic value is searched
