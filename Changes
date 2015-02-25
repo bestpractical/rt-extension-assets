@@ -1,5 +1,8 @@
 Revision history for RT-Extension-Assets
 
+1.03 2015-02-25
+ - keep date cf values on asset create page
+
 1.02 2014-12-08
  - No changes since 1.02rc2
 
