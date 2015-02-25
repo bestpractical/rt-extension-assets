@@ -93,6 +93,7 @@
   <& /Elements/EditCustomFieldCustomGroupings,
         Object => $asset,
         TitleBoxARGS => { title_class => "inverse" },
+        KeepValue => 1,
         CustomFieldGenerator => sub { $catalog->AssetCustomFields } &>
 </div>
 
