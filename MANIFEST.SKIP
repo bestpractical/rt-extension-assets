@@ -69,3 +69,6 @@
 
 # ctags files
 ^\.tags
+
+# Prove state
+^\.prove$
