@@ -53,7 +53,7 @@ package RT::Assets;
 use base 'RT::SearchBuilder';
 
 use Role::Basic "with";
-with "RT::SearchBuilder::Role::Roles";
+with "RT::SearchBuilder::Role::Roles" => { -rename => {RoleLimit => '_RoleLimit'}};
 
 use Scalar::Util qw/blessed/;
 
@@ -110,6 +110,26 @@ sub Limit {
         @_
     );
     $self->SUPER::Limit(%args);
+}
+
+=head2 RoleLimit
+
+Re-uses the underlying JOIN, if possible.
+
+=cut
+
+sub RoleLimit {
+    my $self = shift;
+    my %args = (
+        TYPE => '',
+        SUBCLAUSE => '',
+        OPERATOR => '=',
+        @_
+    );
+
+    my $key = "role-join-".join("-",map {$args{$_}//''} qw/SUBCLAUSE TYPE OPERATOR/);
+    my @ret = $self->_RoleLimit(%args, BUNDLE => $self->{$key} );
+    $self->{$key} = \@ret;
 }
 
 =head1 INTERNAL METHODS
