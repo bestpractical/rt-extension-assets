@@ -71,7 +71,7 @@
 %   for my $name ( @cf_names ) {
 %       $cfs->Limit( FIELD => 'Name', VALUE => $name, CASESENSITIVE => 0 );
 %   }
-  <& /Elements/EditCustomFields, Object => $AssetObj, CustomFields => $cfs, InTable => 1 &>
+  <& /Elements/EditCustomFields, Object => $AssetObj, CustomFields => $cfs, InTable => 1, KeepValue => 1 &>
 % }
 % $m->callback(%ARGS, CallbackName => "AfterFields");
 </table>
