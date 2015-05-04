@@ -6,7 +6,7 @@ unless (grep {$_ eq "RT::Extension::Assets"} RT->Config->Get('Plugins')) {
     RT->Config->Set('Plugins', (RT->Config->Get('Plugins'), "RT::Extension::Assets"));
     RT->InitPluginPaths;
     RT->Config->LoadConfig( File => "Assets_Config.pm" );
-    RT::Lifecycle->new->FillCache;
+    RT::Lifecycle->FillCache;
     require RT::Extension::Assets;
 }
 
