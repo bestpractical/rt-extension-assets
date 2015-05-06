@@ -1,5 +1,14 @@
 Revision history for RT-Extension-Assets
 
+1.05 2015-05-06
+ - Only call FillCache once if enabling plugin during "make initdb"
+ - Ensure that grouping-less custom fields keep their values
+
+1.04 2015-03-02
+ - Bundle similar RoleLimits; this notably improves performance when
+   MergeUsers is enabled
+ - Updated build and test targets
+
 1.03 2015-02-25
  - keep date cf values on asset create page
 
