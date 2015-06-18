@@ -10,6 +10,8 @@ INSTALLATION
         This step may require root permissions.
 
     Patch your RT
+            patch -d /opt/rt4 -p1 < patches/assets-query-builder.patch
+
         Assets requires a small patch to work on versions of RT prior to
         4.2.3. To patch RT, run:
 

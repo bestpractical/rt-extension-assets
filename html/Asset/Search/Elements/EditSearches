@@ -1,0 +1,329 @@
+%# BEGIN BPS TAGGED BLOCK {{{
+%#
+%# COPYRIGHT:
+%#
+%# This software is Copyright (c) 1996-2015 Best Practical Solutions, LLC
+%#                                          <sales@bestpractical.com>
+%#
+%# (Except where explicitly superseded by other copyright notices)
+%#
+%#
+%# LICENSE:
+%#
+%# This work is made available to you under the terms of Version 2 of
+%# the GNU General Public License. A copy of that license should have
+%# been provided with this software, but in any event can be snarfed
+%# from www.gnu.org.
+%#
+%# This work is distributed in the hope that it will be useful, but
+%# WITHOUT ANY WARRANTY; without even the implied warranty of
+%# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%# General Public License for more details.
+%#
+%# You should have received a copy of the GNU General Public License
+%# along with this program; if not, write to the Free Software
+%# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+%# 02110-1301 or visit their web page on the internet at
+%# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html.
+%#
+%#
+%# CONTRIBUTION SUBMISSION POLICY:
+%#
+%# (The following paragraph is not intended to limit the rights granted
+%# to you to modify and distribute this software under the terms of
+%# the GNU General Public License and is only of importance to you if
+%# you choose to contribute your changes and enhancements to the
+%# community by submitting them to Best Practical Solutions, LLC.)
+%#
+%# By intentionally submitting any modifications, corrections or
+%# derivatives to this work, or any other work intended for use with
+%# Request Tracker, to Best Practical Solutions, LLC, you confirm that
+%# you are the copyright holder for those contributions and you grant
+%# Best Practical Solutions,  LLC a nonexclusive, worldwide, irrevocable,
+%# royalty-free, perpetual, license to use, copy, create derivative
+%# works based on those contributions, and sublicense and distribute
+%# those contributions and any derivatives thereof.
+%#
+%# END BPS TAGGED BLOCK }}}
+<div class="edit-saved-searches">
+<&| /Widgets/TitleBox, title => loc($Title)&>
+
+%# Hide all the save functionality if the user shouldn't see it.
+% if ( $can_modify ) {
+<span class="label"><&|/l&>Privacy</&>:</span>
+<& SelectSearchObject, Name => 'SavedSearchOwner', Objects => \@Objects, Object => ( $Object && $Object->id ) ? $Object->Object : '' &>
+<br />
+<span class="label"><&|/l&>Description</&>:</span>
+<input size="25" name="SavedSearchDescription" value="<% $Description || '' %>" />
+
+% if ($Id ne 'new') {
+<nobr>
+% if ( $Dirty ) {
+<input type="submit" class="button" name="SavedSearchRevert" value="<%loc('Revert')%>" />
+% }
+<input type="submit" class="button" name="SavedSearchDelete" value="<%loc('Delete')%>" />
+% if ( $AllowCopy ) {
+<input type="submit" class="button" name="SavedSearchCopy"   value="<%loc('Save as New')%>" />
+% }
+</nobr>
+% }
+% if ( $Object && $Object->Id ) {
+<input type="submit" class="button" id="SavedSearchSave" name="SavedSearchSave"   value="<%loc('Update')%>" />
+% } else {
+<input type="submit" class="button" id="SavedSearchSave" name="SavedSearchSave"   value="<%loc('Save')%>" />
+%}
+% }
+<br />
+<hr />
+<span class="label"><&|/l&>Load saved search</&>:</span>
+<& SelectSearchesForObjects, Name => 'SavedSearchLoad', Objects => \@Objects, SearchType => $Type &>
+<input type="submit" value="<% loc('Load') %>" id="SavedSearchLoadSubmit" name="SavedSearchLoadSubmit" class="button" />
+
+</&>
+</div>
+<%INIT>
+return unless $session{'CurrentUser'}->HasRight(
+    Right  => 'LoadSavedSearch',
+    Object => $RT::System,
+);
+
+my $can_modify = $session{'CurrentUser'}->HasRight(
+    Right  => 'CreateSavedSearch',
+    Object => $RT::System,
+);
+
+use RT::SavedSearch;
+my @Objects = RT::SavedSearch->new($session{CurrentUser})->_PrivacyObjects;
+push @Objects, RT::System->new( $session{'CurrentUser'} )
+    if $session{'CurrentUser'}->HasRight( Object=> $RT::System,
+                                          Right => 'SuperUser' );
+
+my $is_dirty = sub {
+    my %arg = (
+        Query       => {},
+        SavedSearch => {},
+        SearchFields => [qw(Query Format OrderBy Order RowsPerPage)],
+        @_
+    );
+
+    my $obj  = $arg{'SavedSearch'}->{'Object'};
+    return 0 unless $obj && $obj->id;
+
+    foreach( @{ $arg{'SearchFields'} } ) {
+        return 1 if $obj->SubValue( $_ ) ne $arg{'Query'}->{$_};
+    }
+
+    return 0;
+};
+
+# If we're modifying an old query, check if it's been changed
+my $Dirty = $is_dirty->(
+    Query       => $CurrentSearch,
+    SavedSearch => { Id => $Id, Object => $Object, Description => $Description },
+    SearchFields => \@SearchFields,
+);
+
+</%INIT>
+
+<%ARGS>
+$Id            => 'new'
+$Object        => undef
+$Type          => 'Asset'
+$Description   => ''
+$CurrentSearch => {}
+@SearchFields   => ()
+$AllowCopy     => 1
+$Title         => loc('Saved searches')
+</%ARGS>
+
+<%METHOD Init>
+<%ARGS>
+$Query       => {}
+$SavedSearch => {}
+@SearchFields => qw(Query Format OrderBy Order RowsPerPage)
+</%ARGS>
+<%INIT>
+
+$SavedSearch->{'Id'}          = $ARGS{'SavedSearchId'} || 'new';
+$SavedSearch->{'Type'}        = 'Asset';
+$SavedSearch->{'Description'} = $ARGS{'SavedSearchDescription'} || '';
+$SavedSearch->{'Privacy'}     = $ARGS{'SavedSearchOwner'}       || undef;
+
+my @results;
+
+if ( $ARGS{'SavedSearchRevert'} ) {
+    $ARGS{'SavedSearchLoad'} = $SavedSearch->{'Id'};
+}
+
+if ( $ARGS{'SavedSearchLoad'} ) {
+    my ($container, $id ) = _parse_saved_search ($ARGS{'SavedSearchLoad'});
+    if ( $container ) {
+        my $search = RT::Attribute->new( $session{'CurrentUser'} );
+        $search->Load( $id );
+        $SavedSearch->{'Id'}          = $ARGS{'SavedSearchLoad'};
+        $SavedSearch->{'Object'}      = $search;
+        $SavedSearch->{'Description'} = $search->Description;
+        $Query->{$_} = $search->SubValue($_) foreach @SearchFields;
+
+        if ( $ARGS{'SavedSearchRevert'} ) {
+            push @results, loc('Loaded original "[_1]" saved search', $SavedSearch->{'Description'} );
+        } else {
+            push @results, loc('Loaded saved search "[_1]"', $SavedSearch->{'Description'} );
+        }
+    }
+    else {
+        push @results, loc( 'Can not load saved search "[_1]"',
+                $ARGS{'SavedSearchLoad'} );
+        return @results;
+    }
+}
+elsif ( $ARGS{'SavedSearchDelete'} ) {
+    # We set $SearchId to 'new' above already, so peek into the %ARGS
+    my ($container, $id) = _parse_saved_search( $SavedSearch->{'Id'} );
+    if ( $container && $container->id ) {
+        # We have the object the entry is an attribute on; delete the entry...
+        my ($val, $msg) = $container->Attributes->DeleteEntry( Name => 'SavedSearch', id => $id );
+        unless ( $val ) {
+            push @results, $msg;
+            return @results;
+        }
+    }
+    $SavedSearch->{'Id'}          = 'new';
+    $SavedSearch->{'Object'}      = undef;
+    $SavedSearch->{'Description'} = undef;
+    push @results, loc("Deleted saved search");
+}
+elsif ( $ARGS{'SavedSearchCopy'} ) {
+    my ($container, $id ) = _parse_saved_search( $ARGS{'SavedSearchId'} );
+    $SavedSearch->{'Object'} = RT::Attribute->new( $session{'CurrentUser'} );
+    $SavedSearch->{'Object'}->Load( $id );
+    if ( $ARGS{'SavedSearchDescription'} && $ARGS{'SavedSearchDescription'} ne $SavedSearch->{'Object'}->Description ) {
+        $SavedSearch->{'Description'} = $ARGS{'SavedSearchDescription'};
+    } else {
+        $SavedSearch->{'Description'} = loc( "[_1] copy", $SavedSearch->{'Object'}->Description );
+    }
+    $SavedSearch->{'Id'}          = 'new';
+    $SavedSearch->{'Object'}      = undef;
+}
+
+if ( $SavedSearch->{'Id'} && $SavedSearch->{'Id'} ne 'new'
+     && !$SavedSearch->{'Object'} )
+{
+    my ($container, $id ) = _parse_saved_search( $ARGS{'SavedSearchId'} );
+    $SavedSearch->{'Object'} = RT::Attribute->new( $session{'CurrentUser'} );
+    $SavedSearch->{'Object'}->Load( $id );
+    $SavedSearch->{'Description'} ||= $SavedSearch->{'Object'}->Description;
+}
+
+return @results;
+
+</%INIT>
+</%METHOD>
+
+<%METHOD Save>
+<%ARGS>
+$Query        => {}
+$SavedSearch  => {}
+@SearchFields => qw(Query Format OrderBy Order RowsPerPage)
+</%ARGS>
+<%INIT>
+
+return unless $ARGS{'SavedSearchSave'} || $ARGS{'SavedSearchCopy'};
+
+my @results;
+my $obj  = $SavedSearch->{'Object'};
+my $id   = $SavedSearch->{'Id'};
+my $desc = $SavedSearch->{'Description'};
+my $privacy = $SavedSearch->{'Privacy'};
+
+my %params = map { $_ => $Query->{$_} } @SearchFields;
+my ($new_obj_type, $new_obj_id) = split(/\-/, ($privacy || ''));
+
+if ( $obj && $obj->id ) {
+    # permission check
+    if ($obj->Object->isa('RT::System')) {
+        unless ($session{'CurrentUser'}->HasRight( Object=> $RT::System, Right => 'SuperUser')) {
+            push @results, loc("No permission to save system-wide searches");
+            return @results;
+        }
+    }
+
+    $obj->SetSubValues( %params );
+    $obj->SetDescription( $desc );
+
+    my $obj_type = ref($obj->Object);
+    # We need to get current obj_id now, because when we change obj_type to
+    # RT::System, $obj->Object->Id returns 1, not the old one :(
+    my $obj_id = $obj->Object->Id;
+
+    if ( $new_obj_type && $new_obj_id ) {
+        my ($val, $msg);
+
+        # we need to check right before we change any of ObjectType and ObjectId, 
+        # or it will fail the 2nd change if we use SetObjectType and
+        # SetObjectId sequentially
+
+        if ( $obj->CurrentUserHasRight('update') ) {
+            if ( $new_obj_type ne $obj_type ) {
+                ( $val, $msg ) = $obj->__Set(
+                    Field => 'ObjectType',
+                    Value => $new_obj_type,
+                );
+                push @results, loc( 'Unable to set privacy object: [_1]', $msg )
+                  unless ($val);
+            }
+            if ( $new_obj_id != $obj_id ) {
+                ( $val, $msg ) = $obj->__Set(
+                    Field => 'ObjectId',
+                    Value => $new_obj_id,
+                );
+                push @results, loc( 'Unable to set privacy id: [_1]', $msg )
+                  unless ($val);
+            }
+        }
+        else {
+            # two loc are just for convenience so we don't need to
+            # write an extra i18n translation item
+            push @results,
+              loc( 'Unable to set privacy object or id: [_1]',
+                loc('Permission Denied') )
+        }
+    } else {
+        push @results, loc('Unable to determine object type or id');
+    }
+    push @results, loc('Updated saved search "[_1]"', $desc);
+}
+elsif ( $id eq 'new' and defined $desc and length $desc ) {
+    my $saved_search = RT::SavedSearch->new( $session{'CurrentUser'} );
+    my ($status, $msg) = $saved_search->Save(
+        Privacy      => $privacy,
+        Name         => $desc,
+        Type         => $SavedSearch->{'Type'},
+        SearchParams => \%params,
+    );
+
+    if ( $status ) {
+        $SavedSearch->{'Object'} = RT::Attribute->new( $session{'CurrentUser'} );
+        $SavedSearch->{'Object'}->Load( $saved_search->Id );
+        # Build new SearchId
+        $SavedSearch->{'Id'} =
+                ref( $session{'CurrentUser'}->UserObj ) . '-'
+                    . $session{'CurrentUser'}->UserObj->Id
+                    . '-SavedSearch-'
+                    . $SavedSearch->{'Object'}->Id;
+    }
+    else {
+        push @results, loc("Can't find a saved search to work with").': '.loc($msg);
+    }
+}
+elsif ( $id eq 'new' ) {
+    push @results, loc("Can't save a search without a Description");
+}
+else {
+    push @results, loc("Can't save this search");
+}
+
+return @results;
+
+</%INIT>
+</%METHOD>

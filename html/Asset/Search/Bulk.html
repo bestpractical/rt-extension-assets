@@ -56,6 +56,9 @@
 % foreach my $var ( @{$search{'PassArguments'}} )  {
 <input type="hidden" class="hidden" name="<% $var %>" value="<% $ARGS{$var} || '' %>" />
 % }
+% foreach my $var (qw(Query Format OrderBy Order Rows Page Token)) {
+<input type="hidden" class="hidden" name="<%$var%>" value="<%$ARGS{$var} || ''%>" />
+%}
 <& /Elements/CollectionList,
     %search,
     Collection      => $assets,
@@ -152,11 +155,16 @@ my $catalog_obj = LoadDefaultCatalog($ARGS{'Catalog'} || '');
 $ARGS{'Catalog'} = $catalog_obj->Id;
 
 my $assets = RT::Assets->new($session{CurrentUser});
-my %search = ProcessAssetsSearchArguments(
-    Assets => $assets, Catalog => $catalog_obj, ARGSRef => \%ARGS,
-);
-
-my $DisplayFormat = "'__CheckBox.{UpdateAsset}__',". $search{'Format'};
+my %search;
+if ( $ARGS{Query} ) {
+    $assets->FromSQL($ARGS{Query});
+}
+else {
+    %search = ProcessAssetsSearchArguments(
+        Assets => $assets, Catalog => $catalog_obj, ARGSRef => \%ARGS,
+    );
+}
+my $DisplayFormat = "'__CheckBox.{UpdateAsset}__',". $ARGS{Format} || $search{'Format'};
 $DisplayFormat =~ s/\s*,\s*('?__NEWLINE__'?)/,$1,''/gi;
 
 my $asset = RT::Asset->new( $session{'CurrentUser'} );
@@ -188,7 +196,7 @@ if ( $ARGS{Update} ) {
 
     MaybeRedirectForResults(
         Actions     => \@results,
-        Arguments   => { map { $_ => $ARGS{$_} } grep { defined $ARGS{$_} } @{$search{'PassArguments'}} },
+        Arguments   => { map { $_ => $ARGS{$_} } grep { defined $ARGS{$_} } @{$search{'PassArguments'}}, qw(Query Format OrderBy Order Rows Page Token) },
     );
 }
 </%INIT>

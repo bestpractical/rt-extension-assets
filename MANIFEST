@@ -40,7 +40,9 @@ html/Asset/Elements/CreateLinkedTicket
 html/Asset/Elements/EditBasics
 html/Asset/Elements/EditDates
 html/Asset/Elements/EditPeople
+html/Asset/Elements/SelectAttachmentField
 html/Asset/Elements/SelectCatalog
+html/Asset/Elements/SelectDateType
 html/Asset/Elements/SelectStatus
 html/Asset/Elements/ShowBasics
 html/Asset/Elements/ShowCatalog
@@ -59,8 +61,28 @@ html/Asset/ModifyCFs.html
 html/Asset/ModifyDates.html
 html/Asset/ModifyLinks.html
 html/Asset/ModifyPeople.html
+html/Asset/Search/Build.html
 html/Asset/Search/Bulk.html
+html/Asset/Search/Edit.html
+html/Asset/Search/Elements/BuildFormatString
+html/Asset/Search/Elements/ConditionRow
+html/Asset/Search/Elements/DisplayOptions
+html/Asset/Search/Elements/EditFormat
+html/Asset/Search/Elements/EditQuery
+html/Asset/Search/Elements/EditSearches
+html/Asset/Search/Elements/EditSort
+html/Asset/Search/Elements/NewListActions
+html/Asset/Search/Elements/PickAssetCFs
+html/Asset/Search/Elements/PickBasics
+html/Asset/Search/Elements/PickCriteria
+html/Asset/Search/Elements/SearchPrivacy
+html/Asset/Search/Elements/SelectAndOr
+html/Asset/Search/Elements/SelectLinks
+html/Asset/Search/Elements/SelectPersonType
+html/Asset/Search/Elements/SelectSearchesForObjects
+html/Asset/Search/Elements/SelectSearchObject
 html/Asset/Search/index.html
+html/Asset/Search/Results.html
 html/Asset/Search/Results.tsv
 html/Callbacks/RT-Extension-Assets/Elements/AddLinks/ExtraLinkInstructions
 html/Callbacks/RT-Extension-Assets/Elements/Tabs/Privileged
@@ -112,6 +134,7 @@ Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
+patches/assets-query-builder.patch
 patches/rt-4.2.1-4.2.2.patch
 po/assets.pot
 po/en.po

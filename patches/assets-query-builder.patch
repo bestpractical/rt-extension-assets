@@ -1,0 +1,35 @@
+diff --git a/share/html/Elements/SelectStatus b/share/html/Elements/SelectStatus
+index e29e7cf..3820033 100644
+--- a/share/html/Elements/SelectStatus
++++ b/share/html/Elements/SelectStatus
+@@ -94,7 +94,7 @@ if ( @Statuses ) {
+     }
+ 
+     if (not keys %statuses_by_lifecycle) {
+-        for my $lifecycle (map { RT::Lifecycle->Load($_) } RT::Lifecycle->List($Type)) {
++        for my $lifecycle (map { RT::Lifecycle->Load(Type => $Type, Name => $_) } RT::Lifecycle->List($Type)) {
+             $statuses_by_lifecycle{$lifecycle->Name} = [ $lifecycle->Valid ];
+         }
+     }
+diff --git a/share/html/Elements/Tabs b/share/html/Elements/Tabs
+index c6c6505..24617b8 100644
+--- a/share/html/Elements/Tabs
++++ b/share/html/Elements/Tabs
+@@ -936,7 +936,7 @@ my $build_main_nav = sub {
+         PageMenu()->child( edit => title => loc('Edit'), path => '/Prefs/MyRT.html' );
+     }
+ 
+-    $m->callback( CallbackName => 'Privileged', Path => $request_path );
++    $m->callback( CallbackName => 'Privileged', Path => $request_path, ARGSRef => \%ARGS );
+ };
+ 
+ my $build_selfservice_nav = sub {
+@@ -989,7 +989,7 @@ my $build_selfservice_nav = sub {
+ 
+     PageWidgets->child( goto => raw_html => $m->scomp('/SelfService/Elements/GotoTicket') );
+ 
+-    $m->callback( CallbackName => 'SelfService', Path => $request_path );
++    $m->callback( CallbackName => 'SelfService', Path => $request_path, ARGSRef => \%ARGS );
+ };
+ 
+ 
