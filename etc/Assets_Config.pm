@@ -131,7 +131,7 @@ something like:
 Set($AssetSearchFormat, q[
     '<a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a>/TITLE:Name',
     Description,
-    '__Status__ (__Catalog__)/TITLE:Status',
+    '__Status__ (__Catalog__)/ATTRIBUTE:Status',
     Owner,
     HeldBy,
     Contacts,
@@ -149,7 +149,7 @@ name.
 Set($AssetSummaryFormat, q[
     '<a href="__WebHomePath__/Asset/Display.html?id=__id__">__Name__</a>/TITLE:Name',
     Description,
-    '__Status__ (__Catalog__)/TITLE:Status',
+    '__Status__ (__Catalog__)/ATTRIBUTE:Status',
     Owner,
     HeldBy,
     Contacts,
