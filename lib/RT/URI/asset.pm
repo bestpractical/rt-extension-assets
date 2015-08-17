@@ -138,7 +138,7 @@ sub ParseURI {
 
     # canonicalize "42" and "asset:42" -> asset://example.com/42
     if ($uri =~ /^(?:\Q$scheme\E:)?(\d+)$/i) {
-        my $assetId = 0+$1;
+        my $assetId = 0+$1; # convert asset id $1 into proper number format
         $self->{'uri'} = $self->LocalURIPrefix . $assetId;
     }
     else {
