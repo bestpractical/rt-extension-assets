@@ -622,7 +622,7 @@ Checks L</CurrentUserCanSee> before calling C<SUPER::_Value>.
 
 sub _Value {
     my $self = shift;
-    return unless $self->CurrentUserCanSee;
+    return undef unless $self->CurrentUserCanSee;
     return $self->SUPER::_Value(@_);
 }
 
